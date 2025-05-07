@@ -9,8 +9,8 @@ namespace FEV
         [SerializeField] private Vector3 faceSize = new Vector3(0.8f, 0.4f, 0.8f);
         [SerializeField] private float vertexRadius = 0.1f;
         
-        GridFactory _gridFactory = new GridFactory();
-        Cell[,] _cells;
+        private readonly GridFactory _gridFactory = new GridFactory();
+        private Cell[,] _cells;
         
         [ContextMenu("CreateNewGrid")]
         public void CreateNewGrid()

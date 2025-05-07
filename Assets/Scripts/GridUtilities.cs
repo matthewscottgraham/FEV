@@ -1,10 +1,11 @@
+using System;
 using UnityEngine;
 
 namespace FEV
 {
     public static class GridUtilities
     {
-        public static Vector2Int GetCellID(Vector3 worldPosition)
+        public static Vector2Int GetCellCoordinatesFromWorldPosition(Vector3 worldPosition)
         {
             return new Vector2Int((int)worldPosition.x, (int)worldPosition.z);
         }
@@ -15,7 +16,7 @@ namespace FEV
         }
 
         /// <summary>
-        /// Vertex indicies are arranged clockwise from the north-east
+        /// Vertex indices are arranged clockwise from the north-east
         /// </summary>
         /// <param name="cell"></param>
         /// <param name="vertexIndex"></param>
@@ -29,12 +30,12 @@ namespace FEV
                 1 => position + new Vector3(0.5f, 0, -0.5f),
                 2 => position + new Vector3(-0.5f, 0, -0.5f),
                 3 => position + new Vector3(-0.5f, 0, 0.5f),
-                _ => position
+                _ => throw new IndexOutOfRangeException()
             };
         }
         
         /// <summary>
-        /// edge indices are arranged clockwise from the east
+        /// Edge indices are arranged clockwise from the east
         /// </summary>
         /// <param name="cell"></param>
         /// <param name="edgeIndex"></param>
@@ -48,7 +49,7 @@ namespace FEV
                 1 => position + new Vector3(0, 0, -0.5f),
                 2 => position + new Vector3(-0.5f, 0, 0),
                 3 => position + new Vector3(0, 0, 0.5f),
-                _ => position
+                _ => throw new IndexOutOfRangeException()
             };
         }
     }
