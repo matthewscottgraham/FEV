@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -6,8 +7,8 @@ namespace FEV
     public class GridVisualizer : MonoBehaviour
     {
         [SerializeField] private Vector2Int gridDimensions;
-        [SerializeField] private Vector3 faceSize = new Vector3(0.8f, 0.4f, 0.8f);
-        [SerializeField] private float vertexRadius = 0.1f;
+        private Vector3 _faceSize = new Vector3(0.7f, 0.2f, 0.7f);
+        private float _vertexRadius = 0.1f;
         
         private readonly GridFactory _gridFactory = new GridFactory();
         private Cell[,] _cells;
@@ -16,6 +17,11 @@ namespace FEV
         public void CreateNewGrid()
         {
             _cells = _gridFactory.CreateGrid(gridDimensions.x,gridDimensions.y);
+        }
+
+        private void Start()
+        {
+            CreateNewGrid();
         }
 
         private void OnDrawGizmos()
@@ -38,23 +44,23 @@ namespace FEV
 
         private void DrawFace(Cell cell)
         {
-            Gizmos.DrawCube(GridUtilities.GetCellPosition(cell), faceSize);
+            Gizmos.DrawWireCube(GridUtilities.GetCellPosition(cell), _faceSize);
         }
 
         private void DrawEdges(Cell cell)
         {
-            Gizmos.DrawCube(GridUtilities.GetEdgePosition(cell, 0), new Vector3(0.2f, 0.2f, 0.8f));
-            Gizmos.DrawCube(GridUtilities.GetEdgePosition(cell, 1), new Vector3(0.8f, 0.2f, 0.2f));
-            Gizmos.DrawCube(GridUtilities.GetEdgePosition(cell, 2), new Vector3(0.2f, 0.2f, 0.8f));
-            Gizmos.DrawCube(GridUtilities.GetEdgePosition(cell, 3), new Vector3(0.8f, 0.2f, 0.2f));
+            Gizmos.DrawWireCube(GridUtilities.GetEdgePosition(cell, 0), new Vector3(0.2f, 0.2f, 0.8f));
+            Gizmos.DrawWireCube(GridUtilities.GetEdgePosition(cell, 1), new Vector3(0.8f, 0.2f, 0.2f));
+            Gizmos.DrawWireCube(GridUtilities.GetEdgePosition(cell, 2), new Vector3(0.2f, 0.2f, 0.8f));
+            Gizmos.DrawWireCube(GridUtilities.GetEdgePosition(cell, 3), new Vector3(0.8f, 0.2f, 0.2f));
         }
 
         private void DrawVertices(Cell cell)
         {
-            Gizmos.DrawSphere(GridUtilities.GetVertexPosition(cell, 0), vertexRadius);
-            Gizmos.DrawSphere(GridUtilities.GetVertexPosition(cell, 1), vertexRadius);
-            Gizmos.DrawSphere(GridUtilities.GetVertexPosition(cell, 2), vertexRadius);
-            Gizmos.DrawSphere(GridUtilities.GetVertexPosition(cell, 3), vertexRadius);
+            Gizmos.DrawWireSphere(GridUtilities.GetVertexPosition(cell, 0), _vertexRadius);
+            Gizmos.DrawWireSphere(GridUtilities.GetVertexPosition(cell, 1), _vertexRadius);
+            Gizmos.DrawWireSphere(GridUtilities.GetVertexPosition(cell, 2), _vertexRadius);
+            Gizmos.DrawWireSphere(GridUtilities.GetVertexPosition(cell, 3), _vertexRadius);
         }
     }
 }

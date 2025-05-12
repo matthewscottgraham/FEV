@@ -7,7 +7,7 @@ namespace FEV
     {
         public static Vector2Int GetCellCoordinatesFromWorldPosition(Vector3 worldPosition)
         {
-            return new Vector2Int((int)worldPosition.x, (int)worldPosition.z);
+            return new Vector2Int(Mathf.RoundToInt(worldPosition.x), Mathf.RoundToInt(worldPosition.z));
         }
 
         public static Vector3 GetCellPosition(Cell cell)

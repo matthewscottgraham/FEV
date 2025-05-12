@@ -8,6 +8,10 @@ namespace FEV
         {
             Coordinates = new Vector2Int(x, y);
         }
+        public Cell(Vector2Int coordinates)
+        {
+            Coordinates = coordinates;
+        }
         
         public Vector2Int Coordinates { get; private set; }
     }
