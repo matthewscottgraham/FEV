@@ -4,11 +4,6 @@ namespace FEV
 {
     public class Selector : MonoBehaviour
     {
-        public static System.Action<Cell> OnFaceHover;
-        public static System.Action<Cell, int> OnEdgeHover;
-        public static System.Action<Cell, int> OnVertexHover;
-        public static System.Action OnNullHover;
-
         [SerializeField] private Camera cam;
         [SerializeField] private InputController inputController;
         
@@ -23,23 +18,32 @@ namespace FEV
 
                 if (IsCursorOverVertex(cell, hit.point)) return;
                 if (IsCursorOverEdge(cell, hit.point)) return;
-                
-                OnFaceHover?.Invoke(cell);
+                if (IsCursorOverFace(cell)) return;
             }
-            else
-            {
-                OnNullHover?.Invoke();
-            }
+
+            Blackboard.Instance.ClearSelection();
+        }
+
+        private bool IsCursorOverFace(Cell cell)
+        {
+            if (Blackboard.Instance.FeatureMode != FeatureMode.Face)
+                return false;
+            
+            Blackboard.Instance.SetSelection(cell, 0);
+            return true;
         }
 
         private bool IsCursorOverEdge(Cell cell, Vector3 cursorPosition)
         {
+            if (Blackboard.Instance.FeatureMode != FeatureMode.Edge)
+                return false;
+            
             for (int i = 0; i < 4; i++)
             {
                 var distance = Vector3.Distance(GridUtilities.GetEdgePosition(cell, i), cursorPosition);
                 if (distance < distanceThreshold)
                 {
-                    OnEdgeHover(cell, i);
+                    Blackboard.Instance.SetSelection(cell, i);
                     return true;
                 }
             }
@@ -49,12 +53,15 @@ namespace FEV
 
         private bool IsCursorOverVertex(Cell cell, Vector3 cursorPosition)
         {
+            if (Blackboard.Instance.FeatureMode != FeatureMode.Vertex)
+                return false;
+            
             for (int i = 0; i < 4; i++)
             {
                 var distance = Vector3.Distance(GridUtilities.GetVertexPosition(cell, i), cursorPosition);
                 if (distance < distanceThreshold)
                 {
-                    OnVertexHover(cell, i);
+                    Blackboard.Instance.SetSelection(cell, i);
                     return true;
                 }
             }

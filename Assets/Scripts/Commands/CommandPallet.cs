@@ -1,0 +1,25 @@
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace FEV
+{
+    public class CommandPallet : MonoBehaviour
+    {
+        private void Start()
+        {
+            var uiDocument = GetComponent<UIDocument>();
+            var commandPanel = uiDocument.rootVisualElement.Q("commandPanel");
+            
+            commandPanel.Add(CreateCommandButton("Face", new PlaceFaceFeatureCommand()));
+            commandPanel.Add(CreateCommandButton("Edge", new PlaceEdgeFeatureCommand()));
+            commandPanel.Add(CreateCommandButton("Vertex", new PlaceVertexFeatureCommand()));
+        }
+
+        private Button CreateCommandButton(string label, ICommand command)
+        {
+            var button = new Button { text = label };
+            button.clicked += command.Execute;
+            return button;
+        }
+    }
+}

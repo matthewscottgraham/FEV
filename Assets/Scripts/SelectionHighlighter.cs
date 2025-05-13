@@ -13,24 +13,40 @@ namespace FEV
 
         private void OnEnable()
         {
-            Selector.OnFaceHover += HandleFaceHover;
-            Selector.OnEdgeHover += HandleEdgeHover;
-            Selector.OnVertexHover += HandleVertexHover;
-            Selector.OnNullHover += HideSelectionObjects;
+            Blackboard.Instance.OnUpdate += HandleBlackboardUpdate;
         }
 
         private void OnDisable()
         {
-            Selector.OnFaceHover -= HandleFaceHover;
-            Selector.OnEdgeHover -= HandleEdgeHover;
-            Selector.OnVertexHover -= HandleVertexHover;
-            Selector.OnNullHover -= HideSelectionObjects;
+            Blackboard.Instance.OnUpdate -= HandleBlackboardUpdate;
         }
 
+        private void HandleBlackboardUpdate()
+        {
+            if (Blackboard.Instance.SelectedCell == null) return;
+            
+            HideSelectionObjects();
+            
+            var featureMode = Blackboard.Instance.FeatureMode;
+            var cell = Blackboard.Instance.SelectedCell.Value;
+            var index = Blackboard.Instance.SelectedComponent;
+            
+            switch (featureMode)
+            {
+                case FeatureMode.Vertex:
+                    HandleVertexHover(cell, index); break;
+                case FeatureMode.Face:
+                    HandleFaceHover(cell); break;
+                case FeatureMode.Edge:
+                    HandleEdgeHover(cell, index); break;
+                default:
+                    break;
+            }
+        }
+        
         private void HandleFaceHover(Cell cell)
         {
             transform.position = GridUtilities.GetCellPosition(cell);
-            HideSelectionObjects();
             faceSelectionObject.gameObject.SetActive(true);
         }
 
