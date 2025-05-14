@@ -10,9 +10,10 @@ namespace FEV
             var uiDocument = GetComponent<UIDocument>();
             var commandPanel = uiDocument.rootVisualElement.Q("commandPanel");
             
-            commandPanel.Add(CreateCommandButton("Face", new PlaceFaceFeatureCommand()));
-            commandPanel.Add(CreateCommandButton("Edge", new PlaceEdgeFeatureCommand()));
-            commandPanel.Add(CreateCommandButton("Vertex", new PlaceVertexFeatureCommand()));
+            commandPanel.Add(CreateCommandButton("Face", new SelectFaceCommand()));
+            commandPanel.Add(CreateCommandButton("Edge", new SelectEdgeCommand()));
+            commandPanel.Add(CreateCommandButton("Vertex", new SelectVertexCommand()));
+            commandPanel.Add(CreateCommandButton("Place", new PlaceFeatureCommand()));
         }
 
         private Button CreateCommandButton(string label, ICommand command)

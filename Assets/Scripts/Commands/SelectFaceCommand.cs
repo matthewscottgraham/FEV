@@ -1,6 +1,6 @@
 namespace FEV
 {
-    internal class PlaceFaceFeatureCommand : ICommand
+    internal class SelectFaceCommand : ICommand
     {
         public void Execute()
         {

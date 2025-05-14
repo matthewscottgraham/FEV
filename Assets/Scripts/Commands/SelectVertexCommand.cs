@@ -1,6 +1,6 @@
 namespace FEV
 {
-    internal class PlaceVertexFeatureCommand : ICommand
+    internal class SelectVertexCommand : ICommand
     {
         public void Execute()
         {

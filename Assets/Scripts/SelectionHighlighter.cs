@@ -23,13 +23,13 @@ namespace FEV
 
         private void HandleBlackboardUpdate()
         {
-            if (Blackboard.Instance.SelectedCell == null) return;
+            if (Blackboard.Instance.HoveredCell == null) return;
             
             HideSelectionObjects();
             
             var featureMode = Blackboard.Instance.FeatureMode;
-            var cell = Blackboard.Instance.SelectedCell.Value;
-            var index = Blackboard.Instance.SelectedComponent;
+            var cell = Blackboard.Instance.HoveredCell.Value;
+            var index = Blackboard.Instance.HoveredCellComponent;
             
             switch (featureMode)
             {

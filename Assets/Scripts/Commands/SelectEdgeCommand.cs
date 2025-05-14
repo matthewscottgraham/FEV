@@ -1,6 +1,6 @@
 namespace FEV
 {
-    internal class PlaceEdgeFeatureCommand : ICommand
+    internal class SelectEdgeCommand : ICommand
     {
         public void Execute()
         {

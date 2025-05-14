@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace FEV
@@ -8,7 +9,17 @@ namespace FEV
         [SerializeField] private InputController inputController;
         
         [SerializeField] private float distanceThreshold = 0.2f;
-        
+
+        private void OnEnable()
+        {
+            inputController.Clicked += HandleCursorClick;
+        }
+
+        private void OnDisable()
+        {
+            inputController.Clicked -= HandleCursorClick;
+        }
+
         private void Update()
         {
             if (Physics.Raycast(cam.ScreenPointToRay(inputController.CursorPosition), out RaycastHit hit))
@@ -21,7 +32,7 @@ namespace FEV
                 if (IsCursorOverFace(cell)) return;
             }
 
-            Blackboard.Instance.ClearSelection();
+            Blackboard.Instance.ClearHovered();
         }
 
         private bool IsCursorOverFace(Cell cell)
@@ -29,7 +40,7 @@ namespace FEV
             if (Blackboard.Instance.FeatureMode != FeatureMode.Face)
                 return false;
             
-            Blackboard.Instance.SetSelection(cell, 0);
+            Blackboard.Instance.SetHovered(cell, 0);
             return true;
         }
 
@@ -43,7 +54,7 @@ namespace FEV
                 var distance = Vector3.Distance(GridUtilities.GetEdgePosition(cell, i), cursorPosition);
                 if (distance < distanceThreshold)
                 {
-                    Blackboard.Instance.SetSelection(cell, i);
+                    Blackboard.Instance.SetHovered(cell, i);
                     return true;
                 }
             }
@@ -61,12 +72,17 @@ namespace FEV
                 var distance = Vector3.Distance(GridUtilities.GetVertexPosition(cell, i), cursorPosition);
                 if (distance < distanceThreshold)
                 {
-                    Blackboard.Instance.SetSelection(cell, i);
+                    Blackboard.Instance.SetHovered(cell, i);
                     return true;
                 }
             }
 
             return false;
+        }
+
+        private void HandleCursorClick()
+        {
+            Blackboard.Instance.SelectHovered();
         }
     }
 }
