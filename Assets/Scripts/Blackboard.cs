@@ -49,7 +49,6 @@ namespace FEV
             SelectedCell = cell;
             SelectedCellComponent = componentIndex;
             OnUpdate?.Invoke();
-            Debug.Log(SelectedCell.Value.Coordinates);
         }
 
         public void ClearSelection()
