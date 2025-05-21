@@ -46,7 +46,11 @@ namespace FEV
             
             var featureType = Blackboard.Instance.FeatureMode;
             var cell = Blackboard.Instance.SelectedCell.Value;
-            InstantiateNewFeature(featureType, cell);
+            var feature = InstantiateNewFeature(featureType, cell);
+            feature.GetComponent<MeshRenderer>().material.color = Blackboard.Instance.CurrentPlayer.Color;
+            
+            if (_ghostFeature != null)
+                Destroy(_ghostFeature.gameObject);
         }
 
         private Transform InstantiateNewFeature(FeatureMode featureType, Cell cell)

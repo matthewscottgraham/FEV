@@ -7,7 +7,8 @@ namespace FEV
         public static Blackboard Instance { get; } = new Blackboard();
 
         public System.Action OnUpdate;
-        
+
+        public Player CurrentPlayer { get; set; } = null;
         public FeatureMode FeatureMode { get; private set; } = FeatureMode.Face;
         public Cell? HoveredCell { get; private set; } = null;
         public int HoveredCellComponent { get; private set; } = 0;
