@@ -16,13 +16,13 @@ namespace FEV
         
         private void OnEnable()
         {
-            Blackboard.Instance.OnUpdate += PlaceGhostFeature;
+            Blackboard.Instance.OnSelect += PlaceGhostFeature;
             PlaceFeatureCommand.OnConfirmPlaceFeature += HandleConfirmPlaceFeature;
         }
 
         private void OnDisable()
         {
-            Blackboard.Instance.OnUpdate -= PlaceGhostFeature;
+            Blackboard.Instance.OnSelect -= PlaceGhostFeature;
             PlaceFeatureCommand.OnConfirmPlaceFeature -= HandleConfirmPlaceFeature;
         }
 
@@ -42,6 +42,9 @@ namespace FEV
         }
         private void HandleConfirmPlaceFeature()
         {
+            if (_ghostFeature != null)
+                Destroy(_ghostFeature.gameObject);
+            
             if (Blackboard.Instance.SelectedCell == null) return;
             
             var featureType = Blackboard.Instance.FeatureMode;
@@ -49,8 +52,7 @@ namespace FEV
             var feature = InstantiateNewFeature(featureType, cell);
             feature.GetComponent<MeshRenderer>().material.color = Blackboard.Instance.CurrentPlayer.Color;
             
-            if (_ghostFeature != null)
-                Destroy(_ghostFeature.gameObject);
+            
         }
 
         private Transform InstantiateNewFeature(FeatureMode featureType, Cell cell)

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -5,11 +6,25 @@ namespace FEV
 {
     public class CommandPallet : MonoBehaviour
     {
+        private Label _playerLabel;
+
+        private void OnEnable()
+        {
+            Blackboard.Instance.OnUpdate += HandleBlackboardUpdate;
+        }
+
+        private void OnDisable()
+        {
+            Blackboard.Instance.OnUpdate -= HandleBlackboardUpdate;
+        }
+
         private void Start()
         {
             var uiDocument = GetComponent<UIDocument>();
-            var commandPanel = uiDocument.rootVisualElement.Q("commandPanel");
             
+            _playerLabel = uiDocument.rootVisualElement.Q<Label>("playerLabel");
+            
+            var commandPanel = uiDocument.rootVisualElement.Q("commandPanel");
             commandPanel.Add(CreateCommandButton("Face", new SelectFaceCommand()));
             commandPanel.Add(CreateCommandButton("Edge", new SelectEdgeCommand()));
             commandPanel.Add(CreateCommandButton("Vertex", new SelectVertexCommand()));
@@ -21,6 +36,14 @@ namespace FEV
             var button = new Button { text = label };
             button.clicked += command.Execute;
             return button;
+        }
+
+        private void HandleBlackboardUpdate()
+        {
+            if (_playerLabel == null) return;
+
+            _playerLabel.text = $"Player {Blackboard.Instance.CurrentPlayer.Index}";
+            _playerLabel.style.color = Blackboard.Instance.CurrentPlayer.Color;
         }
     }
 }

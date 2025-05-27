@@ -14,11 +14,13 @@ namespace FEV
         private void OnEnable()
         {
             Blackboard.Instance.OnUpdate += HandleBlackboardUpdate;
+            PlaceFeatureCommand.OnConfirmPlaceFeature += HideSelectionObjects;
         }
 
         private void OnDisable()
         {
             Blackboard.Instance.OnUpdate -= HandleBlackboardUpdate;
+            PlaceFeatureCommand.OnConfirmPlaceFeature -= HideSelectionObjects;
         }
 
         private void HandleBlackboardUpdate()
@@ -57,13 +59,13 @@ namespace FEV
             
             if (edgeIndex % 2 == 0)
             {
-                vEdgeSelectionObject.gameObject.SetActive(true);
-                vEdgeSelectionObject.position = GridUtilities.GetEdgePosition(cell, edgeIndex);
+                hEdgeSelectionObject.gameObject.SetActive(true);
+                hEdgeSelectionObject.position = GridUtilities.GetEdgePosition(cell, edgeIndex);
             }
             else
             {
-                hEdgeSelectionObject.gameObject.SetActive(true);
-                hEdgeSelectionObject.position = GridUtilities.GetEdgePosition(cell, edgeIndex);
+                vEdgeSelectionObject.gameObject.SetActive(true);
+                vEdgeSelectionObject.position = GridUtilities.GetEdgePosition(cell, edgeIndex);
             }
         }
 

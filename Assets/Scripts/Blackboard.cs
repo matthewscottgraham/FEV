@@ -7,6 +7,7 @@ namespace FEV
         public static Blackboard Instance { get; } = new Blackboard();
 
         public System.Action OnUpdate;
+        public System.Action OnSelect;
 
         public Player CurrentPlayer { get; set; } = null;
         public FeatureMode FeatureMode { get; private set; } = FeatureMode.Face;
@@ -49,7 +50,7 @@ namespace FEV
         {
             SelectedCell = cell;
             SelectedCellComponent = componentIndex;
-            OnUpdate?.Invoke();
+            OnSelect?.Invoke();
         }
 
         public void ClearSelection()
