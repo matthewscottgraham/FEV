@@ -1,7 +1,9 @@
 namespace FEV
 {
-    internal interface ICommand
+    public interface ICommand
     {
+        public string Label { get; }
         public void Execute();
+        public void Destroy();
     }
 }
