@@ -16,7 +16,7 @@ namespace FEV
             _players[1] = ScriptableObject.CreateInstance<Player>();
             _players[1].Initialize(1, Color.red);
             
-            Blackboard.Instance.CurrentPlayer = _players[0];
+            Blackboard.Instance.SetCurrentPlayer(_players[0]);
         }
 
         private void OnEnable()
@@ -34,7 +34,7 @@ namespace FEV
             var currentPlayerIndex = Blackboard.Instance.CurrentPlayer.Index;
             currentPlayerIndex++;
             currentPlayerIndex %= _players.Length;
-            Blackboard.Instance.CurrentPlayer = _players[currentPlayerIndex];
+            Blackboard.Instance.SetCurrentPlayer(_players[currentPlayerIndex]);
         }
     }
 }

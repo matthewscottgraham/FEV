@@ -4,12 +4,14 @@ namespace FEV
 {
     public class DrawCardCommand : ICommand
     {
+        public System.Action OnComplete { get; set; }
         public string Label => "Draw card";
         
         public void Execute()
         {
             var card = GetRandomCard();
             Blackboard.Instance.CurrentPlayer.AddCard(card);
+            OnComplete?.Invoke();
         }
 
         public void Destroy()

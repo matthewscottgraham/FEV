@@ -6,10 +6,12 @@ namespace FEV
     {
         public static Blackboard Instance { get; } = new Blackboard();
 
+        public System.Action OnPlayerUpdate;
         public System.Action OnUpdate;
+        public System.Action OnHoverChange;
         public System.Action OnSelect;
 
-        public Player CurrentPlayer { get; set; } = null;
+        public Player CurrentPlayer { get; private set; } = null;
         public FeatureMode FeatureMode { get; private set; } = FeatureMode.Face;
         public Cell? HoveredCell { get; private set; } = null;
         public int HoveredCellComponent { get; private set; } = 0;
@@ -26,14 +28,14 @@ namespace FEV
         {
             HoveredCell = cell;
             HoveredCellComponent = componentIndex;
-            OnUpdate?.Invoke();
+            OnHoverChange?.Invoke();
         }
 
         public void ClearHovered()
         {
             HoveredCell = null;
             HoveredCellComponent = 0;
-            OnUpdate?.Invoke();
+            OnHoverChange?.Invoke();
         }
 
         public void SelectHovered()
@@ -58,6 +60,12 @@ namespace FEV
             HoveredCell = null;
             HoveredCellComponent = 0;
             OnUpdate?.Invoke();
+        }
+
+        public void SetCurrentPlayer(Player player)
+        {
+            CurrentPlayer = player;
+            OnPlayerUpdate?.Invoke();
         }
     }
 }

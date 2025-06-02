@@ -13,17 +13,17 @@ namespace FEV
 
         private void OnEnable()
         {
-            Blackboard.Instance.OnUpdate += HandleBlackboardUpdate;
+            Blackboard.Instance.OnHoverChange += HandleHoverUpdate;
             PlaceFeatureCommand.OnConfirmPlaceFeature += HideSelectionObjects;
         }
 
         private void OnDisable()
         {
-            Blackboard.Instance.OnUpdate -= HandleBlackboardUpdate;
+            Blackboard.Instance.OnHoverChange -= HandleHoverUpdate;
             PlaceFeatureCommand.OnConfirmPlaceFeature -= HideSelectionObjects;
         }
 
-        private void HandleBlackboardUpdate()
+        private void HandleHoverUpdate()
         {
             if (Blackboard.Instance.HoveredCell == null) return;
             
