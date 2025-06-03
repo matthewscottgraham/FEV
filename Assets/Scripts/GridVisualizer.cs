@@ -7,6 +7,7 @@ namespace FEV
     public class GridVisualizer : MonoBehaviour
     {
         [SerializeField] private Vector2Int gridDimensions;
+        [SerializeField] private Material gridMaterial;
         private Vector3 _faceSize = new Vector3(0.7f, 0.2f, 0.7f);
         private float _vertexRadius = 0.1f;
         
@@ -17,6 +18,7 @@ namespace FEV
         public void CreateNewGrid()
         {
             _cells = _gridFactory.CreateGrid(gridDimensions.x,gridDimensions.y);
+            CreateLines();
         }
 
         private void Start()
@@ -24,43 +26,48 @@ namespace FEV
             CreateNewGrid();
         }
 
-        private void OnDrawGizmos()
+        private void CreateLines()
         {
             if (_cells == null)
                 return;
-            
-            foreach (var cell in _cells)
+
+            for (int x = 0; x <= _cells.GetLength(1); x++)
             {
-                Gizmos.color = Color.yellow;
-                DrawFace(cell);
-                
-                Gizmos.color = Color.green;
-                DrawEdges(cell);
-                
-                Gizmos.color = Color.red;
-                DrawVertices(cell);
+                DrawHorizontalEdge(x);
+            }
+            for (int y = 0; y <= _cells.GetLength(0); y++)
+            {
+                DrawVerticalEdge(y);
             }
         }
 
-        private void DrawFace(Cell cell)
+        private void DrawHorizontalEdge(int index)
         {
-            Gizmos.DrawWireCube(GridUtilities.GetCellPosition(cell), _faceSize);
+            var lineRenderer = CreateLineObject();
+            lineRenderer.SetPosition(0, new Vector3(0, 0, 0));
+            lineRenderer.SetPosition(1, new Vector3(_cells.GetLongLength(0), 0, 0));
+            lineRenderer.transform.position = new Vector3(-0.5f, 0, index - 0.5f);
+        }
+        
+        private void DrawVerticalEdge(int index)
+        {
+            var lineRenderer = CreateLineObject();
+            lineRenderer.SetPosition(0, new Vector3(0, 0, 0));
+            lineRenderer.SetPosition(1, new Vector3(0, 0, _cells.GetLongLength(1)));
+            lineRenderer.transform.position = new Vector3(index - 0.5f, 0, - 0.5f);
         }
 
-        private void DrawEdges(Cell cell)
+        private LineRenderer CreateLineObject()
         {
-            Gizmos.DrawWireCube(GridUtilities.GetEdgePosition(cell, 0), new Vector3(0.2f, 0.2f, 0.8f));
-            Gizmos.DrawWireCube(GridUtilities.GetEdgePosition(cell, 1), new Vector3(0.8f, 0.2f, 0.2f));
-            Gizmos.DrawWireCube(GridUtilities.GetEdgePosition(cell, 2), new Vector3(0.2f, 0.2f, 0.8f));
-            Gizmos.DrawWireCube(GridUtilities.GetEdgePosition(cell, 3), new Vector3(0.8f, 0.2f, 0.2f));
-        }
-
-        private void DrawVertices(Cell cell)
-        {
-            Gizmos.DrawWireSphere(GridUtilities.GetVertexPosition(cell, 0), _vertexRadius);
-            Gizmos.DrawWireSphere(GridUtilities.GetVertexPosition(cell, 1), _vertexRadius);
-            Gizmos.DrawWireSphere(GridUtilities.GetVertexPosition(cell, 2), _vertexRadius);
-            Gizmos.DrawWireSphere(GridUtilities.GetVertexPosition(cell, 3), _vertexRadius);
+            var lineObject = new GameObject();
+            lineObject.transform.SetParent(this.transform);
+            
+            var lineRenderer = lineObject.AddComponent<LineRenderer>();
+            lineRenderer.useWorldSpace = false;
+            lineRenderer.widthMultiplier = 0.1f;
+            lineRenderer.material = gridMaterial;
+            
+            return lineRenderer;
         }
     }
 }
