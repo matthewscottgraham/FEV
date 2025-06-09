@@ -6,24 +6,16 @@ namespace FEV
 {
     public class GridVisualizer : MonoBehaviour
     {
-        [SerializeField] private Vector2Int gridDimensions;
         [SerializeField] private Material gridMaterial;
-        private Vector3 _faceSize = new Vector3(0.7f, 0.2f, 0.7f);
-        private float _vertexRadius = 0.1f;
         
         private readonly GridFactory _gridFactory = new GridFactory();
         private Cell[,] _cells;
-        
-        [ContextMenu("CreateNewGrid")]
-        public void CreateNewGrid()
-        {
-            _cells = _gridFactory.CreateGrid(gridDimensions.x,gridDimensions.y);
-            CreateLines();
-        }
 
-        private void Start()
+        public void Initialize()
         {
-            CreateNewGrid();
+            var matchState = Resources.Load<MatchState>("MatchState");
+            _cells = _gridFactory.CreateGrid(matchState.GridSize.x,matchState.GridSize.y);
+            CreateLines();
         }
 
         private void CreateLines()
