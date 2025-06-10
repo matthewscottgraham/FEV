@@ -3,11 +3,17 @@ using UnityEngine;
 
 namespace FEV
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IDisposable
     {
+        public Action OnPlayerTurnStart { get; set; }
+        
         private Player[] _players;
-        private void Start()
+        private int _currentPlayerIndex = 0;
+        
+        public void Initialize()
         {
+            PlaceFeatureCommand.OnConfirmPlaceFeature += OnTurnCompleted;
+            
             _players = new Player[2];
             
             _players[0] = ScriptableObject.CreateInstance<Player>();
@@ -16,17 +22,13 @@ namespace FEV
             _players[1] = ScriptableObject.CreateInstance<Player>();
             _players[1].Initialize(1, Color.red);
             
-            Blackboard.Instance.SetCurrentPlayer(_players[0]);
+            OnPlayerTurnStart?.Invoke();
+            //Blackboard.Instance.SetCurrentPlayer(_players[0]);
         }
 
-        private void OnEnable()
+        public Player GetCurrentPlayer()
         {
-            PlaceFeatureCommand.OnConfirmPlaceFeature += OnTurnCompleted;
-        }
-
-        private void OnDisable()
-        {
-            PlaceFeatureCommand.OnConfirmPlaceFeature -= OnTurnCompleted;
+            return _players[_currentPlayerIndex];
         }
 
         private void OnTurnCompleted()
@@ -34,7 +36,13 @@ namespace FEV
             var currentPlayerIndex = Blackboard.Instance.CurrentPlayer.Index;
             currentPlayerIndex++;
             currentPlayerIndex %= _players.Length;
-            Blackboard.Instance.SetCurrentPlayer(_players[currentPlayerIndex]);
+            //Blackboard.Instance.SetCurrentPlayer(_players[currentPlayerIndex]);
+        }
+
+        public void Dispose()
+        {
+            PlaceFeatureCommand.OnConfirmPlaceFeature -= OnTurnCompleted;
+            _players = null;
         }
     }
 }

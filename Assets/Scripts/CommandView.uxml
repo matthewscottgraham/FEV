@@ -2,5 +2,7 @@
     <engine:VisualElement style="flex-grow: 1;">
         <engine:Label text="Label" name="playerLabel" />
     </engine:VisualElement>
-    <engine:VisualElement name="commandPanel" style="flex-grow: 0; height: 100px; flex-direction: row;" />
+    <engine:VisualElement name="commandContainer" style="flex-grow: 0; height: 100px; flex-direction: row;">
+        <engine:VisualElement name="cardContainer" style="flex-grow: 1;" />
+    </engine:VisualElement>
 </engine:UXML>

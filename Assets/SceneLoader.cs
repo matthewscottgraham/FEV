@@ -24,7 +24,7 @@ public class SceneLoader : MonoBehaviour
         var activeScene = SceneManager.GetActiveScene();
         if (activeScene.name != PersistentSceneName)
         { 
-            SceneManager.LoadSceneAsync(PersistentSceneName, LoadSceneMode.Single);
+            await SceneManager.LoadSceneAsync(PersistentSceneName, LoadSceneMode.Single);
             await LoadSceneAsync(FirstSceneName, LoadSceneMode.Additive);
         }
         else

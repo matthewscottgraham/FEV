@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8107ce2bcdc144ef8767743cb958ebe8, type: 3}
   m_Name: MatchState
   m_EditorClassIdentifier: 
-  GridSize: {x: 3, y: 12}
+  GridSize: {x: 12, y: 12}
   PlayerCount: 2

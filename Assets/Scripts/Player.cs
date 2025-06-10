@@ -29,5 +29,10 @@ namespace FEV
                 Cards.Remove(card);
             OnCardsModified?.Invoke();
         }
+
+        public override string ToString()
+        {
+            return $"Player: {Index}";
+        }
     }
 }

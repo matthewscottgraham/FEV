@@ -12,6 +12,7 @@ namespace FEV
         private List<Button> _cards = new();
         private Button _drawCardButton;
         private Button _placeFeatureButton;
+        
         private void OnEnable()
         {
             Blackboard.Instance.OnPlayerUpdate += HandleBlackboardUpdate;
