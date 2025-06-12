@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class GameBootstrapper : MonoBehaviour
 {
-    [SerializeField] private GridVisualizer gridVisualizer;
     [SerializeField] private CommandView commandView;
     
+    private GridVisualizer _gridVisualizer;
+    private PegController _pegController;
     private PlayerController _playerController;
     private CommandController _commandController;
     
     private void Start()
     {
-        gridVisualizer.Initialize();
+        _gridVisualizer = Create<GridVisualizer>() as GridVisualizer;
+        _gridVisualizer?.Initialize();
+        
+        _pegController = Create<PegController>() as PegController;
+        _pegController?.Initialize();
         
         _playerController = Create<PlayerController>() as PlayerController;
         _playerController?.Initialize();

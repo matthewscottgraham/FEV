@@ -6,14 +6,14 @@ namespace FEV
 {
     public class GridVisualizer : MonoBehaviour
     {
-        [SerializeField] private Material gridMaterial;
-        
+        private Material _gridMaterial;
         private readonly GridFactory _gridFactory = new GridFactory();
         private Cell[,] _cells;
 
         public void Initialize()
         {
             var matchState = Resources.Load<MatchState>("MatchState");
+            _gridMaterial = Resources.Load<Material>("Materials/mat_grid");
             _cells = _gridFactory.CreateGrid(matchState.GridSize.x,matchState.GridSize.y);
             CreateLines();
         }
@@ -57,7 +57,7 @@ namespace FEV
             var lineRenderer = lineObject.AddComponent<LineRenderer>();
             lineRenderer.useWorldSpace = false;
             lineRenderer.widthMultiplier = 0.1f;
-            lineRenderer.material = gridMaterial;
+            lineRenderer.material = _gridMaterial;
             
             return lineRenderer;
         }
