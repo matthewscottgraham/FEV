@@ -56,7 +56,7 @@ namespace FEV
             
             var lineRenderer = lineObject.AddComponent<LineRenderer>();
             lineRenderer.useWorldSpace = false;
-            lineRenderer.widthMultiplier = 0.1f;
+            lineRenderer.widthMultiplier = 0.04f;
             lineRenderer.material = _gridMaterial;
             
             return lineRenderer;

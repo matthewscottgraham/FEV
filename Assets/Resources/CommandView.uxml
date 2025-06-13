@@ -1,6 +1,7 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <engine:VisualElement style="flex-grow: 1;">
         <engine:Label text="Label" name="playerLabel" />
+        <engine:VisualElement name="stagingArea" style="flex-grow: 1;" />
     </engine:VisualElement>
     <engine:VisualElement name="commandContainer" style="flex-grow: 0; height: 100px; flex-direction: row;">
         <engine:VisualElement name="cardContainer" style="flex-grow: 1;" />

@@ -5,6 +5,13 @@ namespace FEV
         public static System.Action OnConfirmPlaceFeature;
         public string Label => "Place Feature";
         
+        private CommandController _commandController;
+        
+        public PlaceFeatureCommand(CommandController controller)
+        {
+            _commandController = controller;
+        }
+        
         public void Execute()
         {
             OnConfirmPlaceFeature?.Invoke();

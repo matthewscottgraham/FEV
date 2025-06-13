@@ -1,17 +1,28 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace FEV
 {
     public class DrawCardCommand : ICommand
     {
-        public System.Action OnComplete { get; set; }
         public string Label => "Draw card";
+        
+        private CommandController _commandController;
+        
+        public DrawCardCommand(CommandController controller)
+        {
+            _commandController = controller;
+        }
         
         public void Execute()
         {
-            var card = GetRandomCard();
-            Blackboard.Instance.CurrentPlayer.AddCard(card);
-            OnComplete?.Invoke();
+            var cards = new List<ICommand>()
+            {
+                GetRandomCard(),
+                GetRandomCard(),
+                GetRandomCard()
+            };
+            _commandController.AddCards(cards);
         }
 
         public void Destroy()
