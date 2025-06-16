@@ -19,10 +19,9 @@ namespace FEV
             var cards = new List<ICommand>()
             {
                 GetRandomCard(),
-                GetRandomCard(),
                 GetRandomCard()
             };
-            _commandController.AddCards(cards);
+            _commandController.StageCards(cards);
         }
 
         public void Destroy()

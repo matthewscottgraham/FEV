@@ -10,6 +10,7 @@ public class GameBootstrapper : MonoBehaviour
     private PegController _pegController;
     private PlayerController _playerController;
     private CommandController _commandController;
+    private InputController _inputController;
     
     private void Start()
     {
@@ -23,6 +24,9 @@ public class GameBootstrapper : MonoBehaviour
         _playerController?.Initialize();
         
         _commandController = new CommandController(commandView, _playerController);
+        
+        _inputController = Create<InputController>() as InputController;
+        _inputController?.Initialize();
     }
 
     private void OnDestroy()
@@ -32,6 +36,9 @@ public class GameBootstrapper : MonoBehaviour
         
         _commandController?.Dispose();
         _commandController = null;
+
+        _inputController?.Dispose();
+        _inputController = null;
     }
 
     private Component Create<T>()

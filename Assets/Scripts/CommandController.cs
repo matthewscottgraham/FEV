@@ -6,6 +6,7 @@ namespace FEV
     public class CommandController: IDisposable
     {
         public List<ICommand> StagedCards { get; private set; } = new();
+        public Turn CurrentTurn { get; private set; } = new();
         
         private CommandView _view;
         private PlayerController _playerController;
@@ -26,9 +27,17 @@ namespace FEV
             StagedCards.Clear();
         }
 
-        public void AddCards(List<ICommand> cards)
+        public void StageCards(List<ICommand> cards)
         {
             StagedCards = cards;
+            CurrentTurn.CardsDrawn = true;
+            _view.Redraw(_playerController.GetCurrentPlayer());
+        }
+
+        public void PlayerClaimsCard(ICommand card)
+        {
+            _playerController.GetCurrentPlayer().AddCard(card);
+            StagedCards.Clear();
             _view.Redraw(_playerController.GetCurrentPlayer());
         }
     }

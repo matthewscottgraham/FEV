@@ -26,17 +26,24 @@ namespace FEV
             _commandContainer = _uiDocument.rootVisualElement.Q("commandContainer");
             _cardContainer = _uiDocument.rootVisualElement.Q("cardContainer");
             _stagedCardContainer = _uiDocument.rootVisualElement.Q("stagingArea");
-            _drawCardButton = CreateStagedCardButton(new DrawCardCommand(_commandController), null);
-            _commandContainer.Insert(0, _drawCardButton);
             
-            _confirmPlacementButton = CreateStagedCardButton(new PlaceFeatureCommand(_commandController), null);
-            _commandContainer.Add(_confirmPlacementButton);
+            var drawCardCommand = new DrawCardCommand(_commandController);
+            _drawCardButton = CreateCardButton(drawCardCommand, null);
+            _drawCardButton.clicked += drawCardCommand.Execute;
+            _commandContainer.Insert(0, _drawCardButton);
+
+            var confirmPlacementCommand = new PlaceFeatureCommand(_commandController);
+            _confirmPlacementButton = CreateCardButton(confirmPlacementCommand, _commandContainer);
+            _confirmPlacementButton.clicked += confirmPlacementCommand.Execute;
         }
 
         public void Redraw(Player player)
         {
             ClearCommandButtons();
             ClearStagingArea();
+
+            _drawCardButton.visible = !_commandController.CurrentTurn.CardsDrawn;
+            _confirmPlacementButton.visible = _commandController.CurrentTurn.CardsPlayed;
             
             DisplayPlayerName(player);
             DisplayPlayerCards(player);
@@ -50,9 +57,10 @@ namespace FEV
             if (player.Cards.Count == 0)
                 return;
             
-            foreach (var card in player.Cards)
+            foreach (var cardCommand in player.Cards)
             {
-                CreateStagedCardButton(card, _cardContainer);
+                var cardButton = CreateCardButton(cardCommand, _cardContainer);
+                cardButton.clicked += cardCommand.Execute;
             }
         }
 
@@ -67,9 +75,10 @@ namespace FEV
             if (_commandController.StagedCards.Count == 0)
                 return;
             
-            foreach (var card in _commandController.StagedCards)
+            foreach (var cardCommand in _commandController.StagedCards)
             {
-                CreateStagedCardButton(card, _stagedCardContainer);
+                var cardButton = CreateCardButton(cardCommand, _stagedCardContainer);
+                cardButton.clicked += ()=> _commandController.PlayerClaimsCard(cardCommand);
             }
         }
 
@@ -84,10 +93,9 @@ namespace FEV
             _stagedCardContainer.Clear();
         }
         
-        private Button CreateStagedCardButton(ICommand command, VisualElement container)
+        private static Button CreateCardButton(ICommand command, VisualElement container)
         {
             var cardButton = new Button { text = command.Label };
-            cardButton.clicked += command.Execute;
             container?.Add(cardButton);
             return cardButton;
         }

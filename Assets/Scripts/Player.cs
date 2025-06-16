@@ -5,7 +5,6 @@ namespace FEV
 {
     public class Player : ScriptableObject
     {
-        public static System.Action OnCardsModified;
         public int Index { get; private set; }
         public Color Color { get; private set; }
         public bool IsHuman { get; private set; }
@@ -20,14 +19,12 @@ namespace FEV
         public void AddCard(ICommand card)
         {
             Cards.Add(card);
-            OnCardsModified?.Invoke();
         }
 
         public void RemoveCard(ICommand card)
         {
             if (Cards.Contains(card))
                 Cards.Remove(card);
-            OnCardsModified?.Invoke();
         }
 
         public override string ToString()

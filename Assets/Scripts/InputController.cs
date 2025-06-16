@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace FEV
 {
-    public class InputController : MonoBehaviour
+    public class InputController : MonoBehaviour, IDisposable
     {
         public Action<Vector2> Moved;
         public Action<float> Zoomed;
@@ -15,20 +15,17 @@ namespace FEV
         // TODO this needs to function from a touch or mouse
         public Vector2 CursorPosition => Mouse.current.position.ReadValue();
         
-        private void Awake()
+        public void Initialize()
         {
             _inputSystem = new InputSystem_Actions();
             _inputSystem.Enable();
-        }
-
-        private void OnEnable()
-        {
+            
             _inputSystem.Player.Move.performed += OnMove;
             _inputSystem.Player.Zoom.performed += OnZoom;
             _inputSystem.Player.Attack.performed += OnClick;
         }
 
-        private void OnDisable()
+        public void Dispose()
         {
             _inputSystem.Player.Move.performed -= OnMove;
             _inputSystem.Player.Zoom.performed -= OnZoom;
