@@ -309,7 +309,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc3173f1f99fe4976821088cb181f2fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputController: {fileID: 0}
   cameraTransform: {fileID: 431789122}
   zoomSpeed: 0.002
   zoomBounds: {x: 5, y: 12}

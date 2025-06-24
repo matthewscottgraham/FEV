@@ -6,7 +6,7 @@ namespace FEV
     public class CameraController : MonoBehaviour
     {
         // TODO need an event bus or something so that I dont have the dependencies of the different controllers
-        [SerializeField] private InputController inputController;
+        //[SerializeField] private InputController inputController;
         [SerializeField] private Transform cameraTransform;
     
         [Header("Camera Settings")]
@@ -17,17 +17,17 @@ namespace FEV
         private readonly float _timeToMove = 0.3f;
         private readonly Vector3 _centerOffset = new Vector3(0, 0, -25f);
     
-        void OnEnable()
-        {
-            inputController.Moved += HandleMove;
-            inputController.Zoomed += HandleZoom;
-        }
-
-        void OnDisable()
-        {
-            inputController.Moved += HandleMove;
-            inputController.Zoomed -= HandleZoom;
-        }
+        // void OnEnable()
+        // {
+        //     inputController.Moved += HandleMove;
+        //     inputController.Zoomed += HandleZoom;
+        // }
+        //
+        // void OnDisable()
+        // {
+        //     inputController.Moved += HandleMove;
+        //     inputController.Zoomed -= HandleZoom;
+        // }
 
         void Start()
         {

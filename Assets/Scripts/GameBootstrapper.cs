@@ -1,4 +1,3 @@
-using System;
 using FEV;
 using UnityEngine;
 
@@ -6,19 +5,18 @@ public class GameBootstrapper : MonoBehaviour
 {
     [SerializeField] private CommandView commandView;
     
-    private GridVisualizer _gridVisualizer;
     private PegController _pegController;
     private PlayerController _playerController;
     private CommandController _commandController;
     private InputController _inputController;
-    
+    private SelectionController _selectionController;
+
     private void Start()
     {
-        _gridVisualizer = Create<GridVisualizer>() as GridVisualizer;
-        _gridVisualizer?.Initialize();
+        var matchState = Resources.Load<MatchState>("MatchState");
         
         _pegController = Create<PegController>() as PegController;
-        _pegController?.Initialize();
+        _pegController?.Initialize(matchState);
         
         _playerController = Create<PlayerController>() as PlayerController;
         _playerController?.Initialize();
@@ -27,6 +25,9 @@ public class GameBootstrapper : MonoBehaviour
         
         _inputController = Create<InputController>() as InputController;
         _inputController?.Initialize();
+
+        _selectionController = Create<SelectionController>() as SelectionController;
+        _selectionController?.Initialize(matchState, _inputController, _pegController);
     }
 
     private void OnDestroy()
@@ -39,6 +40,9 @@ public class GameBootstrapper : MonoBehaviour
 
         _inputController?.Dispose();
         _inputController = null;
+        
+        _selectionController?.Dispose();
+        _selectionController = null;
     }
 
     private Component Create<T>()
