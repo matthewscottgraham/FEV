@@ -10,6 +10,8 @@ namespace FEV
         private PegController _pegController;
         private Camera _camera;
         
+        private Vector2Int? _lastHoveredCoordinate;
+        
         public void Initialize(MatchState matchState, InputController inputController, PegController pegController)
         {
             _matchState = matchState;
@@ -36,7 +38,10 @@ namespace FEV
         private void Update()
         {
             var hoveredPegCoords = GetHoveredPegCoordinates();
-            if (hoveredPegCoords != null) _pegController.SetHighlight(hoveredPegCoords.Value);
+            if (hoveredPegCoords == null || hoveredPegCoords == _lastHoveredCoordinate) return;
+            
+            _pegController.SetHighlight(hoveredPegCoords.Value);
+            _lastHoveredCoordinate = hoveredPegCoords;
         }
 
         private Vector2Int? GetHoveredPegCoordinates()

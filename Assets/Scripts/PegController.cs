@@ -1,14 +1,18 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace FEV
 {
     public class PegController : MonoBehaviour
     {
+        //TEMPORARY FOR TESTING
+        public TileShape tileShape;
+        
         private readonly Vector3 _pegOffset = new Vector3(-1f, 0, -1f);
         private Peg _pegPrototype;
         private Peg[,] _pegs;
-        private Peg _highlightedPeg;
-        private Peg _selectedPeg;
+        private List<Peg> _highlightedPegs = new();
+        private List<Peg> _selectedPegs = new();
         
         public void Initialize(MatchState matchState)
         {
@@ -18,25 +22,65 @@ namespace FEV
 
         public void SetHighlight(Vector2Int coordinates)
         {
-            _highlightedPeg?.Highlight(false);
-            if (!IsValidCoordinate(coordinates)) return;
-            _pegs[coordinates.x, coordinates.y].Highlight(true);
-            _highlightedPeg = _pegs[coordinates.x, coordinates.y];
+            ClearHighlight();
+            
+            var dimensions = tileShape.GetShapeDimensions();
+            if (!IsValidCoordinate(coordinates, dimensions)) return;
+            
+            for (int y = 0; y < dimensions.y; y++)
+            {
+                for (int x = 0; x < dimensions.x; x++)
+                {
+                    if (!tileShape.GetValue(x,y))
+                        continue;
+                    _pegs[coordinates.x + x - 1, coordinates.y + y - 1].Highlight(true);
+                    _highlightedPegs.Add(_pegs[coordinates.x + x - 1, coordinates.y + y - 1]);
+                }
+            }
         }
 
         public void SetSelected(Vector2Int coordinates)
         {
-            _selectedPeg?.Select(false);
-            if (!IsValidCoordinate(coordinates)) return;
-            _pegs[coordinates.x, coordinates.y].Select(true);
-            _selectedPeg = _pegs[coordinates.x, coordinates.y];
+            ClearSelected();
+            
+            var dimensions = tileShape.GetShapeDimensions();
+            if (!IsValidCoordinate(coordinates, dimensions)) return;
+            
+            for (int y = 0; y < dimensions.y; y++)
+            {
+                for (int x = 0; x < dimensions.x; x++)
+                {
+                    if (!tileShape.GetValue(x,y))
+                        continue;
+                    _pegs[coordinates.x + x - 1, coordinates.y + y - 1].Select(true);
+                    _selectedPegs.Add(_pegs[coordinates.x + x - 1, coordinates.y + y - 1]);
+                }
+            }
         }
-
-        private bool IsValidCoordinate(Vector2Int coordinates)
+        
+        private void ClearHighlight()
+        {
+            foreach (var peg in _highlightedPegs)
+            {
+                peg.Highlight(false);
+            }
+            _highlightedPegs.Clear();
+        }
+        private void ClearSelected()
+        {
+            foreach (var peg in _selectedPegs)
+            {
+                peg.Select(false);
+            }
+            _selectedPegs.Clear();
+        }
+        
+        private bool IsValidCoordinate(Vector2Int coordinates, Vector2Int dimensions)
         {
             if (coordinates.x < 0 || coordinates.y < 0)
                 return false;
-            if (coordinates.x >= _pegs.GetLength(0) || coordinates.y >= _pegs.GetLength(1))
+            if (coordinates.x + dimensions.x - 1 > _pegs.GetLength(0) 
+                || coordinates.y + dimensions.y - 1 > _pegs.GetLength(1))
                 return false;
             return true;
         }
