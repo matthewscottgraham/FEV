@@ -5,62 +5,53 @@ namespace FEV
 {
     public class CommandView : MonoBehaviour
     {
-        private CommandController _commandController;
         private UIDocument _uiDocument;
         
         private Label _playerLabel;
         private VisualElement _commandContainer;
-        private VisualElement _cardContainer;
-        private VisualElement _stagedCardContainer;
+        private VisualElement _tileContainer;
 
-        private Button _drawCardButton;
+        private Button _drawTileButton;
         private Button _confirmPlacementButton;
         
         public void Initialize(CommandController commandController)
         {
-            _commandController = commandController;
-            
             _uiDocument = gameObject.GetComponent<UIDocument>();
             _playerLabel = _uiDocument.rootVisualElement.Q<Label>("playerLabel");
             
             _commandContainer = _uiDocument.rootVisualElement.Q("commandContainer");
-            _cardContainer = _uiDocument.rootVisualElement.Q("cardContainer");
-            _stagedCardContainer = _uiDocument.rootVisualElement.Q("stagingArea");
+            _tileContainer = _uiDocument.rootVisualElement.Q("cardContainer");
             
-            var drawCardCommand = new DrawCardCommand(_commandController);
-            _drawCardButton = CreateCardButton(drawCardCommand, null);
-            _drawCardButton.clicked += drawCardCommand.Execute;
-            _commandContainer.Insert(0, _drawCardButton);
+            var drawTileCommand = new DrawTileCommand(commandController);
+            _drawTileButton = CreateTileButton(drawTileCommand, null);
+            _commandContainer.Insert(0, _drawTileButton);
 
-            var confirmPlacementCommand = new PlaceFeatureCommand(_commandController);
-            _confirmPlacementButton = CreateCardButton(confirmPlacementCommand, _commandContainer);
-            _confirmPlacementButton.clicked += confirmPlacementCommand.Execute;
+            var confirmPlacementCommand = new PlaceFeatureCommand(commandController);
+            _confirmPlacementButton = CreateTileButton(confirmPlacementCommand, _commandContainer);
         }
 
         public void Redraw(Player player)
         {
             ClearCommandButtons();
-            ClearStagingArea();
 
-            _drawCardButton.visible = !_commandController.CurrentTurn.CardsDrawn;
-            _confirmPlacementButton.visible = _commandController.CurrentTurn.CardsPlayed;
+            _drawTileButton.visible = !MatchState.TilesDrawn;
+            _confirmPlacementButton.visible = MatchState.TilesPlayed;
             
             DisplayPlayerName(player);
-            DisplayPlayerCards(player);
-            DisplayStagedCards();
+            DisplayPlayerTiles(player);
         }
 
-        private void DisplayPlayerCards(Player player)
+        private void DisplayPlayerTiles(Player player)
         {
             _commandContainer.visible = true;
             
-            if (player.Cards.Count == 0)
+            if (player.Tiles.Count == 0)
                 return;
             
-            foreach (var cardCommand in player.Cards)
+            foreach (var tile in player.Tiles)
             {
-                var cardButton = CreateCardButton(cardCommand, _cardContainer);
-                cardButton.clicked += cardCommand.Execute;
+                var tileButton = CreateTileButton(tile, _tileContainer);
+                tileButton.clicked += tile.Execute;
             }
         }
 
@@ -70,34 +61,18 @@ namespace FEV
             _playerLabel.style.color = player.Color;
         }
 
-        private void DisplayStagedCards()
-        {
-            if (_commandController.StagedCards.Count == 0)
-                return;
-            
-            foreach (var cardCommand in _commandController.StagedCards)
-            {
-                var cardButton = CreateCardButton(cardCommand, _stagedCardContainer);
-                cardButton.clicked += ()=> _commandController.PlayerClaimsCard(cardCommand);
-            }
-        }
-
         private void ClearCommandButtons()
         {
-            _cardContainer.Clear();
+            _tileContainer.Clear();
             _commandContainer.visible = false;
         }
-
-        private void ClearStagingArea()
-        {
-            _stagedCardContainer.Clear();
-        }
         
-        private static Button CreateCardButton(ICommand command, VisualElement container)
+        private static Button CreateTileButton(ICommand command, VisualElement container)
         {
-            var cardButton = new Button { text = command.Label };
-            container?.Add(cardButton);
-            return cardButton;
+            var button = new Button { text = command.Label };
+            container?.Add(button);
+            button.clicked += command.Execute;
+            return button;
         }
     }
 }

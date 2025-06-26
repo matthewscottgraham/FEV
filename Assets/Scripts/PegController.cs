@@ -5,9 +5,6 @@ namespace FEV
 {
     public class PegController : MonoBehaviour
     {
-        //TEMPORARY FOR TESTING
-        public TileShape tileShape;
-        
         private readonly Vector3 _pegOffset = new Vector3(-1f, 0, -1f);
         private Peg _pegPrototype;
         private Peg[,] _pegs;
@@ -20,18 +17,19 @@ namespace FEV
             CreatePegs(matchState.GridSize.x, matchState.GridSize.y);
         }
 
-        public void SetHighlight(Vector2Int coordinates)
+        public void SetHighlight(Vector2Int coordinates, Tile tile)
         {
             ClearHighlight();
+            if (tile == null) return;
             
-            var dimensions = tileShape.GetShapeDimensions();
+            var dimensions = tile.Shape.GetShapeDimensions();
             if (!IsValidCoordinate(coordinates, dimensions)) return;
             
             for (int y = 0; y < dimensions.y; y++)
             {
                 for (int x = 0; x < dimensions.x; x++)
                 {
-                    if (!tileShape.GetValue(x,y))
+                    if (!tile.Shape.GetValue(x,y))
                         continue;
                     _pegs[coordinates.x + x - 1, coordinates.y + y - 1].Highlight(true);
                     _highlightedPegs.Add(_pegs[coordinates.x + x - 1, coordinates.y + y - 1]);
@@ -39,23 +37,26 @@ namespace FEV
             }
         }
 
-        public void SetSelected(Vector2Int coordinates)
+        public void SetSelected(Vector2Int coordinates, Tile tile)
         {
             ClearSelected();
+            if (tile == null) return;
             
-            var dimensions = tileShape.GetShapeDimensions();
+            var dimensions = tile.Shape.GetShapeDimensions();
             if (!IsValidCoordinate(coordinates, dimensions)) return;
             
             for (int y = 0; y < dimensions.y; y++)
             {
                 for (int x = 0; x < dimensions.x; x++)
                 {
-                    if (!tileShape.GetValue(x,y))
+                    if (!tile.Shape.GetValue(x,y))
                         continue;
                     _pegs[coordinates.x + x - 1, coordinates.y + y - 1].Select(true);
                     _selectedPegs.Add(_pegs[coordinates.x + x - 1, coordinates.y + y - 1]);
                 }
             }
+            
+            MatchState.TilesPlayed = true;
         }
         
         private void ClearHighlight()

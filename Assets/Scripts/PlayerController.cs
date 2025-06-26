@@ -23,7 +23,6 @@ namespace FEV
             _players[1].Initialize(1, Color.red);
             
             OnPlayerTurnStart?.Invoke();
-            //Blackboard.Instance.SetCurrentPlayer(_players[0]);
         }
 
         public Player GetCurrentPlayer()
@@ -33,10 +32,8 @@ namespace FEV
 
         private void OnTurnCompleted()
         {
-            var currentPlayerIndex = Blackboard.Instance.CurrentPlayer.Index;
-            currentPlayerIndex++;
-            currentPlayerIndex %= _players.Length;
-            //Blackboard.Instance.SetCurrentPlayer(_players[currentPlayerIndex]);
+            _currentPlayerIndex++;
+            _currentPlayerIndex %= _players.Length;
         }
 
         public void Dispose()

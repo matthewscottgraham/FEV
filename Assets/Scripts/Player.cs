@@ -8,7 +8,7 @@ namespace FEV
         public int Index { get; private set; }
         public Color Color { get; private set; }
         public bool IsHuman { get; private set; }
-        public List<ICommand> Cards { get; private set; } = new();
+        public List<Tile> Tiles { get; private set; } = new();
         public void Initialize(int index, Color color, bool isHuman = true)
         {
             Index = index;
@@ -16,15 +16,15 @@ namespace FEV
             IsHuman = isHuman;
         }
 
-        public void AddCard(ICommand card)
+        public void AddTile(Tile tile)
         {
-            Cards.Add(card);
+            Tiles.Add(tile);
         }
 
-        public void RemoveCard(ICommand card)
+        public void RemoveTile(Tile tile)
         {
-            if (Cards.Contains(card))
-                Cards.Remove(card);
+            if (Tiles.Contains(tile))
+                Tiles.Remove(tile);
         }
 
         public override string ToString()

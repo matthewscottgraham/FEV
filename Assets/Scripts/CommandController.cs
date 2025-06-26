@@ -5,39 +5,40 @@ namespace FEV
 {
     public class CommandController: IDisposable
     {
-        public List<ICommand> StagedCards { get; private set; } = new();
-        public Turn CurrentTurn { get; private set; } = new();
-        
         private CommandView _view;
         private PlayerController _playerController;
+        private TileFactory _tileFactory;
         
-        public CommandController(CommandView view, PlayerController playerController)
+        public CommandController(CommandView view, PlayerController playerController, TileFactory tileFactory)
         {
             _view = view;
             _playerController = playerController;
 
             _view.Initialize(this);
             _view.Redraw(_playerController.GetCurrentPlayer());
+            
+            _tileFactory = tileFactory;
+
+            MatchState.OnTurnUpdate += UpdateView;
         }
 
         public void Dispose()
         {
             _view = null;
             _playerController = null;
-            StagedCards.Clear();
+            _tileFactory = null;
+            MatchState.OnTurnUpdate -= UpdateView;
         }
 
-        public void StageCards(List<ICommand> cards)
+        public void AddTileToPlayer()
         {
-            StagedCards = cards;
-            CurrentTurn.CardsDrawn = true;
+            var tile = _tileFactory.DrawRandomTile();
+            _playerController.GetCurrentPlayer().AddTile(tile);
             _view.Redraw(_playerController.GetCurrentPlayer());
         }
 
-        public void PlayerClaimsCard(ICommand card)
+        private void UpdateView()
         {
-            _playerController.GetCurrentPlayer().AddCard(card);
-            StagedCards.Clear();
             _view.Redraw(_playerController.GetCurrentPlayer());
         }
     }

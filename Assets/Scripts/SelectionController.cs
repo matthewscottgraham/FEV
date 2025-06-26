@@ -40,7 +40,7 @@ namespace FEV
             var hoveredPegCoords = GetHoveredPegCoordinates();
             if (hoveredPegCoords == null || hoveredPegCoords == _lastHoveredCoordinate) return;
             
-            _pegController.SetHighlight(hoveredPegCoords.Value);
+            _pegController.SetHighlight(hoveredPegCoords.Value, MatchState.SelectedTile);
             _lastHoveredCoordinate = hoveredPegCoords;
         }
 
@@ -56,7 +56,7 @@ namespace FEV
         private void HandleCursorClick()
         {
             var hoveredPegCoords = GetHoveredPegCoordinates();
-            if (hoveredPegCoords != null) _pegController.SetSelected(hoveredPegCoords.Value);
+            if (hoveredPegCoords != null) _pegController.SetSelected(hoveredPegCoords.Value, MatchState.SelectedTile);
         }
     }
 }

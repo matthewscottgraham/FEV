@@ -10,7 +10,8 @@ public class GameBootstrapper : MonoBehaviour
     private CommandController _commandController;
     private InputController _inputController;
     private SelectionController _selectionController;
-
+    private TileFactory _tileFactory;
+    
     private void Start()
     {
         var matchState = Resources.Load<MatchState>("MatchState");
@@ -21,7 +22,8 @@ public class GameBootstrapper : MonoBehaviour
         _playerController = Create<PlayerController>() as PlayerController;
         _playerController?.Initialize();
         
-        _commandController = new CommandController(commandView, _playerController);
+        _tileFactory = new TileFactory();
+        _commandController = new CommandController(commandView, _playerController, _tileFactory);
         
         _inputController = Create<InputController>() as InputController;
         _inputController?.Initialize();
@@ -43,6 +45,9 @@ public class GameBootstrapper : MonoBehaviour
         
         _selectionController?.Dispose();
         _selectionController = null;
+        
+        _tileFactory?.Dispose();
+        _tileFactory = null;
     }
 
     private Component Create<T>()
