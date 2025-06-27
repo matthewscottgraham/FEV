@@ -2,6 +2,7 @@ namespace FEV
 {
     public class Tile : ICommand
     {
+        public static System.Action<Tile> OnTileSelected;
         public Tile(TileShape shape)
         {
             Shape = shape;
@@ -12,7 +13,7 @@ namespace FEV
 
         public void Execute()
         {
-            MatchState.SelectedTile = this;
+            OnTileSelected?.Invoke(this);
         }
 
         public void Destroy()

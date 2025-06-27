@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace FEV
@@ -7,20 +8,21 @@ namespace FEV
     {
         public Action OnPlayerTurnStart { get; set; }
         
+        private MatchState _matchState;
         private Player[] _players;
         private int _currentPlayerIndex = 0;
-        
-        public void Initialize()
+        private Color[] _colors = new []{Color.blue, Color.red, Color.green, Color.yellow};
+        public void Initialize(MatchState matchState)
         {
-            PlaceFeatureCommand.OnConfirmPlaceFeature += OnTurnCompleted;
-            
-            _players = new Player[2];
-            
-            _players[0] = ScriptableObject.CreateInstance<Player>();
-            _players[0].Initialize(0, Color.blue);
-            
-            _players[1] = ScriptableObject.CreateInstance<Player>();
-            _players[1].Initialize(1, Color.red);
+            PlaceTileCommand.OnConfirmPlaceTile += HandleTilePlaced;
+            _matchState = matchState;
+            _players = new Player[_matchState.playerCount];
+
+            for (int i = 0; i < _players.Length; ++i)
+            {
+                _players[i] = ScriptableObject.CreateInstance<Player>();
+                _players[i].Initialize(i, _colors[i]);
+            }
             
             OnPlayerTurnStart?.Invoke();
         }
@@ -30,15 +32,21 @@ namespace FEV
             return _players[_currentPlayerIndex];
         }
 
-        private void OnTurnCompleted()
+        private async void HandleTilePlaced()
         {
+            await Task.Delay(TimeSpan.FromSeconds(0.1f));
+            
+            GetCurrentPlayer().RemoveTile(_matchState.SelectedTile);
+            _matchState.SelectedTile = null;
+            
             _currentPlayerIndex++;
             _currentPlayerIndex %= _players.Length;
+            OnPlayerTurnStart?.Invoke();
         }
 
         public void Dispose()
         {
-            PlaceFeatureCommand.OnConfirmPlaceFeature -= OnTurnCompleted;
+            PlaceTileCommand.OnConfirmPlaceTile -= HandleTilePlaced;
             _players = null;
         }
     }

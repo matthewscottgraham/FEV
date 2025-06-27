@@ -13,7 +13,7 @@ public class MainMenuController : MonoBehaviour
     {
         var matchStateObject = Resources.Load<MatchState>("MatchState");
         var serializedMatchStateObject = new SerializedObject(matchStateObject);
-        var gridSizeProperty = serializedMatchStateObject.FindProperty("GridSize");
+        var gridSizeProperty = serializedMatchStateObject.FindProperty("gridSize");
         
         var uiDocument = GetComponent<UIDocument>();
         

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -5,16 +6,24 @@ namespace FEV
 {
     public class PegController : MonoBehaviour
     {
+        private MatchState _matchState;
+        private PlayerController _playerController;
+        
         private readonly Vector3 _pegOffset = new Vector3(-1f, 0, -1f);
         private Peg _pegPrototype;
         private Peg[,] _pegs;
         private List<Peg> _highlightedPegs = new();
         private List<Peg> _selectedPegs = new();
         
-        public void Initialize(MatchState matchState)
+        public void Initialize(MatchState matchState, PlayerController playerController)
         {
+            PlaceTileCommand.OnConfirmPlaceTile += HandlePlaceTile;
+            
+            _matchState = matchState;
+            _playerController = playerController;
+            
             CreatePegPrototype();
-            CreatePegs(matchState.GridSize.x, matchState.GridSize.y);
+            CreatePegs(matchState.gridSize.x, matchState.gridSize.y);
         }
 
         public void SetHighlight(Vector2Int coordinates, Tile tile)
@@ -56,9 +65,14 @@ namespace FEV
                 }
             }
             
-            MatchState.TilesPlayed = true;
+            _matchState.TilesPlayed = true;
         }
-        
+
+        private void OnDestroy()
+        {
+            PlaceTileCommand.OnConfirmPlaceTile -= HandlePlaceTile;
+        }
+
         private void ClearHighlight()
         {
             foreach (var peg in _highlightedPegs)
@@ -84,6 +98,16 @@ namespace FEV
                 || coordinates.y + dimensions.y - 1 > _pegs.GetLength(1))
                 return false;
             return true;
+        }
+
+        private void HandlePlaceTile()
+        {
+            var player = _playerController.GetCurrentPlayer();
+            foreach (var peg in _selectedPegs)
+            {
+                peg.Claim(player);
+            }
+            ClearSelected();
         }
         
         private void CreatePegPrototype()

@@ -9,6 +9,7 @@ namespace FEV
         private MeshRenderer _meshRenderer;
         private bool _isHighlighted;
         private bool _isSelected;
+        private Player _player;
         
         public void Highlight(bool isHighlighted)
         {
@@ -23,6 +24,11 @@ namespace FEV
             if (_isSelected) _isHighlighted = false;
             SetMaterial();
         }
+
+        public void Claim(Player player)
+        {
+            _player = player;
+        }
         
         private void OnEnable()
         {
@@ -31,6 +37,13 @@ namespace FEV
 
         private void SetMaterial()
         {
+            if (_player != null)
+            {
+                _meshRenderer.material.SetColor(BaseColor, _player.Color);
+                transform.localScale = Vector3.one * 0.5f;
+                return;
+            }
+            
             if (_isSelected)
             {
                 _meshRenderer.material.SetColor(BaseColor, Color.white);

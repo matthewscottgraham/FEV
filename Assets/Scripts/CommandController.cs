@@ -5,32 +5,42 @@ namespace FEV
 {
     public class CommandController: IDisposable
     {
+        private MatchState _matchState;
         private CommandView _view;
         private PlayerController _playerController;
         private TileFactory _tileFactory;
         
-        public CommandController(CommandView view, PlayerController playerController, TileFactory tileFactory)
+        public CommandController(MatchState matchState, CommandView view, PlayerController playerController, TileFactory tileFactory)
         {
+            _matchState = matchState;
             _view = view;
             _playerController = playerController;
 
-            _view.Initialize(this);
+            _view.Initialize(_matchState, this);
             _view.Redraw(_playerController.GetCurrentPlayer());
             
             _tileFactory = tileFactory;
-
-            MatchState.OnTurnUpdate += UpdateView;
+            
+            _matchState.OnTilePlayed += UpdateView;
+            Tile.OnTileSelected += HandleTileSelected;
+            DrawTileCommand.OnDrawTile += HandleDrawTile;
+            _playerController.OnPlayerTurnStart += UpdateView;
         }
 
         public void Dispose()
         {
+            _matchState.OnTilePlayed -= UpdateView;
+            _playerController.OnPlayerTurnStart -= UpdateView;
+            Tile.OnTileSelected -= HandleTileSelected;
+            DrawTileCommand.OnDrawTile -= HandleDrawTile;
+            
             _view = null;
             _playerController = null;
             _tileFactory = null;
-            MatchState.OnTurnUpdate -= UpdateView;
+            _matchState = null;
         }
 
-        public void AddTileToPlayer()
+        private void HandleDrawTile()
         {
             var tile = _tileFactory.DrawRandomTile();
             _playerController.GetCurrentPlayer().AddTile(tile);
@@ -40,6 +50,11 @@ namespace FEV
         private void UpdateView()
         {
             _view.Redraw(_playerController.GetCurrentPlayer());
+        }
+
+        private void HandleTileSelected(Tile tile)
+        {
+            _matchState.SelectedTile = tile;
         }
     }
 }

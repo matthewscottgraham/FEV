@@ -5,23 +5,17 @@ namespace FEV
 {
     public class DrawTileCommand : ICommand
     {
+        public static System.Action OnDrawTile;
         public string Label => "Draw card";
-        
-        private CommandController _commandController;
-        
-        public DrawTileCommand(CommandController controller)
-        {
-            _commandController = controller;
-        }
         
         public void Execute()
         {
-            _commandController.AddTileToPlayer();
+            OnDrawTile?.Invoke();
         }
 
         public void Destroy()
         {
-            _commandController = null;
+            // noop
         }
     }
 }

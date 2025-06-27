@@ -16,14 +16,14 @@ public class GameBootstrapper : MonoBehaviour
     {
         var matchState = Resources.Load<MatchState>("MatchState");
         
-        _pegController = Create<PegController>() as PegController;
-        _pegController?.Initialize(matchState);
-        
         _playerController = Create<PlayerController>() as PlayerController;
-        _playerController?.Initialize();
+        _playerController?.Initialize(matchState);
+        
+        _pegController = Create<PegController>() as PegController;
+        _pegController?.Initialize(matchState, _playerController);
         
         _tileFactory = new TileFactory();
-        _commandController = new CommandController(commandView, _playerController, _tileFactory);
+        _commandController = new CommandController(matchState, commandView, _playerController, _tileFactory);
         
         _inputController = Create<InputController>() as InputController;
         _inputController?.Initialize();

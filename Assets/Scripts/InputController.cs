@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace FEV
@@ -10,6 +12,7 @@ namespace FEV
         public Action<float> Zoomed;
         public Action Clicked;
         
+        private EventSystem _eventSystem;
         private InputSystem_Actions _inputSystem;
 
         // TODO this needs to function from a touch or mouse
@@ -17,6 +20,7 @@ namespace FEV
         
         public void Initialize()
         {
+            _eventSystem = EventSystem.current;
             _inputSystem = new InputSystem_Actions();
             _inputSystem.Enable();
             
@@ -32,8 +36,21 @@ namespace FEV
             _inputSystem.Player.Attack.performed -= OnClick;
         }
 
+        private bool IsPointerOverUIObject()
+        {
+            var pointerEventData = new PointerEventData(_eventSystem)
+            {
+                position = Pointer.current.position.value
+            };
+            var results = new List<RaycastResult>();
+            _eventSystem.RaycastAll(pointerEventData, results);
+            return results.Count > 0;
+        }
+        
         private void OnClick(InputAction.CallbackContext context)
         {
+            if (IsPointerOverUIObject()) return;
+            
             Clicked?.Invoke();
         }
 

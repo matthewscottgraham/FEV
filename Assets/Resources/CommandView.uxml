@@ -1,10 +1,10 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/style.uss?fileID=7433441132597879392&amp;guid=553aacdfc1d394ac294737f2ae5fbb4a&amp;type=3#style" />
-    <engine:VisualElement style="flex-grow: 1;">
-        <engine:Label text="Label" name="playerLabel" />
-        <engine:VisualElement name="stagingArea" class="staging-container" />
+    <engine:VisualElement picking-mode="Ignore" style="flex-grow: 1;">
+        <engine:Label text="Label" name="playerLabel" picking-mode="Ignore" />
+        <engine:VisualElement name="stagingArea" picking-mode="Ignore" class="staging-container" />
     </engine:VisualElement>
-    <engine:VisualElement name="commandContainer" style="flex-grow: 0; height: 100px; flex-direction: row;">
-        <engine:VisualElement name="cardContainer" class="staging-container" style="flex-grow: 1;" />
+    <engine:VisualElement name="commandContainer" picking-mode="Ignore" style="flex-grow: 0; height: 100px; flex-direction: row;">
+        <engine:VisualElement name="cardContainer" picking-mode="Ignore" class="staging-container" style="flex-grow: 1;" />
     </engine:VisualElement>
 </engine:UXML>

@@ -26,7 +26,7 @@ namespace FEV
             if (Tiles.Contains(tile))
                 Tiles.Remove(tile);
         }
-
+        
         public override string ToString()
         {
             return $"Player: {Index}";

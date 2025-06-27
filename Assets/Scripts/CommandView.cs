@@ -5,6 +5,8 @@ namespace FEV
 {
     public class CommandView : MonoBehaviour
     {
+        private MatchState _matchState;
+        
         private UIDocument _uiDocument;
         
         private Label _playerLabel;
@@ -14,19 +16,20 @@ namespace FEV
         private Button _drawTileButton;
         private Button _confirmPlacementButton;
         
-        public void Initialize(CommandController commandController)
+        public void Initialize(MatchState matchState, CommandController commandController)
         {
+            _matchState = matchState;
             _uiDocument = gameObject.GetComponent<UIDocument>();
             _playerLabel = _uiDocument.rootVisualElement.Q<Label>("playerLabel");
             
             _commandContainer = _uiDocument.rootVisualElement.Q("commandContainer");
             _tileContainer = _uiDocument.rootVisualElement.Q("cardContainer");
             
-            var drawTileCommand = new DrawTileCommand(commandController);
+            var drawTileCommand = new DrawTileCommand();
             _drawTileButton = CreateTileButton(drawTileCommand, null);
             _commandContainer.Insert(0, _drawTileButton);
 
-            var confirmPlacementCommand = new PlaceFeatureCommand(commandController);
+            var confirmPlacementCommand = new PlaceTileCommand();
             _confirmPlacementButton = CreateTileButton(confirmPlacementCommand, _commandContainer);
         }
 
@@ -34,8 +37,8 @@ namespace FEV
         {
             ClearCommandButtons();
 
-            _drawTileButton.visible = !MatchState.TilesDrawn;
-            _confirmPlacementButton.visible = MatchState.TilesPlayed;
+            _drawTileButton.visible = !_matchState.TilesDrawn;
+            _confirmPlacementButton.visible = _matchState.TilesPlayed;
             
             DisplayPlayerName(player);
             DisplayPlayerTiles(player);
