@@ -1,7 +1,7 @@
-using System;
+using FEV;
 using UnityEngine;
 
-namespace FEV
+namespace Pegs
 {
     public class Peg : MonoBehaviour
     {

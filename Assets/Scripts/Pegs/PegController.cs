@@ -1,6 +1,10 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
+using Pegs;
+using Rules;
+using Tiles;
 
 namespace FEV
 {
@@ -8,6 +12,8 @@ namespace FEV
     {
         private MatchState _matchState;
         private PlayerController _playerController;
+        private PlacementRule[] _placementRules;
+        
         
         private readonly Vector3 _pegOffset = new Vector3(-1f, 0, -1f);
         private Peg _pegPrototype;
@@ -21,6 +27,8 @@ namespace FEV
             
             _matchState = matchState;
             _playerController = playerController;
+
+            _placementRules = Resources.LoadAll<PlacementRule>("Rules");
             
             CreatePegPrototype();
             CreatePegs(matchState.gridSize.x, matchState.gridSize.y);
@@ -33,6 +41,11 @@ namespace FEV
             
             var dimensions = tile.Shape.GetShapeDimensions();
             if (!IsValidCoordinate(coordinates, dimensions)) return;
+
+            if (_placementRules.Any(rule => !rule.IsSatisfied(coordinates, tile, _pegs)))
+            {
+                return;
+            }
             
             for (int y = 0; y < dimensions.y; y++)
             {

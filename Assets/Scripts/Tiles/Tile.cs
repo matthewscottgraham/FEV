@@ -1,4 +1,6 @@
-namespace FEV
+using FEV;
+
+namespace Tiles
 {
     public class Tile : ICommand
     {

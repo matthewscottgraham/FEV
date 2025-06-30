@@ -1,0 +1,11 @@
+using UnityEngine;
+using Pegs;
+using Tiles;
+
+namespace Rules
+{
+    public interface IRule
+    {
+        public bool IsSatisfied(Vector2Int coordinate, Tile tile, Peg[,] board);
+    }
+}
