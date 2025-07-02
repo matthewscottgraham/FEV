@@ -5,16 +5,16 @@ namespace FEV
 {
     public class SelectionController : MonoBehaviour, IDisposable
     {
-        private MatchState _matchState;
+        private MatchConfiguration _matchConfiguration;
         private InputController _inputController;
         private PegController _pegController;
         private Camera _camera;
         
         private Vector2Int? _lastHoveredCoordinate;
         
-        public void Initialize(MatchState matchState, InputController inputController, PegController pegController)
+        public void Initialize(MatchConfiguration matchConfiguration, InputController inputController, PegController pegController)
         {
-            _matchState = matchState;
+            _matchConfiguration = matchConfiguration;
             _inputController = inputController;
             _pegController = pegController;
             _camera = Camera.main;
@@ -25,7 +25,7 @@ namespace FEV
         public void Dispose()
         {
             _inputController.Clicked -= HandleCursorClick;
-            _matchState = null;
+            _matchConfiguration = null;
             _inputController = null;
             _pegController = null;
         }
@@ -37,12 +37,12 @@ namespace FEV
         
         private void Update()
         {
-            if (_matchState.SelectedTile == null) return;
+            if (_matchConfiguration.SelectedTile == null) return;
             
             var hoveredPegCoords = GetHoveredPegCoordinates();
             if (hoveredPegCoords == null || hoveredPegCoords == _lastHoveredCoordinate) return;
             
-            _pegController.SetHighlight(hoveredPegCoords.Value, _matchState.SelectedTile);
+            _pegController.SetHighlight(hoveredPegCoords.Value, _matchConfiguration.SelectedTile);
             _lastHoveredCoordinate = hoveredPegCoords;
         }
 
@@ -57,10 +57,10 @@ namespace FEV
 
         private void HandleCursorClick()
         {
-            if (_matchState.SelectedTile == null) return;
+            if (_matchConfiguration.SelectedTile == null) return;
             
             var hoveredPegCoords = GetHoveredPegCoordinates();
-            if (hoveredPegCoords != null) _pegController.SetSelected(hoveredPegCoords.Value, _matchState.SelectedTile);
+            if (hoveredPegCoords != null) _pegController.SetSelected(hoveredPegCoords.Value, _matchConfiguration.SelectedTile);
         }
     }
 }

@@ -14,22 +14,22 @@ public class GameBootstrapper : MonoBehaviour
     
     private void Start()
     {
-        var matchState = Resources.Load<MatchState>("MatchState");
+        var matchConfiguration = new MatchConfiguration();
         
         _playerController = Create<PlayerController>() as PlayerController;
-        _playerController?.Initialize(matchState);
+        _playerController?.Initialize(matchConfiguration);
         
         _pegController = Create<PegController>() as PegController;
-        _pegController?.Initialize(matchState, _playerController);
+        _pegController?.Initialize(matchConfiguration, _playerController);
         
         _tileFactory = new TileFactory();
-        _commandController = new CommandController(matchState, commandView, _playerController, _tileFactory);
+        _commandController = new CommandController(matchConfiguration, commandView, _playerController, _tileFactory);
         
         _inputController = Create<InputController>() as InputController;
         _inputController?.Initialize();
 
         _selectionController = Create<SelectionController>() as SelectionController;
-        _selectionController?.Initialize(matchState, _inputController, _pegController);
+        _selectionController?.Initialize(matchConfiguration, _inputController, _pegController);
     }
 
     private void OnDestroy()

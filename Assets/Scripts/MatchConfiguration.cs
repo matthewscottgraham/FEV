@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace FEV
 {
-    [CreateAssetMenu(menuName = "FEV/MatchState", fileName = "New Match State")]
-    public class MatchState : ScriptableObject
+    public class MatchConfiguration
     {
         public System.Action OnTileDrawn;
         public System.Action OnTilePlayed;

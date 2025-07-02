@@ -8,15 +8,15 @@ namespace FEV
     {
         public Action OnPlayerTurnStart { get; set; }
         
-        private MatchState _matchState;
+        private MatchConfiguration _matchConfiguration;
         private Player[] _players;
         private int _currentPlayerIndex = 0;
         private Color[] _colors = new []{Color.blue, Color.red, Color.green, Color.yellow};
-        public void Initialize(MatchState matchState)
+        public void Initialize(MatchConfiguration matchConfiguration)
         {
             PlaceTileCommand.OnConfirmPlaceTile += HandleTilePlaced;
-            _matchState = matchState;
-            _players = new Player[_matchState.playerCount];
+            _matchConfiguration = matchConfiguration;
+            _players = new Player[_matchConfiguration.playerCount];
 
             for (int i = 0; i < _players.Length; ++i)
             {
@@ -36,8 +36,8 @@ namespace FEV
         {
             await Task.Delay(TimeSpan.FromSeconds(0.1f));
             
-            GetCurrentPlayer().RemoveTile(_matchState.SelectedTile);
-            _matchState.SelectedTile = null;
+            GetCurrentPlayer().RemoveTile(_matchConfiguration.SelectedTile);
+            _matchConfiguration.SelectedTile = null;
             
             _currentPlayerIndex++;
             _currentPlayerIndex %= _players.Length;

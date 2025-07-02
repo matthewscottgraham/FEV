@@ -11,6 +11,8 @@ namespace Pegs
         private bool _isSelected;
         private Player _player;
         
+        public bool IsClaimed => _player != null;
+        
         public void Highlight(bool isHighlighted)
         {
             if (_isSelected) return;

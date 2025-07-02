@@ -11,16 +11,16 @@ public class MainMenuController : MonoBehaviour
     
     private void Start()
     {
-        var matchStateObject = Resources.Load<MatchState>("MatchState");
-        var serializedMatchStateObject = new SerializedObject(matchStateObject);
-        var gridSizeProperty = serializedMatchStateObject.FindProperty("gridSize");
+        //var matchStateObject = Resources.Load<MatchConfiguration>("MatchState");
+        //var serializedMatchStateObject = new SerializedObject(matchStateObject);
+        //var gridSizeProperty = serializedMatchStateObject.FindProperty("gridSize");
         
         var uiDocument = GetComponent<UIDocument>();
         
         _rootElement = uiDocument.rootVisualElement.AddNew<VisualElement>();
 
-        _gameSizeField = _rootElement.AddNew<Vector2IntField>();
-        _gameSizeField.BindProperty(gridSizeProperty);
+        //_gameSizeField = _rootElement.AddNew<Vector2IntField>();
+        //_gameSizeField.BindProperty(gridSizeProperty);
         
         var playButton = _rootElement.AddNew<Button>();
         playButton.text = "Play";

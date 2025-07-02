@@ -6,23 +6,23 @@ namespace FEV
 {
     public class CommandController: IDisposable
     {
-        private MatchState _matchState;
+        private MatchConfiguration _matchConfiguration;
         private CommandView _view;
         private PlayerController _playerController;
         private TileFactory _tileFactory;
         
-        public CommandController(MatchState matchState, CommandView view, PlayerController playerController, TileFactory tileFactory)
+        public CommandController(MatchConfiguration matchConfiguration, CommandView view, PlayerController playerController, TileFactory tileFactory)
         {
-            _matchState = matchState;
+            _matchConfiguration = matchConfiguration;
             _view = view;
             _playerController = playerController;
 
-            _view.Initialize(_matchState, this);
+            _view.Initialize(_matchConfiguration, this);
             _view.Redraw(_playerController.GetCurrentPlayer());
             
             _tileFactory = tileFactory;
             
-            _matchState.OnTilePlayed += UpdateView;
+            _matchConfiguration.OnTilePlayed += UpdateView;
             Tile.OnTileSelected += HandleTileSelected;
             DrawTileCommand.OnDrawTile += HandleDrawTile;
             _playerController.OnPlayerTurnStart += UpdateView;
@@ -30,7 +30,7 @@ namespace FEV
 
         public void Dispose()
         {
-            _matchState.OnTilePlayed -= UpdateView;
+            _matchConfiguration.OnTilePlayed -= UpdateView;
             _playerController.OnPlayerTurnStart -= UpdateView;
             Tile.OnTileSelected -= HandleTileSelected;
             DrawTileCommand.OnDrawTile -= HandleDrawTile;
@@ -38,7 +38,7 @@ namespace FEV
             _view = null;
             _playerController = null;
             _tileFactory = null;
-            _matchState = null;
+            _matchConfiguration = null;
         }
 
         private void HandleDrawTile()
@@ -55,7 +55,7 @@ namespace FEV
 
         private void HandleTileSelected(Tile tile)
         {
-            _matchState.SelectedTile = tile;
+            _matchConfiguration.SelectedTile = tile;
         }
     }
 }

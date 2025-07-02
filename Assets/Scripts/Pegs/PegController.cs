@@ -10,9 +10,9 @@ namespace FEV
 {
     public class PegController : MonoBehaviour
     {
-        private MatchState _matchState;
+        private MatchConfiguration _matchConfiguration;
         private PlayerController _playerController;
-        private PlacementRule[] _placementRules;
+        private IRule[] _placementRules;
         
         
         private readonly Vector3 _pegOffset = new Vector3(-1f, 0, -1f);
@@ -21,17 +21,21 @@ namespace FEV
         private List<Peg> _highlightedPegs = new();
         private List<Peg> _selectedPegs = new();
         
-        public void Initialize(MatchState matchState, PlayerController playerController)
+        public void Initialize(MatchConfiguration matchConfiguration, PlayerController playerController)
         {
             PlaceTileCommand.OnConfirmPlaceTile += HandlePlaceTile;
             
-            _matchState = matchState;
+            _matchConfiguration = matchConfiguration;
             _playerController = playerController;
 
-            _placementRules = Resources.LoadAll<PlacementRule>("Rules");
+            _placementRules = new IRule[]
+            {
+                new IsTileInBounds(),
+                new IsTileObstructed() 
+            };
             
             CreatePegPrototype();
-            CreatePegs(matchState.gridSize.x, matchState.gridSize.y);
+            CreatePegs(matchConfiguration.gridSize.x, matchConfiguration.gridSize.y);
         }
 
         public void SetHighlight(Vector2Int coordinates, Tile tile)
@@ -40,7 +44,6 @@ namespace FEV
             if (tile == null) return;
             
             var dimensions = tile.Shape.GetShapeDimensions();
-            if (!IsValidCoordinate(coordinates, dimensions)) return;
 
             if (_placementRules.Any(rule => !rule.IsSatisfied(coordinates, tile, _pegs)))
             {
@@ -78,7 +81,7 @@ namespace FEV
                 }
             }
             
-            _matchState.TilesPlayed = true;
+            _matchConfiguration.TilesPlayed = true;
         }
 
         private void OnDestroy()
