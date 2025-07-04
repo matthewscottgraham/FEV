@@ -124,6 +124,22 @@ namespace FEV
                 peg.Claim(player);
             }
             ClearSelected();
+            CalculateScores();
+        }
+
+        private void CalculateScores()
+        {
+            var scores = new Dictionary<Player, int>();
+            foreach (var peg in _pegs)
+            {
+                if (!peg.Owner) continue;
+                if (!scores.TryAdd(peg.Owner, 1))
+                {
+                    scores[peg.Owner] += 1;
+                }
+            }
+            
+            _playerController.SetScores(scores);
         }
         
         private void CreatePegPrototype()

@@ -10,6 +10,7 @@ namespace FEV
         private UIDocument _uiDocument;
         
         private Label _playerLabel;
+        private Label _scoreLabel;
         private VisualElement _commandContainer;
         private VisualElement _tileContainer;
 
@@ -21,7 +22,7 @@ namespace FEV
             _matchConfiguration = matchConfiguration;
             _uiDocument = gameObject.GetComponent<UIDocument>();
             _playerLabel = _uiDocument.rootVisualElement.Q<Label>("playerLabel");
-            
+            _scoreLabel = _uiDocument.rootVisualElement.Q<Label>("playerScore");
             _commandContainer = _uiDocument.rootVisualElement.Q("commandContainer");
             _tileContainer = _uiDocument.rootVisualElement.Q("cardContainer");
             
@@ -41,6 +42,7 @@ namespace FEV
             _confirmPlacementButton.visible = _matchConfiguration.TilesPlayed;
             
             DisplayPlayerName(player);
+            DisplayPlayerScore(player);
             DisplayPlayerTiles(player);
         }
 
@@ -60,8 +62,15 @@ namespace FEV
 
         private void DisplayPlayerName(Player player)
         {
-            _playerLabel.text = player.ToString();
+            var suffix = !player.IsHuman ? "Bot" : "Human";
+            _playerLabel.text = $"{player} ({suffix})";
             _playerLabel.style.color = player.Color;
+        }
+        
+        private void DisplayPlayerScore(Player player)
+        {
+            _scoreLabel.text = player.Score.ToString();
+            _scoreLabel.style.color = player.Color;
         }
 
         private void ClearCommandButtons()

@@ -9,6 +9,7 @@ namespace FEV
         public int Index { get; private set; }
         public Color Color { get; private set; }
         public bool IsHuman { get; private set; }
+        public int Score { get; private set; } = 0;
         public List<Tile> Tiles { get; private set; } = new();
         public void Initialize(int index, Color color, bool isHuman = true)
         {
@@ -17,6 +18,10 @@ namespace FEV
             IsHuman = isHuman;
         }
 
+        public void SetScore(int score)
+        {
+            Score = score;
+        }
         public void AddTile(Tile tile)
         {
             Tiles.Add(tile);

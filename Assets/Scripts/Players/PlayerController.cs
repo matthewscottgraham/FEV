@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -11,7 +12,8 @@ namespace FEV
         private MatchConfiguration _matchConfiguration;
         private Player[] _players;
         private int _currentPlayerIndex = 0;
-        private Color[] _colors = new []{Color.blue, Color.red, Color.green, Color.yellow};
+        private readonly Color[] _colors = new []{Color.blue, Color.red, Color.green, Color.yellow};
+        
         public void Initialize(MatchConfiguration matchConfiguration)
         {
             PlaceTileCommand.OnConfirmPlaceTile += HandleTilePlaced;
@@ -30,6 +32,14 @@ namespace FEV
         public Player GetCurrentPlayer()
         {
             return _players[_currentPlayerIndex];
+        }
+
+        public void SetScores(Dictionary<Player, int> scores)
+        {
+            foreach (var player in _players)
+            {
+                player.SetScore(scores.ContainsKey(player) ? scores[player] : 0);
+            }
         }
 
         private async void HandleTilePlaced()

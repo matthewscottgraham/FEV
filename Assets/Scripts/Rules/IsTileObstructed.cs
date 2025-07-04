@@ -16,11 +16,11 @@ namespace Rules
         public bool IsSatisfied(Vector2Int coordinates, Tile tile, Peg[,] board)
         {
             var tileShape = tile.Shape.GetShapeDimensions();
-            for (var y = 0; y < tileShape.y; y++)
+            for (var y = coordinates.y; y < coordinates.y + tileShape.y; y++)
             {
-                for (var x = 0; x < tileShape.x; x++)
+                for (var x = coordinates.x; x < coordinates.x + tileShape.x; x++)
                 {
-                    if(board[x, y].IsClaimed)
+                    if(board[x, y].Owner)
                         return false;
                 }
             }
