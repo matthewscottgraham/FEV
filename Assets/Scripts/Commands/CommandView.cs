@@ -14,6 +14,7 @@ namespace FEV
         private VisualElement _commandContainer;
         private VisualElement _tileContainer;
 
+        private Button _menuButton;
         private Button _drawTileButton;
         private Button _confirmPlacementButton;
         
@@ -25,6 +26,8 @@ namespace FEV
             _scoreLabel = _uiDocument.rootVisualElement.Q<Label>("playerScore");
             _commandContainer = _uiDocument.rootVisualElement.Q("commandContainer");
             _tileContainer = _uiDocument.rootVisualElement.Q("cardContainer");
+            _menuButton = _uiDocument.rootVisualElement.Q<Button>("menuButton");
+            _menuButton.clicked += HandleMenuButtonClicked;
             
             var drawTileCommand = new DrawTileCommand();
             _drawTileButton = CreateTileButton(drawTileCommand, null);
@@ -85,6 +88,11 @@ namespace FEV
             container?.Add(button);
             button.clicked += command.Execute;
             return button;
+        }
+
+        private void HandleMenuButtonClicked()
+        {
+            SceneLoader.LoadScene("scn_game");
         }
     }
 }

@@ -2,10 +2,11 @@
     <Style src="project://database/Assets/style.uss?fileID=7433441132597879392&amp;guid=553aacdfc1d394ac294737f2ae5fbb4a&amp;type=3#style" />
     <engine:VisualElement picking-mode="Ignore" style="flex-grow: 1;">
         <engine:VisualElement style="flex-grow: 1; flex-direction: row;">
-            <engine:Label text="Label" name="playerLabel" picking-mode="Ignore" />
-            <engine:Label text="Label" name="playerScore" picking-mode="Ignore" />
+            <engine:Label text="Label" name="playerLabel" picking-mode="Ignore" class="label-turn" />
+            <engine:Label text="Label" name="playerScore" picking-mode="Ignore" class="label-turn" />
         </engine:VisualElement>
         <engine:VisualElement name="stagingArea" picking-mode="Ignore" class="staging-container" />
+        <engine:Button text="Restart" name="menuButton" class="button-menu" />
     </engine:VisualElement>
     <engine:VisualElement name="commandContainer" picking-mode="Ignore" style="flex-grow: 0; height: 100px; flex-direction: row;">
         <engine:VisualElement name="cardContainer" picking-mode="Ignore" class="staging-container" style="flex-grow: 1;" />

@@ -1,6 +1,18 @@
+.label-turn {
+    font-size: 22px;
+    -unity-font-style: bold;
+}
+
+.button-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
 .staging-container {
     flex-grow: 1;
     flex-direction: row;
     align-items: center;
     align-self: center;
 }
+

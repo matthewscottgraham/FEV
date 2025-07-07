@@ -20,7 +20,7 @@ namespace Rules
             {
                 for (var x = coordinates.x; x < coordinates.x + tileShape.x; x++)
                 {
-                    if(board[x, y].Owner)
+                    if(board[x, y] || board[x,y].Owner)
                         return false;
                 }
             }
