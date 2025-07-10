@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FEV;
+using Players;
 using Rules;
 using Tiles;
 using UnityEngine;
@@ -28,7 +29,7 @@ namespace Pegs
             {
                 new IsTileInBounds(),
                 new IsTileObstructed(),
-                new IsTileTouchingOwnedPegs()
+                new IsTileAdjacentToOwnedPegs(_playerController)
             };
 
             var pegFactory = gameObject.AddComponent<PegFactory>();
@@ -100,8 +101,8 @@ namespace Pegs
                 while (!claimed)
                 {
                     // get random peg coordinate that is not around the border
-                    var randomX = Random.Range(1, _pegs.GetLength(0) - 1);
-                    var randomY = Random.Range(1, _pegs.GetLength(1) - 1);
+                    var randomX = Random.Range(3, _pegs.GetLength(0) - 3);
+                    var randomY = Random.Range(3, _pegs.GetLength(1) - 3);
 
                     if (_pegs[randomX, randomY].Owner != null) continue;
                     _pegs[randomX, randomY].Claim(player);

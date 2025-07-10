@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Tiles;
 using UnityEngine;
 
-namespace FEV
+namespace Players
 {
     public class Player : ScriptableObject
     {

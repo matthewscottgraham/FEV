@@ -1,5 +1,6 @@
 using FEV;
 using Pegs;
+using Players;
 using UnityEngine;
 
 public class GameBootstrapper : MonoBehaviour
