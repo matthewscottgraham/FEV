@@ -1,4 +1,5 @@
 using Players;
+using Tiles;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -31,11 +32,11 @@ namespace FEV
             _menuButton.clicked += HandleMenuButtonClicked;
             
             var drawTileCommand = new DrawTileCommand();
-            _drawTileButton = CreateTileButton(drawTileCommand, null);
+            _drawTileButton = CreateCommandButton(drawTileCommand, null);
             _commandContainer.Insert(0, _drawTileButton);
 
             var confirmPlacementCommand = new PlaceTileCommand();
-            _confirmPlacementButton = CreateTileButton(confirmPlacementCommand, _commandContainer);
+            _confirmPlacementButton = CreateCommandButton(confirmPlacementCommand, _commandContainer);
         }
 
         public void Redraw(Player player)
@@ -59,21 +60,21 @@ namespace FEV
             
             foreach (var tile in player.Tiles)
             {
-                var tileButton = CreateTileButton(tile, _tileContainer);
-                tileButton.clicked += tile.Execute;
+                CreateTileButton(tile, _tileContainer);
+                //tileButton.clicked += tile.Execute;
             }
         }
 
         private void DisplayPlayerName(Player player)
         {
             var suffix = !player.IsHuman ? "Bot" : "Human";
-            _playerLabel.text = $"{player} ({suffix})";
+            _playerLabel.text = $"{player}";// ({suffix})";
             _playerLabel.style.color = player.Color;
         }
         
         private void DisplayPlayerScore(Player player)
         {
-            _scoreLabel.text = player.Score.ToString();
+            _scoreLabel.text = "$ " + player.Score;
             _scoreLabel.style.color = player.Color;
         }
 
@@ -83,11 +84,22 @@ namespace FEV
             _commandContainer.visible = false;
         }
         
-        private static Button CreateTileButton(ICommand command, VisualElement container)
+        private static Button CreateCommandButton(ICommand command, VisualElement container)
         {
             var button = new Button { text = command.Label };
             container?.Add(button);
             button.clicked += command.Execute;
+            return button;
+        }
+        private static Button CreateTileButton(Tile tile, VisualElement container)
+        {
+            var button = new Button();
+            var image = new Image { image = tile.Shape.GetTexture() };
+            image.style.width = 40;
+            image.style.height = 40;
+            button.Add(image);
+            container?.Add(button);
+            button.clicked += tile.Execute;
             return button;
         }
 

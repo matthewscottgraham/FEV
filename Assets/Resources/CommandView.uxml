@@ -1,7 +1,7 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/style.uss?fileID=7433441132597879392&amp;guid=553aacdfc1d394ac294737f2ae5fbb4a&amp;type=3#style" />
     <engine:VisualElement picking-mode="Ignore" style="flex-grow: 1;">
-        <engine:VisualElement picking-mode="Ignore" style="flex-grow: 1; flex-direction: row;">
+        <engine:VisualElement picking-mode="Ignore" style="flex-grow: 1; flex-direction: column;">
             <engine:Label text="Label" name="playerLabel" picking-mode="Ignore" class="label-turn" />
             <engine:Label text="Label" name="playerScore" picking-mode="Ignore" class="label-turn" />
         </engine:VisualElement>

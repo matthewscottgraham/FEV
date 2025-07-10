@@ -6,7 +6,7 @@ namespace FEV
     public class DrawTileCommand : ICommand
     {
         public static System.Action OnDrawTile;
-        public string Label => "Draw card";
+        public string Label => "+";
         
         public void Execute()
         {

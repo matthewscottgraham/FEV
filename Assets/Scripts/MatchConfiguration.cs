@@ -9,7 +9,7 @@ namespace FEV
         public System.Action OnTileDrawn;
         public System.Action OnTilePlayed;
         
-        [CreateProperty] public Vector2Int gridSize = new Vector2Int(12, 12);
+        [CreateProperty] public Vector2Int gridSize = new Vector2Int(12, 16);
         [CreateProperty] public int playerCount = 2;
         public Tile SelectedTile;
         public bool TilesDrawn
