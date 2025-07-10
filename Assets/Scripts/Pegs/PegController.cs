@@ -34,6 +34,8 @@ namespace Pegs
             var pegFactory = gameObject.AddComponent<PegFactory>();
             pegFactory.Initialize();
             _pegs = pegFactory.CreatePegs(matchConfiguration.gridSize.x, matchConfiguration.gridSize.y);
+
+            ClaimInitialPegs();
         }
 
         public void SetHighlight(Vector2Int coordinates, Tile tile)
@@ -87,6 +89,25 @@ namespace Pegs
         private void OnDestroy()
         {
             PlaceTileCommand.OnConfirmPlaceTile -= HandlePlaceTile;
+        }
+
+        private void ClaimInitialPegs()
+        {
+            for (var playerIndex = 0; playerIndex < _matchConfiguration.playerCount; playerIndex++)
+            {
+                var player = _playerController.GetPlayer(playerIndex);
+                var claimed = false;
+                while (!claimed)
+                {
+                    // get random peg coordinate that is not around the border
+                    var randomX = Random.Range(1, _pegs.GetLength(0) - 1);
+                    var randomY = Random.Range(1, _pegs.GetLength(1) - 1);
+
+                    if (_pegs[randomX, randomY].Owner != null) continue;
+                    _pegs[randomX, randomY].Claim(player);
+                    claimed = true;
+                }
+            }
         }
 
         private void ClearHighlight()

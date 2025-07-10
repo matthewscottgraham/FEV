@@ -30,8 +30,9 @@ namespace Pegs
         public void Claim(Player player)
         {
             _player = player;
+            SetMaterial();
         }
-        
+
         private void OnEnable()
         {
             _meshRenderer = GetComponent<MeshRenderer>();

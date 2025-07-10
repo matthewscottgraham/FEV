@@ -59,5 +59,11 @@ namespace FEV
             PlaceTileCommand.OnConfirmPlaceTile -= HandleTilePlaced;
             _players = null;
         }
+
+        public Player GetPlayer(int playerIndex)
+        {
+            try { return _players[playerIndex]; }
+            catch { return null; }
+        }
     }
 }
