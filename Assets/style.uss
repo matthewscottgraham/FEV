@@ -1,3 +1,20 @@
+.main-menu-container{
+    flex-grow: 1;
+    padding: 22px;
+    justify-content: center;
+}
+
+.info-container {
+    padding: 12px;
+    padding-top: 48px;
+    background-color: black;
+    flex-direction: row;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
 .label-turn {
     font-size: 22px;
     -unity-font-style: bold;

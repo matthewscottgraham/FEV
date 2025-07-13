@@ -10,7 +10,7 @@ namespace FEV
     {
         public Action<Vector2> Moved;
         public Action<float> Zoomed;
-        public Action Clicked;
+        public Action<Vector2> Clicked;
         
         private EventSystem _eventSystem;
         private InputSystem_Actions _inputSystem;
@@ -34,6 +34,8 @@ namespace FEV
             _inputSystem.Player.Move.performed -= OnMove;
             _inputSystem.Player.Zoom.performed -= OnZoom;
             _inputSystem.Player.Attack.performed -= OnClick;
+            
+            _inputSystem.Disable();
         }
 
         private bool IsPointerOverUIObject()
@@ -51,7 +53,7 @@ namespace FEV
         {
             if (IsPointerOverUIObject()) return;
             
-            Clicked?.Invoke();
+            Clicked?.Invoke(context.ReadValue<Vector2>());
         }
 
         void OnMove(InputAction.CallbackContext context)

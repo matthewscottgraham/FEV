@@ -40,28 +40,28 @@ namespace FEV
         {
             if (_matchConfiguration.SelectedTile == null) return;
             
-            var hoveredPegCoords = GetHoveredPegCoordinates();
+            var hoveredPegCoords = GetHoveredPegCoordinates(_inputController.CursorPosition);
             if (hoveredPegCoords == null || hoveredPegCoords == _lastHoveredCoordinate) return;
             
             _pegController.SetHighlight(hoveredPegCoords.Value, _matchConfiguration.SelectedTile);
             _lastHoveredCoordinate = hoveredPegCoords;
         }
 
-        private Vector2Int? GetHoveredPegCoordinates()
+        private Vector2Int? GetHoveredPegCoordinates(Vector2 screenPosition)
         {
-            if (Physics.Raycast(_camera.ScreenPointToRay(_inputController.CursorPosition), out RaycastHit hit))
+            if (Physics.Raycast(_camera.ScreenPointToRay(screenPosition), out RaycastHit hit))
             {
                 return GetPegCoordinatesFromWorldPosition(hit.point);
             }
             return null;
         }
 
-        private void HandleCursorClick()
+        private void HandleCursorClick(Vector2 screenPosition)
         {
             if (_matchConfiguration.SelectedTile == null) return;
             
-            var hoveredPegCoords = GetHoveredPegCoordinates();
-            if (hoveredPegCoords != null) _pegController.SetSelected(hoveredPegCoords.Value, _matchConfiguration.SelectedTile);
+            var clickedCoords = GetHoveredPegCoordinates(screenPosition);
+            if (clickedCoords != null) _pegController.SetSelected(clickedCoords.Value, _matchConfiguration.SelectedTile);
         }
     }
 }

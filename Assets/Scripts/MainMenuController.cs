@@ -18,6 +18,7 @@ public class MainMenuController : MonoBehaviour
         var uiDocument = GetComponent<UIDocument>();
         
         _rootElement = uiDocument.rootVisualElement.AddNew<VisualElement>();
+        _rootElement.AddToClassList("main-menu-container");
 
         //_gameSizeField = _rootElement.AddNew<Vector2IntField>();
         //_gameSizeField.BindProperty(gridSizeProperty);
