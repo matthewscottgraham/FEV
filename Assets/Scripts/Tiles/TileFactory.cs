@@ -1,27 +1,35 @@
 using System;
 using Tiles;
+using Rules;
 using UnityEngine;
 
 namespace FEV
 {
     public class TileFactory : IDisposable
     {
-        public TileFactory()
-        {
-            _tileShapes = Resources.LoadAll<TileShape>("TileShapes");
-        }
-        
-        private TileShape[] _tileShapes;
+        private TileShape[] _tileShapes = Resources.LoadAll<TileShape>("TileShapes");
 
         public Tile DrawRandomTile()
         {
             var shape = _tileShapes[UnityEngine.Random.Range(0, _tileShapes.Length)];
-            return new Tile(shape);
+            var ignoredRuleType = GetIgnoredRuleType();
+            return new Tile(shape, ignoredRuleType);
         }
 
         public void Dispose()
         {
             _tileShapes = null;
+        }
+
+        private Type GetIgnoredRuleType()
+        {
+            var rand = UnityEngine.Random.Range(0, 100);
+            return rand switch
+            {
+                > 80 => typeof(IsTileAdjacentToOwnedPegs),
+                > 70 => typeof(IsTileObstructed),
+                _ => null
+            };
         }
     }
 }

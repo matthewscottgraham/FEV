@@ -23,6 +23,8 @@ namespace Rules
         /// <returns></returns>
         public bool IsSatisfied(Vector2Int coordinates, Tile tile, Peg[,] board)
         {
+            if (tile.CanTileIgnoreRule(GetType())) return true;
+            
             var dimensions = tile.Shape.GetShapeDimensions();
             var currentPlayer = _playerController.GetCurrentPlayer();
             for (var y = 0; y < dimensions.y; y++)

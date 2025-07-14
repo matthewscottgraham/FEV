@@ -94,6 +94,7 @@ namespace FEV
         private static Button CreateTileButton(Tile tile, VisualElement container)
         {
             var button = new Button();
+            button.Add(new Label(tile.GetIgnoredRuleLabel()));
             var image = new Image { image = tile.Shape.GetTexture() };
             image.style.width = 40;
             image.style.height = 40;
