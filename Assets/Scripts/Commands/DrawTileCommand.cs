@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace FEV
+namespace Commands
 {
     public class DrawTileCommand : ICommand
     {

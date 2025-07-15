@@ -1,9 +1,9 @@
 using System;
-using System.Collections.Generic;
+using FEV;
 using Players;
 using Tiles;
 
-namespace FEV
+namespace Commands
 {
     public class CommandController: IDisposable
     {

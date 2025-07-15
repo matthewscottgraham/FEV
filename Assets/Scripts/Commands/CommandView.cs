@@ -1,9 +1,10 @@
+using FEV;
 using Players;
 using Tiles;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace FEV
+namespace Commands
 {
     public class CommandView : MonoBehaviour
     {

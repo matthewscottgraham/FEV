@@ -1,4 +1,4 @@
-namespace FEV
+namespace Commands
 {
     internal class PlaceTileCommand : ICommand
     {
