@@ -1,9 +1,11 @@
 using System;
-using Tiles;
+using Effects;
+using FEV;
 using Rules;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-namespace FEV
+namespace Tiles
 {
     public class TileFactory : IDisposable
     {
@@ -12,8 +14,9 @@ namespace FEV
         public Tile DrawRandomTile()
         {
             var shape = _tileShapes[UnityEngine.Random.Range(0, _tileShapes.Length)];
-            var ignoredRuleType = GetIgnoredRuleType();
-            return new Tile(shape, ignoredRuleType);
+            var ignoredRuleType = GetRandomIgnoredRuleType();
+            var effect = GetRandomEffect();
+            return new Tile(shape, ignoredRuleType, effect);
         }
 
         public void Dispose()
@@ -21,13 +24,24 @@ namespace FEV
             _tileShapes = null;
         }
 
-        private Type GetIgnoredRuleType()
+        private Type GetRandomIgnoredRuleType()
         {
-            var rand = UnityEngine.Random.Range(0, 100);
+            var rand = Random.Range(0, 100);
             return rand switch
             {
-                > 80 => typeof(IsTileAdjacentToOwnedPegs),
-                > 70 => typeof(IsTileObstructed),
+                > 90 => typeof(IsTileAdjacentToOwnedPegs),
+                > 80 => typeof(IsTileObstructed),
+                _ => null
+            };
+        }
+
+        private IEffect GetRandomEffect()
+        {
+            var rand = Random.Range(0, 100);
+            return rand switch
+            {
+                > 90 => new ScoreMultiplier(Random.Range(2,4)),
+                > 80 => new RadialGrow(Random.Range(1,3)),
                 _ => null
             };
         }

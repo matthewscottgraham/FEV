@@ -1,26 +1,27 @@
 using System;
 using Commands;
+using Effects;
 using FEV;
-using Rules;
-using UnityEngine;
 
 namespace Tiles
 {
     public class Tile : ICommand
     {
         public static Action<Tile> OnTileSelected;
-        public Tile(TileShape shape, Type ignoredRule = null)
+        private readonly Type _ignoredRule = null;
+        private IEffect _effect = null;
+        
+        public TileShape Shape { get; private set; }
+        public string Label => Shape.name;
+        public bool CanIgnoreAnyRule => _ignoredRule != null;
+        public bool HasEffect => _effect != null;
+        
+        public Tile(TileShape shape, Type ignoredRule = null, IEffect effect = null)
         {
             Shape = shape;
             _ignoredRule = ignoredRule;
-            if (_ignoredRule != null)
-                Debug.Log(_ignoredRule.Name);
+            _effect = effect;
         }
-
-        public TileShape Shape { get; private set; }
-        public string Label => Shape.name;
-        
-        private readonly Type _ignoredRule = null;
         
         public bool CanTileIgnoreRule(Type type)
         {

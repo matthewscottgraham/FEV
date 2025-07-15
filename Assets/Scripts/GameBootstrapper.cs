@@ -1,7 +1,9 @@
 using Commands;
+using Commands.View;
 using FEV;
 using Pegs;
 using Players;
+using Tiles;
 using UnityEngine;
 
 public class GameBootstrapper : MonoBehaviour

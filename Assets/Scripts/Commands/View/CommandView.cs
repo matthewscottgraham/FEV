@@ -4,7 +4,7 @@ using Tiles;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Commands
+namespace Commands.View
 {
     public class CommandView : MonoBehaviour
     {
@@ -94,12 +94,9 @@ namespace Commands
         }
         private static Button CreateTileButton(Tile tile, VisualElement container)
         {
-            var button = new Button();
-            button.Add(new Label(tile.GetIgnoredRuleLabel()));
-            var image = new Image { image = tile.Shape.GetTexture() };
-            image.style.width = 40;
-            image.style.height = 40;
-            button.Add(image);
+            var button = new TileElement(tile.Shape.GetTexture(),
+                tile.HasEffect,
+                tile.CanIgnoreAnyRule );
             container?.Add(button);
             button.clicked += tile.Execute;
             return button;
