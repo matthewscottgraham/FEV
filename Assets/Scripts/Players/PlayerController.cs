@@ -10,6 +10,7 @@ namespace Players
     public class PlayerController : MonoBehaviour, IDisposable
     {
         public Action OnPlayerTurnStart { get; set; }
+        public Action OnScoreUpdated { get; set; }
         
         private MatchConfiguration _matchConfiguration;
         private Player[] _players;
@@ -18,7 +19,7 @@ namespace Players
         
         public void Initialize(MatchConfiguration matchConfiguration)
         {
-            PlaceTileCommand.OnConfirmPlaceTile += HandleTilePlaced;
+            PlaceTileCommand.OnConfirmPlaceTiles += HandleTilePlaced;
             _matchConfiguration = matchConfiguration;
             _players = new Player[_matchConfiguration.PlayerCount];
 
@@ -36,12 +37,14 @@ namespace Players
             return _players[_currentPlayerIndex];
         }
 
-        public void SetScores(Dictionary<Player, int> scores)
+        public void UpdateScores(Dictionary<Player, int> scores)
         {
             foreach (var player in _players)
             {
                 player.SetScore(scores.ContainsKey(player) ? scores[player] : 0);
             }
+            
+            OnScoreUpdated?.Invoke();
         }
 
         private async void HandleTilePlaced()
@@ -51,6 +54,8 @@ namespace Players
             GetCurrentPlayer().RemoveTile(_matchConfiguration.SelectedTile);
             _matchConfiguration.SelectedTile = null;
             
+            await Task.Delay(TimeSpan.FromSeconds(2f));
+            
             _currentPlayerIndex++;
             _currentPlayerIndex %= _players.Length;
             OnPlayerTurnStart?.Invoke();
@@ -58,7 +63,7 @@ namespace Players
 
         public void Dispose()
         {
-            PlaceTileCommand.OnConfirmPlaceTile -= HandleTilePlaced;
+            PlaceTileCommand.OnConfirmPlaceTiles -= HandleTilePlaced;
             _players = null;
         }
 

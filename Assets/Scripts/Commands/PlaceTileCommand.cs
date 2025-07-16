@@ -2,12 +2,12 @@ namespace Commands
 {
     internal class PlaceTileCommand : ICommand
     {
-        public static System.Action OnConfirmPlaceTile;
+        public static System.Action OnConfirmPlaceTiles;
         public string Label => "=";
         
         public void Execute()
         {
-            OnConfirmPlaceTile?.Invoke();
+            OnConfirmPlaceTiles?.Invoke();
         }
         
         public void Destroy()

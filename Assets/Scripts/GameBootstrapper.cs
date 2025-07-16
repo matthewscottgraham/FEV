@@ -3,6 +3,7 @@ using Commands.View;
 using FEV;
 using Pegs;
 using Players;
+using States;
 using Tiles;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ public class GameBootstrapper : MonoBehaviour
     private InputController _inputController;
     private SelectionController _selectionController;
     private TileFactory _tileFactory;
-    
+    private StateMachine _stateMachine;
     private void Start()
     {
         var matchConfiguration = new MatchConfiguration();
@@ -35,6 +36,8 @@ public class GameBootstrapper : MonoBehaviour
 
         _selectionController = Create<SelectionController>() as SelectionController;
         _selectionController?.Initialize(matchConfiguration, _inputController, _pegController);
+        
+        _stateMachine = new StateMachine();
     }
 
     private void OnDestroy()
@@ -53,6 +56,9 @@ public class GameBootstrapper : MonoBehaviour
         
         _tileFactory?.Dispose();
         _tileFactory = null;
+
+        _stateMachine?.Dispose();
+        _stateMachine = null;
     }
 
     private Component Create<T>()

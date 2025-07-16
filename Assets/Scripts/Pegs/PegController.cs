@@ -21,7 +21,7 @@ namespace Pegs
         
         public void Initialize(MatchConfiguration matchConfiguration, PlayerController playerController)
         {
-            PlaceTileCommand.OnConfirmPlaceTile += HandlePlaceTile;
+            PlaceTileCommand.OnConfirmPlaceTiles += HandleConfirmPlaceTiles;
             
             _matchConfiguration = matchConfiguration;
             _playerController = playerController;
@@ -90,7 +90,7 @@ namespace Pegs
 
         private void OnDestroy()
         {
-            PlaceTileCommand.OnConfirmPlaceTile -= HandlePlaceTile;
+            PlaceTileCommand.OnConfirmPlaceTiles -= HandleConfirmPlaceTiles;
         }
 
         private void ClaimInitialPegs()
@@ -134,13 +134,14 @@ namespace Pegs
             return _placementRules.All(rule => rule.IsSatisfied(coordinates, tile, _pegs));
         }
 
-        private void HandlePlaceTile()
+        private void HandleConfirmPlaceTiles()
         {
             var player = _playerController.GetCurrentPlayer();
             foreach (var peg in _selectedPegs)
             {
                 peg.Claim(player);
             }
+            
             ClearSelected();
             CalculateScores();
         }
@@ -151,13 +152,13 @@ namespace Pegs
             foreach (var peg in _pegs)
             {
                 if (!peg.Owner) continue;
-                if (!scores.TryAdd(peg.Owner, 1))
+                if (!scores.TryAdd(peg.Owner, peg.GetScore()))
                 {
-                    scores[peg.Owner] += 1;
+                    scores[peg.Owner] += peg.GetScore();
                 }
             }
             
-            _playerController.SetScores(scores);
+            _playerController.UpdateScores(scores);
         }
     }
 }

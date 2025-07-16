@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6994d9caf93844d08a5af56f033a820f, type: 3}
   m_Name: Shape_med_zVertical
   m_EditorClassIdentifier: 
-  shape: ' X
+  shape: 'zXz
 
-    XX
+    XXz
 
-    X '
+    Xzz'

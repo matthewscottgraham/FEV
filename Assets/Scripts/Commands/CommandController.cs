@@ -27,6 +27,8 @@ namespace Commands
             _matchConfiguration.OnTilePlayed += UpdateView;
             Tile.OnTileSelected += HandleTileSelected;
             DrawTileCommand.OnDrawTile += HandleDrawTile;
+
+            _playerController.OnScoreUpdated += UpdateView;
             _playerController.OnPlayerTurnStart += UpdateView;
         }
 
@@ -34,6 +36,7 @@ namespace Commands
         {
             _matchConfiguration.OnTilePlayed -= UpdateView;
             _playerController.OnPlayerTurnStart -= UpdateView;
+            _playerController.OnScoreUpdated -= UpdateView;
             Tile.OnTileSelected -= HandleTileSelected;
             DrawTileCommand.OnDrawTile -= HandleDrawTile;
             

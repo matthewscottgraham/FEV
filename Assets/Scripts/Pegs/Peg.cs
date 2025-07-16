@@ -32,6 +32,12 @@ namespace Pegs
             _player = player;
             SetMaterial();
         }
+
+        public int GetScore()
+        {
+            return 1;
+        }
+        
         private void OnEnable()
         {
             _meshRenderer = GetComponent<MeshRenderer>();
