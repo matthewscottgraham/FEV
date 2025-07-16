@@ -45,8 +45,12 @@ namespace Commands
 
         private void HandleDrawTile()
         {
-            var tile = _tileFactory.DrawRandomTile();
-            _playerController.GetCurrentPlayer().AddTile(tile);
+            var player = _playerController.GetCurrentPlayer();
+            while (player.Tiles.Count < _matchConfiguration.MaxPlayerTileCount)
+            {
+                player.AddTile(_tileFactory.DrawRandomTile());
+            }
+
             _view.Redraw(_playerController.GetCurrentPlayer());
         }
 

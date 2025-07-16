@@ -44,7 +44,7 @@ namespace Commands.View
         {
             ClearCommandButtons();
 
-            _drawTileButton.visible = !_matchConfiguration.TilesDrawn;
+            _drawTileButton.visible = player.Tiles.Count < _matchConfiguration.MaxPlayerTileCount;
             _confirmPlacementButton.visible = _matchConfiguration.TilesPlayed;
             
             DisplayPlayerName(player);

@@ -35,7 +35,7 @@ namespace Pegs
 
             var pegFactory = gameObject.AddComponent<PegFactory>();
             pegFactory.Initialize();
-            _pegs = pegFactory.CreatePegs(matchConfiguration.gridSize.x, matchConfiguration.gridSize.y);
+            _pegs = pegFactory.CreatePegs(matchConfiguration.GridSize.x, matchConfiguration.GridSize.y);
 
             ClaimInitialPegs();
         }
@@ -95,7 +95,7 @@ namespace Pegs
 
         private void ClaimInitialPegs()
         {
-            for (var playerIndex = 0; playerIndex < _matchConfiguration.playerCount; playerIndex++)
+            for (var playerIndex = 0; playerIndex < _matchConfiguration.PlayerCount; playerIndex++)
             {
                 var player = _playerController.GetPlayer(playerIndex);
                 var claimed = false;

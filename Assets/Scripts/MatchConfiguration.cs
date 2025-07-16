@@ -6,22 +6,14 @@ namespace FEV
 {
     public class MatchConfiguration
     {
-        public System.Action OnTileDrawn;
         public System.Action OnTilePlayed;
         
-        [CreateProperty] public Vector2Int gridSize = new Vector2Int(8, 12);
-        [CreateProperty] public int playerCount = 2;
+        public Vector2Int GridSize => new Vector2Int(8, 12);
+        public int PlayerCount => 2;
+        public int MaxPlayerTileCount => 3;
+
         public Tile SelectedTile;
-        public bool TilesDrawn
-        {
-            get => _tilesDrawn;
-            set
-            {
-                _tilesDrawn = value;
-                OnTileDrawn?.Invoke();
-            }
-            
-        }
+
         public bool TilesPlayed
         {
             get => _tilesPlayed;
@@ -32,7 +24,6 @@ namespace FEV
             }
         }
         
-        private bool _tilesDrawn;
         private bool _tilesPlayed;
     }
 }

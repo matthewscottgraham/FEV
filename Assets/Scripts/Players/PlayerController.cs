@@ -20,7 +20,7 @@ namespace Players
         {
             PlaceTileCommand.OnConfirmPlaceTile += HandleTilePlaced;
             _matchConfiguration = matchConfiguration;
-            _players = new Player[_matchConfiguration.playerCount];
+            _players = new Player[_matchConfiguration.PlayerCount];
 
             for (int i = 0; i < _players.Length; ++i)
             {
