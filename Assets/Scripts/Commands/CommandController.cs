@@ -2,6 +2,7 @@ using System;
 using Commands.View;
 using FEV;
 using Players;
+using States;
 using Tiles;
 
 namespace Commands
@@ -9,6 +10,7 @@ namespace Commands
     public class CommandController: IDisposable
     {
         private MatchConfiguration _matchConfiguration;
+        
         private CommandView _view;
         private PlayerController _playerController;
         private TileFactory _tileFactory;
@@ -24,21 +26,19 @@ namespace Commands
             
             _tileFactory = tileFactory;
             
-            _matchConfiguration.OnTilePlayed += UpdateView;
+            StateMachine.OnStateChanged += UpdateView;
             Tile.OnTileSelected += HandleTileSelected;
-            DrawTileCommand.OnDrawTile += HandleDrawTile;
+            StateMachine.OnStateChanged += HandleStateChange;
 
             _playerController.OnScoreUpdated += UpdateView;
-            _playerController.OnPlayerTurnStart += UpdateView;
         }
 
         public void Dispose()
         {
-            _matchConfiguration.OnTilePlayed -= UpdateView;
-            _playerController.OnPlayerTurnStart -= UpdateView;
+            StateMachine.OnStateChanged -= UpdateView;
             _playerController.OnScoreUpdated -= UpdateView;
             Tile.OnTileSelected -= HandleTileSelected;
-            DrawTileCommand.OnDrawTile -= HandleDrawTile;
+            StateMachine.OnStateChanged -= HandleStateChange;
             
             _view = null;
             _playerController = null;
@@ -46,15 +46,21 @@ namespace Commands
             _matchConfiguration = null;
         }
 
-        private void HandleDrawTile()
+        private void HandleStateChange()
+        {
+            if (StateMachine.CurrentState.GetType() == typeof(DrawTilePhase))
+                HandleDrawTiles();
+
+            _view.Redraw(_playerController.GetCurrentPlayer());
+        }
+
+        private void HandleDrawTiles()
         {
             var player = _playerController.GetCurrentPlayer();
             while (player.Tiles.Count < _matchConfiguration.MaxPlayerTileCount)
             {
                 player.AddTile(_tileFactory.DrawRandomTile());
             }
-
-            _view.Redraw(_playerController.GetCurrentPlayer());
         }
 
         private void UpdateView()

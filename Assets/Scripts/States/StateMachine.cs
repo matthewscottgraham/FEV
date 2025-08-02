@@ -1,41 +1,55 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace States
 {
     public class StateMachine: IDisposable
     {
-        private readonly Queue<IState> _statesQueue = new();
-        public IState CurrentState { get; private set; }
+        public static Action OnStateChanged;
+        
+        private static readonly Queue<State> StatesQueue = new();
+        
+        public static State CurrentState { get; private set; }
         
         public StateMachine()
         {
-            _statesQueue.Enqueue(new StartTurnPhase());
-            _statesQueue.Enqueue(new PlaceTilePhase());
-            _statesQueue.Enqueue(new EndTurnPhase());
+            StatesQueue.Enqueue(new StartTurnPhase());
+            StatesQueue.Enqueue(new DrawTilePhase());
+            StatesQueue.Enqueue(new PlaceTilePhase());
+            StatesQueue.Enqueue(new PlaceAdditionalTilePhase());
+            StatesQueue.Enqueue(new PlaceAdditionalTilePhase());
+            StatesQueue.Enqueue(new EndTurnPhase());
 
             NextState();
         }
 
-        public void NextState()
+        public static void EndTurn()
         {
-            var nextState = _statesQueue.Dequeue();
-            ChangeState(nextState);
-            _statesQueue.Enqueue(nextState);
+            while (CurrentState.GetType() != typeof(StartTurnPhase))
+            {
+                NextState();
+            }
         }
-        
-        private void ChangeState(IState newState)
+        public static void NextState()
+        {
+            var nextState = StatesQueue.Dequeue();
+            ChangeState(nextState);
+            StatesQueue.Enqueue(nextState);
+        }
+        private static void ChangeState(State newState)
         {
             if (newState == null) return;
-            CurrentState?.OnExit();
-
+            CurrentState?.ExitState();
             CurrentState = newState;
-            CurrentState.OnEnter();
+            OnStateChanged?.Invoke();
+            Debug.Log(CurrentState.ToString());
+            CurrentState.EnterState();
         }
 
         public void Dispose()
         {
-            _statesQueue.Clear();
+            StatesQueue.Clear();
             CurrentState = null;
         }
     }

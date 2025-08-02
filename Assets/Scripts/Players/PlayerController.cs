@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Commands;
 using FEV;
+using States;
 using UnityEngine;
 
 namespace Players
 {
     public class PlayerController : MonoBehaviour, IDisposable
     {
-        public Action OnPlayerTurnStart { get; set; }
         public Action OnScoreUpdated { get; set; }
         
         private MatchConfiguration _matchConfiguration;
@@ -19,7 +19,6 @@ namespace Players
         
         public void Initialize(MatchConfiguration matchConfiguration)
         {
-            PlaceTileCommand.OnConfirmPlaceTiles += HandleTilePlaced;
             _matchConfiguration = matchConfiguration;
             _players = new Player[_matchConfiguration.PlayerCount];
 
@@ -28,8 +27,8 @@ namespace Players
                 _players[i] = ScriptableObject.CreateInstance<Player>();
                 _players[i].Initialize(i, _colors[i]);
             }
-            
-            OnPlayerTurnStart?.Invoke();
+
+            StateMachine.OnStateChanged += HandleStateChanged;
         }
 
         public Player GetCurrentPlayer()
@@ -47,30 +46,38 @@ namespace Players
             OnScoreUpdated?.Invoke();
         }
 
-        private async void HandleTilePlaced()
+        public async void RemoveTile(Tiles.Tile tile, Player player)
         {
-            await Task.Delay(TimeSpan.FromSeconds(0.1f));
-            
-            GetCurrentPlayer().RemoveTile(_matchConfiguration.SelectedTile);
+            player.RemoveTile(tile);
             _matchConfiguration.SelectedTile = null;
+
+            if (GetCurrentPlayer().Tiles.Count > 0) return;
             
             await Task.Delay(TimeSpan.FromSeconds(2f));
-            
+        }
+
+        public void NextPlayer()
+        {
             _currentPlayerIndex++;
             _currentPlayerIndex %= _players.Length;
-            OnPlayerTurnStart?.Invoke();
         }
 
         public void Dispose()
         {
-            PlaceTileCommand.OnConfirmPlaceTiles -= HandleTilePlaced;
             _players = null;
+            StateMachine.OnStateChanged -= HandleStateChanged;
         }
 
         public Player GetPlayer(int playerIndex)
         {
             try { return _players[playerIndex]; }
             catch { return null; }
+        }
+
+        private void HandleStateChanged()
+        {
+            if (StateMachine.CurrentState.GetType() == typeof(EndTurnPhase))
+                NextPlayer();
         }
     }
 }

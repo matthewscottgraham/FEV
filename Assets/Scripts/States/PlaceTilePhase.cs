@@ -1,15 +1,8 @@
 namespace States
 {
-    public class PlaceTilePhase : IState
+    public class PlaceTilePhase : State
     {
-        public void OnEnter()
-        {
-            
-        }
-
-        public void OnExit()
-        {
-            
-        }
+        public override bool CanDrawTiles  => false;
+        public override bool CanEndTurn => false;
     }
 }

@@ -1,15 +1,8 @@
 namespace States
 {
-    public class StartTurnPhase : IState
+    public class StartTurnPhase : State
     {
-        public void OnEnter()
-        {
-            
-        }
-
-        public void OnExit()
-        {
-            
-        }
+        public override bool CanDrawTiles  => true;
+        public override bool CanEndTurn => false;
     }
 }

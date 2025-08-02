@@ -2,15 +2,15 @@ using States;
 
 namespace Commands
 {
-    public class DrawTileCommand : ICommand
+    internal class EndTurnCommand : ICommand
     {
-        public string Label => "+";
+        public string Label => "END";
         
         public void Execute()
         {
-            StateMachine.NextState();
+            StateMachine.EndTurn();
         }
-
+        
         public void Destroy()
         {
             // noop

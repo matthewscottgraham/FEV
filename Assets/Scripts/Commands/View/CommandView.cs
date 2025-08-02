@@ -1,5 +1,7 @@
 using FEV;
+using Pegs;
 using Players;
+using States;
 using Tiles;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -19,7 +21,7 @@ namespace Commands.View
 
         private Button _menuButton;
         private Button _drawTileButton;
-        private Button _confirmPlacementButton;
+        private Button _endTurnButton;
         
         public void Initialize(MatchConfiguration matchConfiguration, CommandController commandController)
         {
@@ -35,23 +37,37 @@ namespace Commands.View
             var drawTileCommand = new DrawTileCommand();
             _drawTileButton = CreateCommandButton(drawTileCommand, null);
             _commandContainer.Insert(0, _drawTileButton);
-
-            var confirmPlacementCommand = new PlaceTileCommand();
-            _confirmPlacementButton = CreateCommandButton(confirmPlacementCommand, _commandContainer);
+            
+            var endTurnCommand = new EndTurnCommand();
+            _endTurnButton = CreateCommandButton(endTurnCommand, _commandContainer);
         }
 
         public void Redraw(Player player)
         {
             ClearCommandButtons();
 
-            _drawTileButton.visible = player.Tiles.Count < _matchConfiguration.MaxPlayerTileCount;
-            _confirmPlacementButton.visible = _matchConfiguration.TilesPlayed;
+            DisplayDrawTilesButton(player);
+            DisplayEndTurnButton();
             
             DisplayPlayerName(player);
             DisplayPlayerScore(player);
             DisplayPlayerTiles(player);
         }
 
+        private void DisplayDrawTilesButton(Player player)
+        {
+            _drawTileButton.visible = false;
+            
+            if (!StateMachine.CurrentState.CanDrawTiles) return;
+            if (player.Tiles.Count >= _matchConfiguration.MaxPlayerTileCount) return;
+            
+            _drawTileButton.visible = true;
+        }
+
+        private void DisplayEndTurnButton()
+        {
+            _endTurnButton.visible = StateMachine.CurrentState.CanEndTurn;
+        }
         private void DisplayPlayerTiles(Player player)
         {
             _commandContainer.visible = true;
@@ -62,7 +78,6 @@ namespace Commands.View
             foreach (var tile in player.Tiles)
             {
                 CreateTileButton(tile, _tileContainer);
-                //tileButton.clicked += tile.Execute;
             }
         }
 

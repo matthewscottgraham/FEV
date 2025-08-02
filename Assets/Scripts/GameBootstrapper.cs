@@ -22,6 +22,8 @@ public class GameBootstrapper : MonoBehaviour
     {
         var matchConfiguration = new MatchConfiguration();
         
+        _stateMachine = new StateMachine();
+        
         _playerController = Create<PlayerController>() as PlayerController;
         _playerController?.Initialize(matchConfiguration);
         
@@ -36,8 +38,6 @@ public class GameBootstrapper : MonoBehaviour
 
         _selectionController = Create<SelectionController>() as SelectionController;
         _selectionController?.Initialize(matchConfiguration, _inputController, _pegController);
-        
-        _stateMachine = new StateMachine();
     }
 
     private void OnDestroy()

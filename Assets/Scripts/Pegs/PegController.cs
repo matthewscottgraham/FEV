@@ -4,7 +4,9 @@ using Commands;
 using FEV;
 using Players;
 using Rules;
+using States;
 using Tiles;
+using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
 
 namespace Pegs
@@ -17,11 +19,10 @@ namespace Pegs
         
         private Peg[,] _pegs;
         private readonly List<Peg> _highlightedPegs = new();
-        private readonly List<Peg> _selectedPegs = new();
         
         public void Initialize(MatchConfiguration matchConfiguration, PlayerController playerController)
         {
-            PlaceTileCommand.OnConfirmPlaceTiles += HandleConfirmPlaceTiles;
+            StateMachine.OnStateChanged += CalculateScores;
             
             _matchConfiguration = matchConfiguration;
             _playerController = playerController;
@@ -55,21 +56,19 @@ namespace Pegs
             }
         }
 
-        public void SetSelected(Vector2Int coordinates, Tile tile)
+        public void ClaimPegs(Vector2Int coordinates, Tile tile)
         {
-            ClearSelected();
-            
             if (tile == null) return;
             if (!IsValidCoordinate(coordinates, tile)) return;
 
             var pegs = GetTilePegs(coordinates, tile);
+            var currentPlayer = _playerController.GetCurrentPlayer();
             foreach (var peg in pegs)
             {
-                peg.Select(true);
-                _selectedPegs.Add(peg);
+                peg.Claim(currentPlayer);
             }
-            
-            _matchConfiguration.TilesPlayed = true;
+            _playerController.RemoveTile(tile, currentPlayer);
+            StateMachine.NextState();
         }
 
         private List<Peg> GetTilePegs(Vector2Int coordinates, Tile tile)
@@ -90,7 +89,7 @@ namespace Pegs
 
         private void OnDestroy()
         {
-            PlaceTileCommand.OnConfirmPlaceTiles -= HandleConfirmPlaceTiles;
+            StateMachine.OnStateChanged -= CalculateScores;
         }
 
         private void ClaimInitialPegs()
@@ -120,34 +119,17 @@ namespace Pegs
             }
             _highlightedPegs.Clear();
         }
-        private void ClearSelected()
-        {
-            foreach (var peg in _selectedPegs)
-            {
-                peg.Select(false);
-            }
-            _selectedPegs.Clear();
-        }
         
         private bool IsValidCoordinate(Vector2Int coordinates, Tile tile)
         {
             return _placementRules.All(rule => rule.IsSatisfied(coordinates, tile, _pegs));
         }
 
-        private void HandleConfirmPlaceTiles()
-        {
-            var player = _playerController.GetCurrentPlayer();
-            foreach (var peg in _selectedPegs)
-            {
-                peg.Claim(player);
-            }
-            
-            ClearSelected();
-            CalculateScores();
-        }
-
         private void CalculateScores()
         {
+            if (StateMachine.CurrentState.GetType() != typeof(EndTurnPhase))
+                return;
+            
             var scores = new Dictionary<Player, int>();
             foreach (var peg in _pegs)
             {

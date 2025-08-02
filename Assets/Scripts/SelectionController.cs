@@ -61,7 +61,7 @@ namespace FEV
             if (_matchConfiguration.SelectedTile == null) return;
             
             var clickedCoords = GetHoveredPegCoordinates(screenPosition);
-            if (clickedCoords != null) _pegController.SetSelected(clickedCoords.Value, _matchConfiguration.SelectedTile);
+            if (clickedCoords != null) _pegController.ClaimPegs(clickedCoords.Value, _matchConfiguration.SelectedTile);
         }
     }
 }
