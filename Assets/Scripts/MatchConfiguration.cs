@@ -1,5 +1,3 @@
-using Tiles;
-using Unity.Properties;
 using UnityEngine;
 
 namespace FEV

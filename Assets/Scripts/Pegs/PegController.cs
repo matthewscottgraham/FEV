@@ -76,12 +76,13 @@ namespace Pegs
             var dimensions = tile.Shape.GetShapeDimensions();
             var pegs = new List<Peg>();
             
+            var offset = dimensions / 2;
             for (int y = 0; y < dimensions.y; y++)
             {
                 for (int x = 0; x < dimensions.x; x++)
                 {
                     if (!tile.Shape.GetValue(x,y)) continue;
-                    pegs.Add(_pegs[coordinates.x + x, coordinates.y + y]);
+                    pegs.Add(_pegs[coordinates.x + x - offset.x, coordinates.y + y - offset.y]);
                 }
             }
             return pegs;

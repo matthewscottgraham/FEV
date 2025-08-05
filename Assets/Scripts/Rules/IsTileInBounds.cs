@@ -15,12 +15,13 @@ namespace Rules
         /// <returns></returns>
         public bool IsSatisfied(Vector2Int coordinates, Tile tile, Peg[,] board)
         {
-            var tileDimensions = tile.Shape.GetShapeDimensions();
+            var dimensions = tile.Shape.GetShapeDimensions();
+            var offset = dimensions / 2;
             
-            if (coordinates.x < 0) return false;
-            if (coordinates.y < 0) return false;
-            if (coordinates.x + tileDimensions.x - 1 > board.GetLength(0) -1) return false;
-            if (coordinates.y + tileDimensions.y - 1 > board.GetLength(1) -1) return false;
+            if (coordinates.x - offset.x < 0) return false;
+            if (coordinates.y - offset.y < 0) return false;
+            if (coordinates.x + dimensions.x - 1 - offset.x > board.GetLength(0) -1) return false;
+            if (coordinates.y + dimensions.y - 1 - offset.y > board.GetLength(1) -1) return false;
             
             return true;
         }

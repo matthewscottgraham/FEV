@@ -18,12 +18,15 @@ namespace Rules
             if (tile.CanTileIgnoreRule(GetType())) return true;
             
             var dimensions = tile.Shape.GetShapeDimensions();
+            var offset = dimensions / 2;
+            
             for (var y = 0; y < dimensions.y; y++)
             {
                 for (var x = 0; x < dimensions.x; x++)
                 {
                     if (!tile.Shape.GetValue(x,y)) continue;
-                    if (board[coordinates.x + x, coordinates.y + y].Owner is not null) return false;
+                    if (board[coordinates.x + x - offset.x, coordinates.y + y - offset.y].Owner is not null)
+                        return false;
                 }
             }
             return true;

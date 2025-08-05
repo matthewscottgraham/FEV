@@ -26,6 +26,7 @@ namespace Rules
             if (tile.CanTileIgnoreRule(GetType())) return true;
             
             var dimensions = tile.Shape.GetShapeDimensions();
+            var offset = dimensions / 2;
             var currentPlayer = _playerController.GetCurrentPlayer();
             for (var y = 0; y < dimensions.y; y++)
             {
@@ -33,8 +34,8 @@ namespace Rules
                 {
                     if (!tile.Shape.GetValue(x,y)) continue;
                     if (AreAnyNeighbouringPegsOwnedByPlayer(
-                        coordinates.x + x,
-                        coordinates.y + y,
+                        coordinates.x + x - offset.x,
+                        coordinates.y + y - offset.y,
                         board,
                         currentPlayer
                         ))
