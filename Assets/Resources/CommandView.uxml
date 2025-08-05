@@ -9,6 +9,9 @@
         <engine:VisualElement name="stagingArea" picking-mode="Ignore" class="staging-container" />
         <engine:Button text="Restart" name="menuButton" class="button-menu" />
     </engine:VisualElement>
+    <engine:VisualElement name="Description" style="flex-grow: 0;">
+        <engine:Label text="Label" name="effectLabel" style="color: rgb(255, 255, 255);" />
+    </engine:VisualElement>
     <engine:VisualElement name="commandContainer" picking-mode="Ignore" style="flex-grow: 0; height: 100px; flex-direction: row;">
         <engine:VisualElement name="cardContainer" picking-mode="Ignore" class="staging-container" style="flex-grow: 1;" />
     </engine:VisualElement>

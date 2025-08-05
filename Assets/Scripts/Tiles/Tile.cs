@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Commands;
 using Effects;
 using FEV;
@@ -27,13 +28,7 @@ namespace Tiles
         {
             return _ignoredRule != null && _ignoredRule == type;
         }
-
-        public string GetIgnoredRuleLabel()
-        {
-            if (_ignoredRule == null)
-                return "";
-            return "X";
-        }
+        
         public void Execute()
         {
             OnTileSelected?.Invoke(this);
@@ -42,6 +37,14 @@ namespace Tiles
         public void Destroy()
         {
             Shape = null;
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            if (_ignoredRule != null) sb.AppendLine(_ignoredRule.ToString());
+            if (_effect != null) sb.AppendLine(_effect.ToString());
+            return sb.ToString();
         }
     }
 }

@@ -17,6 +17,7 @@ namespace Commands.View
         
         private Label _playerLabel;
         private Label _scoreLabel;
+        private Label _effectLabel;
         private VisualElement _commandContainer;
         private VisualElement _tileContainer;
 
@@ -30,6 +31,7 @@ namespace Commands.View
             _uiDocument = gameObject.GetComponent<UIDocument>();
             _playerLabel = _uiDocument.rootVisualElement.Q<Label>("playerLabel");
             _scoreLabel = _uiDocument.rootVisualElement.Q<Label>("playerScore");
+            _effectLabel = _uiDocument.rootVisualElement.Q<Label>("effectLabel");
             _commandContainer = _uiDocument.rootVisualElement.Q("commandContainer");
             _tileContainer = _uiDocument.rootVisualElement.Q("cardContainer");
             _menuButton = _uiDocument.rootVisualElement.Q<Button>("menuButton");
@@ -72,13 +74,19 @@ namespace Commands.View
         private void DisplayPlayerTiles(Player player)
         {
             _commandContainer.visible = true;
+            _effectLabel.text = "";
             
             if (player.Tiles.Count == 0)
                 return;
             
             foreach (var tile in player.Tiles)
             {
-                CreateTileButton(tile, _tileContainer);
+                var button = CreateTileButton(tile, _tileContainer);
+                if (player.SelectedTile == tile)
+                {
+                    button.style.backgroundColor = Color.green;
+                    _effectLabel.text = tile.ToString();
+                }
             }
         }
 

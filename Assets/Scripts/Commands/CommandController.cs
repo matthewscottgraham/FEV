@@ -71,6 +71,7 @@ namespace Commands
         private void HandleTileSelected(Tile tile)
         {
             _playerController.GetCurrentPlayer().SelectTile(tile);
+            _view.Redraw(_playerController.GetCurrentPlayer());
         }
     }
 }
