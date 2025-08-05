@@ -19,6 +19,7 @@ namespace States
             StatesQueue.Enqueue(new PlaceTilePhase());
             StatesQueue.Enqueue(new PlaceAdditionalTilePhase());
             StatesQueue.Enqueue(new PlaceAdditionalTilePhase());
+            StatesQueue.Enqueue(new NoMoreTilesPhase());
             StatesQueue.Enqueue(new EndTurnPhase());
 
             NextState();
@@ -36,6 +37,7 @@ namespace States
             var nextState = StatesQueue.Dequeue();
             ChangeState(nextState);
             StatesQueue.Enqueue(nextState);
+            CurrentState.EnterState();
         }
         private static void ChangeState(State newState)
         {
@@ -44,7 +46,6 @@ namespace States
             CurrentState = newState;
             OnStateChanged?.Invoke();
             Debug.Log(CurrentState.ToString());
-            CurrentState.EnterState();
         }
 
         public void Dispose()
