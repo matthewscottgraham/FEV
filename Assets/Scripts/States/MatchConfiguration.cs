@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace FEV
+namespace States
 {
     public class MatchConfiguration
     {

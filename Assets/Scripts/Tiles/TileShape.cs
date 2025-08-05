@@ -1,8 +1,6 @@
 using UnityEngine;
-using System.Linq;
-using Unity.VisualScripting;
 
-namespace FEV
+namespace Tiles
 {
     [CreateAssetMenu(fileName = "TileShape", menuName = "FEV/TileShape")]
     public class TileShape : ScriptableObject
