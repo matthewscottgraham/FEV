@@ -37,7 +37,7 @@ public class GameBootstrapper : MonoBehaviour
         _inputController?.Initialize();
 
         _selectionController = Create<SelectionController>() as SelectionController;
-        _selectionController?.Initialize(matchConfiguration, _inputController, _pegController);
+        _selectionController?.Initialize(_playerController, _inputController, _pegController);
     }
 
     private void OnDestroy()

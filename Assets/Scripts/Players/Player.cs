@@ -11,6 +11,7 @@ namespace Players
         public bool IsHuman { get; private set; }
         public int Score { get; private set; } = 0;
         public List<Tile> Tiles { get; private set; } = new();
+        public Tile SelectedTile { get; private set; }
         public void Initialize(int index, Color color, bool isHuman = true)
         {
             Index = index;
@@ -31,6 +32,13 @@ namespace Players
         {
             if (Tiles.Contains(tile))
                 Tiles.Remove(tile);
+            if (SelectedTile == tile)
+                SelectedTile = null;
+        }
+
+        public void SelectTile(Tile tile)
+        {
+            if (Tiles.Contains(tile)) SelectedTile = tile;
         }
         
         public override string ToString()

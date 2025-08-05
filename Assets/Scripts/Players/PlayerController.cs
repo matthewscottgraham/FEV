@@ -49,7 +49,6 @@ namespace Players
         public async void RemoveTile(Tiles.Tile tile, Player player)
         {
             player.RemoveTile(tile);
-            _matchConfiguration.SelectedTile = null;
 
             if (GetCurrentPlayer().Tiles.Count > 0) return;
             

@@ -70,7 +70,7 @@ namespace Commands
 
         private void HandleTileSelected(Tile tile)
         {
-            _matchConfiguration.SelectedTile = tile;
+            _playerController.GetCurrentPlayer().SelectTile(tile);
         }
     }
 }

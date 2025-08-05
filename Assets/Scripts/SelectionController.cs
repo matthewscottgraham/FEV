@@ -1,21 +1,22 @@
 using System;
 using Pegs;
+using Players;
 using UnityEngine;
 
 namespace FEV
 {
     public class SelectionController : MonoBehaviour, IDisposable
     {
-        private MatchConfiguration _matchConfiguration;
+        private PlayerController _playerController;
         private InputController _inputController;
         private PegController _pegController;
         private Camera _camera;
         
         private Vector2Int? _lastHoveredCoordinate;
         
-        public void Initialize(MatchConfiguration matchConfiguration, InputController inputController, PegController pegController)
+        public void Initialize(PlayerController playerController, InputController inputController, PegController pegController)
         {
-            _matchConfiguration = matchConfiguration;
+            _playerController = playerController;
             _inputController = inputController;
             _pegController = pegController;
             _camera = Camera.main;
@@ -26,7 +27,7 @@ namespace FEV
         public void Dispose()
         {
             _inputController.Clicked -= HandleCursorClick;
-            _matchConfiguration = null;
+            _playerController = null;
             _inputController = null;
             _pegController = null;
         }
@@ -38,12 +39,12 @@ namespace FEV
         
         private void Update()
         {
-            if (_matchConfiguration.SelectedTile == null) return;
+            if (_playerController.GetCurrentPlayer().SelectedTile == null) return;
             
             var hoveredPegCoords = GetHoveredPegCoordinates(_inputController.CursorPosition);
             if (hoveredPegCoords == null || hoveredPegCoords == _lastHoveredCoordinate) return;
             
-            _pegController.SetHighlight(hoveredPegCoords.Value, _matchConfiguration.SelectedTile);
+            _pegController.SetHighlight(hoveredPegCoords.Value, _playerController.GetCurrentPlayer().SelectedTile);
             _lastHoveredCoordinate = hoveredPegCoords;
         }
 
@@ -58,10 +59,11 @@ namespace FEV
 
         private void HandleCursorClick(Vector2 screenPosition)
         {
-            if (_matchConfiguration.SelectedTile == null) return;
+            if (_playerController.GetCurrentPlayer().SelectedTile == null) return;
             
             var clickedCoords = GetHoveredPegCoordinates(screenPosition);
-            if (clickedCoords != null) _pegController.ClaimPegs(clickedCoords.Value, _matchConfiguration.SelectedTile);
+            if (clickedCoords != null)
+                _pegController.ClaimPegs(clickedCoords.Value, _playerController.GetCurrentPlayer().SelectedTile);
         }
     }
 }
