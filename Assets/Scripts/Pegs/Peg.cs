@@ -5,8 +5,7 @@ namespace Pegs
 {
     public class Peg : MonoBehaviour
     {
-        private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
-        private MeshRenderer _meshRenderer;
+        private SpriteRenderer _spriteRenderer;
         private bool _isHighlighted;
         private bool _isSelected;
         private Player _player;
@@ -40,32 +39,34 @@ namespace Pegs
         
         private void OnEnable()
         {
-            _meshRenderer = GetComponent<MeshRenderer>();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            SetMaterial();
         }
 
         private void SetMaterial()
         {
-            if (_player != null)
+            if (_player)
             {
-                _meshRenderer.material.SetColor(BaseColor, _player.Color);
-                transform.localScale = Vector3.one * 0.5f;
+                _spriteRenderer.sprite = _player.Icon;
+                _spriteRenderer.color = _player.Color;
+                transform.localScale = Vector3.one * 2f;
                 return;
             }
             
             if (_isSelected)
             {
-                _meshRenderer.material.SetColor(BaseColor, Color.white);
-                transform.localScale = Vector3.one * 0.3f;
+                _spriteRenderer.color = Color.white;
+                transform.localScale = Vector3.one * 0.75f;
             }
             else if (_isHighlighted)
             {
-                _meshRenderer.material.SetColor(BaseColor, Color.cyan);
-                transform.localScale = Vector3.one * 0.2f;
+                _spriteRenderer.color = Color.cyan;
+                transform.localScale = Vector3.one * 0.75f;
             }
             else
             {
-                _meshRenderer.material.SetColor(BaseColor, Color.gray);
-                transform.localScale = Vector3.one * 0.1f;
+                _spriteRenderer.color = Color.gray;
+                transform.localScale = Vector3.one * 0.75f;
             }
         }
     }

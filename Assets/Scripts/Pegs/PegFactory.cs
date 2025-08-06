@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Pegs
@@ -6,9 +7,11 @@ namespace Pegs
     {
         private readonly Vector3 _pegOffset = new Vector3(-1f, 0, -1f);
         private Peg _pegPrototype;
+        private Sprite _pegSprite;
 
         public void Initialize()
         {
+            _pegSprite = Resources.LoadAll<Sprite>("Sprites/icons")[4];
             CreatePegPrototype();
         }
         
@@ -28,17 +31,16 @@ namespace Pegs
         
         private void CreatePegPrototype()
         {
-            var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            var go = new GameObject();
+            var spriteRenderer = go.AddComponent<SpriteRenderer>();
             _pegPrototype = go.AddComponent<Peg>();
+            
             _pegPrototype.name = "Peg";
             _pegPrototype.transform.parent = transform;
             _pegPrototype.transform.position = new Vector3(1000, 0, 0);
-            _pegPrototype.transform.localScale = Vector3.one * 0.1f;
+            _pegPrototype.transform.rotation = Quaternion.Euler(90, 0, 0);
             
-            Destroy(_pegPrototype.GetComponent<Collider>());
-            
-            var material = Resources.Load<Material>("Materials/mat_peg");
-            _pegPrototype.GetComponent<Renderer>().material = material;
+            spriteRenderer.sprite = _pegSprite;
         }
         
         private Peg CreatePeg(int x, int y)

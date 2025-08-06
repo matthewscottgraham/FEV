@@ -8,14 +8,16 @@ namespace Players
     {
         public int Index { get; private set; }
         public Color Color { get; private set; }
+        public Sprite Icon { get; private set; }
         public bool IsHuman { get; private set; }
         public int Score { get; private set; } = 0;
         public List<Tile> Tiles { get; private set; } = new();
         public Tile SelectedTile { get; private set; }
-        public void Initialize(int index, Color color, bool isHuman = true)
+        public void Initialize(int index, Color color, Sprite icon, bool isHuman = true)
         {
             Index = index;
             Color = color;
+            Icon = icon;
             IsHuman = isHuman;
         }
 
