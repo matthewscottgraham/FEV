@@ -1,21 +1,24 @@
 using Pegs;
-using Tiles;
-using UnityEngine;
+using Players;
+using System.Collections.Generic;
 
 namespace Effects
 {
     public class ScoreMultiplier : IEffect
     {
-        private int _multiplier;
+        private readonly int _multiplier;
         
         public ScoreMultiplier(int multiplier)
         {
             _multiplier = multiplier;
         }
         
-        public void Apply(Vector2Int coordinates, Tile tile, Peg[,] board)
+        public void Apply(Player player, List<Peg> pegs, Peg[,] board)
         {
-            throw new System.NotImplementedException();
+            foreach (var peg in pegs)
+            {
+                peg.SetMultiplier(_multiplier);
+            }
         }
     }
 }

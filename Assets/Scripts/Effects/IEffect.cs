@@ -1,11 +1,11 @@
-using UnityEngine;
-using Tiles;
+using System.Collections.Generic;
+using Players;
 using Pegs;
 
 namespace Effects
 {
     public interface IEffect
     {
-        public void Apply(Vector2Int coordinates, Tile tile, Peg[,] board);
+        public void Apply(Player player, List<Peg> pegs, Peg[,] board);
     }
 }

@@ -47,6 +47,7 @@ namespace Pegs
         {
             var peg = Instantiate(_pegPrototype, transform);
             peg.transform.position = new Vector3(x, 0, y) + _pegOffset;
+            peg.Init(new Vector2Int(x,y));
             return peg;
         }
     }

@@ -9,8 +9,20 @@ namespace Pegs
         private bool _isHighlighted;
         private bool _isSelected;
         private Player _player;
+        private int _multiplier;
         
         public Player Owner => _player;
+        public Vector2Int Coordinates { get; private set; }
+
+        public void Init(Vector2Int coordinates)
+        {
+            Coordinates = coordinates;
+        }
+
+        public void SetMultiplier(int multiplier)
+        {
+            _multiplier = multiplier;
+        }
         
         public void Highlight(bool isHighlighted)
         {
@@ -34,7 +46,7 @@ namespace Pegs
 
         public int GetScore()
         {
-            return 1;
+            return 1 * _multiplier;
         }
         
         private void OnEnable()

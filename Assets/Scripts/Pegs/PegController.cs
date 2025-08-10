@@ -68,6 +68,7 @@ namespace Pegs
                 peg.Claim(currentPlayer);
             }
             _playerController.RemoveTile(tile, currentPlayer);
+            tile.Effect?.Apply(currentPlayer, pegs, _pegs);
             StateMachine.NextState();
         }
 

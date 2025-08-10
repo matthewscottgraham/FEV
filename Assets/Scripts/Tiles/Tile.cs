@@ -10,18 +10,18 @@ namespace Tiles
     {
         public static Action<Tile> OnTileSelected;
         private readonly Type _ignoredRule = null;
-        private IEffect _effect = null;
         
         public TileShape Shape { get; private set; }
         public string Label => Shape.name;
         public bool CanIgnoreAnyRule => _ignoredRule != null;
-        public bool HasEffect => _effect != null;
+        public bool HasEffect => Effect != null;
+        public IEffect Effect {get;}
         
         public Tile(TileShape shape, Type ignoredRule = null, IEffect effect = null)
         {
             Shape = shape;
             _ignoredRule = ignoredRule;
-            _effect = effect;
+            Effect = effect;
         }
         
         public bool CanTileIgnoreRule(Type type)
@@ -43,7 +43,7 @@ namespace Tiles
         {
             var sb = new StringBuilder();
             if (_ignoredRule != null) sb.AppendLine(_ignoredRule.ToString());
-            if (_effect != null) sb.AppendLine(_effect.ToString());
+            if (Effect != null) sb.AppendLine(Effect.ToString());
             return sb.ToString();
         }
     }
