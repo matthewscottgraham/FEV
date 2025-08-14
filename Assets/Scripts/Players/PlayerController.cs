@@ -5,6 +5,7 @@ using Commands;
 using FEV;
 using States;
 using UnityEngine;
+using Utils;
 
 namespace Players
 {
@@ -22,12 +23,10 @@ namespace Players
             _matchConfiguration = matchConfiguration;
             _players = new Player[_matchConfiguration.PlayerCount];
             
-            var icons = Resources.LoadAll<Sprite>("Sprites/icons");
-            
             for (int i = 0; i < _players.Length; ++i)
             {
                 _players[i] = ScriptableObject.CreateInstance<Player>();
-                _players[i].Initialize(i, _colors[i], icons[i]);
+                _players[i].Initialize(i, _colors[i], IconUtility.GetPlayerSprite(i));
             }
 
             StateMachine.OnStateChanged += HandleStateChanged;
