@@ -7,7 +7,6 @@ namespace Pegs
     {
         private SpriteRenderer _spriteRenderer;
         private bool _isHighlighted;
-        private bool _isSelected;
         private Player _player;
         private int _multiplier;
         
@@ -26,15 +25,7 @@ namespace Pegs
         
         public void Highlight(bool isHighlighted)
         {
-            if (_isSelected) return;
             _isHighlighted = isHighlighted;
-            SetMaterial();
-        }
-
-        public void Select(bool isSelected)
-        {
-            _isSelected = isSelected;
-            if (_isSelected) _isHighlighted = false;
             SetMaterial();
         }
 
@@ -65,12 +56,7 @@ namespace Pegs
                 return;
             }
             
-            if (_isSelected)
-            {
-                _spriteRenderer.color = Color.white;
-                transform.localScale = Vector3.one * 0.75f;
-            }
-            else if (_isHighlighted)
+            if (_isHighlighted)
             {
                 _spriteRenderer.color = Color.cyan;
                 transform.localScale = Vector3.one * 0.75f;
