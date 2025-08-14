@@ -1,6 +1,7 @@
 using Pegs;
 using Players;
 using System.Collections.Generic;
+using States;
 using UnityEngine;
 
 namespace Effects
@@ -14,7 +15,7 @@ namespace Effects
             _radius = radius;
         }
 
-        public void Apply(Player player, List<Peg> pegs, Peg[,] board)
+        public void Apply(Player player, List<Peg> pegs)
         {
             var affectedPegs = new HashSet<Peg>();
             foreach (var peg in pegs)
@@ -23,7 +24,7 @@ namespace Effects
                 {
                     for (var x = -_radius; x <= _radius; x++)
                     {
-                        affectedPegs.Add(GetNeighbour(peg, board, x, y));
+                        affectedPegs.Add(GetNeighbour(peg, x, y));
                     }
                 }
             }
@@ -35,21 +36,11 @@ namespace Effects
             }
         }
 
-        private Peg GetNeighbour(Peg peg, Peg[,] board, int x, int y)
+        private Peg GetNeighbour(Peg peg, int x, int y)
         {
             var coordinates = peg.Coordinates + new Vector2Int(x, y);
-            if (!AreCoordinatesInBounds(coordinates, board)) return null;
-            return board[coordinates.x, coordinates.y];
-        }
-        
-        public bool AreCoordinatesInBounds(Vector2Int coordinates, Peg[,] board)
-        {
-            if (coordinates.x < 0) return false;
-            if (coordinates.y < 0) return false;
-            if (coordinates.x > board.GetLength(0) -1) return false;
-            if (coordinates.y > board.GetLength(1) -1) return false;
-            
-            return true;
+            if (!Board.Instance.AreCoordinatesInBounds(coordinates)) return null;
+            return Board.Instance.GetPeg(coordinates.x, coordinates.y);
         }
     }
 }

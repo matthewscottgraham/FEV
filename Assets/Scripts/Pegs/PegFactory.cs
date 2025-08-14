@@ -1,3 +1,4 @@
+using States;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,10 +10,11 @@ namespace Pegs
         private Peg _pegPrototype;
         private Sprite _pegSprite;
 
-        public void Initialize()
+        public void Initialize(Vector2Int gridSize)
         {
             _pegSprite = Resources.LoadAll<Sprite>("Sprites/icons")[4];
             CreatePegPrototype();
+            new Board(CreatePegs(gridSize.x, gridSize.y));
         }
         
         public Peg[,] CreatePegs(int gridSizeX, int gridSizeY)

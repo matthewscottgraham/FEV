@@ -1,5 +1,6 @@
 using Pegs;
 using Players;
+using States;
 using Tiles;
 using UnityEngine;
 
@@ -19,9 +20,8 @@ namespace Rules
         /// </summary>
         /// <param name="coordinates"></param>
         /// <param name="tile"></param>
-        /// <param name="board"></param>
         /// <returns></returns>
-        public bool IsSatisfied(Vector2Int coordinates, Tile tile, Peg[,] board)
+        public bool IsSatisfied(Vector2Int coordinates, Tile tile)
         {
             if (tile.CanTileIgnoreRule(GetType())) return true;
             
@@ -36,7 +36,6 @@ namespace Rules
                     if (AreAnyNeighbouringPegsOwnedByPlayer(
                         coordinates.x + x - offset.x,
                         coordinates.y + y - offset.y,
-                        board,
                         currentPlayer
                         ))
                     {
@@ -47,25 +46,13 @@ namespace Rules
             return false;
         }
 
-        private bool AreAnyNeighbouringPegsOwnedByPlayer(int x, int y, Peg[,] board, Player currentPlayer)
+        private bool AreAnyNeighbouringPegsOwnedByPlayer(int x, int y, Player currentPlayer)
         {
-             if (GetNeighbouringPeg(x - 1, y, board)?.Owner == currentPlayer) return true;
-             if (GetNeighbouringPeg(x + 1, y, board)?.Owner == currentPlayer) return true;
-             if (GetNeighbouringPeg(x, y - 1, board)?.Owner == currentPlayer) return true;
-             if (GetNeighbouringPeg(x, y + 1, board)?.Owner == currentPlayer) return true;
+             if (Board.Instance.GetPeg(x - 1, y)?.Owner == currentPlayer) return true;
+             if (Board.Instance.GetPeg(x + 1, y)?.Owner == currentPlayer) return true;
+             if (Board.Instance.GetPeg(x, y - 1)?.Owner == currentPlayer) return true;
+             if (Board.Instance.GetPeg(x, y + 1)?.Owner == currentPlayer) return true;
             return false;
-        }
-
-        private Peg GetNeighbouringPeg(int x, int y, Peg[,] board)
-        {
-            try
-            {
-                return board[x, y];
-            }
-            catch
-            {
-                return null;
-            }
         }
     }
 }

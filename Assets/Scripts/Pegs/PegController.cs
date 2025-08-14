@@ -13,18 +13,15 @@ namespace Pegs
 {
     public class PegController : MonoBehaviour
     {
-        private MatchConfiguration _matchConfiguration;
         private PlayerController _playerController;
         private IRule[] _placementRules;
         
-        private Peg[,] _pegs;
         private readonly List<Peg> _highlightedPegs = new();
         
         public void Initialize(MatchConfiguration matchConfiguration, PlayerController playerController)
         {
             StateMachine.OnStateChanged += CalculateScores;
             
-            _matchConfiguration = matchConfiguration;
             _playerController = playerController;
 
             _placementRules = new IRule[]
@@ -35,10 +32,9 @@ namespace Pegs
             };
 
             var pegFactory = gameObject.AddComponent<PegFactory>();
-            pegFactory.Initialize();
-            _pegs = pegFactory.CreatePegs(matchConfiguration.GridSize.x, matchConfiguration.GridSize.y);
+            pegFactory.Initialize(matchConfiguration.GridSize);
 
-            ClaimInitialPegs();
+            ClaimInitialPegs(matchConfiguration.PlayerCount, matchConfiguration.GridSize);
         }
 
         public void SetHighlight(Vector2Int coordinates, Tile tile)
@@ -68,7 +64,7 @@ namespace Pegs
                 peg.Claim(currentPlayer);
             }
             _playerController.RemoveTile(tile, currentPlayer);
-            tile.Effect?.Apply(currentPlayer, pegs, _pegs);
+            tile.Effect?.Apply(currentPlayer, pegs);
             StateMachine.NextState();
         }
 
@@ -83,7 +79,7 @@ namespace Pegs
                 for (int x = 0; x < dimensions.x; x++)
                 {
                     if (!tile.Shape.GetValue(x,y)) continue;
-                    pegs.Add(_pegs[coordinates.x + x - offset.x, coordinates.y + y - offset.y]);
+                    pegs.Add(Board.Instance.GetPeg(coordinates.x + x - offset.x, coordinates.y + y - offset.y));
                 }
             }
             return pegs;
@@ -94,20 +90,21 @@ namespace Pegs
             StateMachine.OnStateChanged -= CalculateScores;
         }
 
-        private void ClaimInitialPegs()
+        private void ClaimInitialPegs(int playerCount, Vector2Int boardSize)
         {
-            for (var playerIndex = 0; playerIndex < _matchConfiguration.PlayerCount; playerIndex++)
+            for (var playerIndex = 0; playerIndex < playerCount; playerIndex++)
             {
                 var player = _playerController.GetPlayer(playerIndex);
                 var claimed = false;
                 while (!claimed)
                 {
                     // get random peg coordinate that is not around the border
-                    var randomX = Random.Range(3, _pegs.GetLength(0) - 3);
-                    var randomY = Random.Range(3, _pegs.GetLength(1) - 3);
-
-                    if (_pegs[randomX, randomY].Owner != null) continue;
-                    _pegs[randomX, randomY].Claim(player);
+                    var randomX = Random.Range(3, boardSize.x - 3);
+                    var randomY = Random.Range(3, boardSize.y - 3);
+                    
+                    var peg = Board.Instance.GetPeg(randomX, randomY);
+                    if (peg.Owner != null) continue;
+                    peg.Claim(player);
                     claimed = true;
                 }
             }
@@ -124,7 +121,7 @@ namespace Pegs
         
         private bool IsValidCoordinate(Vector2Int coordinates, Tile tile)
         {
-            return _placementRules.All(rule => rule.IsSatisfied(coordinates, tile, _pegs));
+            return _placementRules.All(rule => rule.IsSatisfied(coordinates, tile));
         }
 
         private void CalculateScores()
@@ -132,17 +129,7 @@ namespace Pegs
             if (StateMachine.CurrentState.GetType() != typeof(EndTurnPhase))
                 return;
             
-            var scores = new Dictionary<Player, int>();
-            foreach (var peg in _pegs)
-            {
-                if (!peg.Owner) continue;
-                if (!scores.TryAdd(peg.Owner, peg.GetScore()))
-                {
-                    scores[peg.Owner] += peg.GetScore();
-                }
-            }
-            
-            _playerController.UpdateScores(scores);
+            _playerController.UpdateScores(Board.Instance.CalculateScores());
         }
     }
 }

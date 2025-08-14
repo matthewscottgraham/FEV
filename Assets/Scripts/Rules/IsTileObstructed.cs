@@ -1,4 +1,5 @@
 using Pegs;
+using States;
 using Tiles;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace Rules
         /// <param name="tile"></param>
         /// <param name="board"></param>
         /// <returns></returns>
-        public bool IsSatisfied(Vector2Int coordinates, Tile tile, Peg[,] board)
+        public bool IsSatisfied(Vector2Int coordinates, Tile tile)
         {
             if (tile.CanTileIgnoreRule(GetType())) return true;
             
@@ -25,7 +26,10 @@ namespace Rules
                 for (var x = 0; x < dimensions.x; x++)
                 {
                     if (!tile.Shape.GetValue(x,y)) continue;
-                    if (board[coordinates.x + x - offset.x, coordinates.y + y - offset.y].Owner is not null)
+                    if (Board.Instance.GetPeg(
+                            coordinates.x + x - offset.x,
+                            coordinates.y + y - offset.y)
+                            .Owner is not null)
                         return false;
                 }
             }

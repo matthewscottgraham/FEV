@@ -13,7 +13,7 @@ namespace Effects
             _multiplier = multiplier;
         }
         
-        public void Apply(Player player, List<Peg> pegs, Peg[,] board)
+        public void Apply(Player player, List<Peg> pegs)
         {
             foreach (var peg in pegs)
             {

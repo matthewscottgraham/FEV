@@ -6,6 +6,6 @@ namespace Effects
 {
     public interface IEffect
     {
-        public void Apply(Player player, List<Peg> pegs, Peg[,] board);
+        public void Apply(Player player, List<Peg> pegs);
     }
 }
