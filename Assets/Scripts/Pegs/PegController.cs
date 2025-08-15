@@ -54,6 +54,8 @@ namespace Pegs
 
         public void ClaimPegs(Vector2Int coordinates, Tile tile)
         {
+            ClearHighlight();
+            
             if (tile == null) return;
             if (!IsValidCoordinate(coordinates, tile)) return;
 

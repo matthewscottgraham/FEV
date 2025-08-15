@@ -51,7 +51,7 @@ namespace Pegs
             if (_player)
             {
                 _spriteRenderer.sprite = _player.Icon;
-                _spriteRenderer.color = _player.Color;
+                _spriteRenderer.color = _isHighlighted ? Color.cyan : _player.Color;
                 transform.localScale = Vector3.one * 2f;
                 return;
             }
