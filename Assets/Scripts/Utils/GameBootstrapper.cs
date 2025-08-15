@@ -33,7 +33,7 @@ namespace Utils
             _pegController?.Initialize(matchConfiguration, _playerController);
         
             _tileFactory = new TileFactory();
-            _commandController = new CommandController(matchConfiguration, commandView, _playerController, _tileFactory);
+            _commandController = new CommandController(matchConfiguration, commandView, _playerController, _tileFactory, _pegController);
         
             _inputController = Create<InputController>() as InputController;
             _inputController?.Initialize();

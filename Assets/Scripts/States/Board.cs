@@ -39,6 +39,16 @@ namespace States
                 return null;
             }
         }
+
+        public Peg[] GetUnclaimedPegs()
+        {
+            var pegs = new List<Peg>();
+            foreach (var peg in _pegs)
+            {
+                if (peg.Owner is null) pegs.Add(peg);
+            }
+            return pegs.ToArray();
+        }
         
         public Dictionary<Player, int> CalculateScores()
         {

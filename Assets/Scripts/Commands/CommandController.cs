@@ -1,6 +1,7 @@
 using System;
 using Commands.View;
 using FEV;
+using Pegs;
 using Players;
 using States;
 using Tiles;
@@ -12,13 +13,15 @@ namespace Commands
         private MatchConfiguration _matchConfiguration;
         
         private CommandView _view;
+        private PegController _pegController;
         private PlayerController _playerController;
         private TileFactory _tileFactory;
         
-        public CommandController(MatchConfiguration matchConfiguration, CommandView view, PlayerController playerController, TileFactory tileFactory)
+        public CommandController(MatchConfiguration matchConfiguration, CommandView view, PlayerController playerController, TileFactory tileFactory, PegController pegController)
         {
             _matchConfiguration = matchConfiguration;
             _view = view;
+            _pegController = pegController;
             _playerController = playerController;
 
             _view.Initialize(_matchConfiguration, this);
@@ -61,6 +64,13 @@ namespace Commands
             {
                 player.AddTile(_tileFactory.DrawRandomTile());
             }
+
+            foreach (var tile in player.Tiles)
+            {
+                if (_pegController.CanTileBePlaced(tile)) return;
+            }
+
+            StateMachine.EndGame();
         }
 
         private void UpdateView()

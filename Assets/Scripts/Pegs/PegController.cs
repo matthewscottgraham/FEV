@@ -37,6 +37,17 @@ namespace Pegs
             ClaimInitialPegs(matchConfiguration.PlayerCount, matchConfiguration.GridSize);
         }
 
+        public bool CanTileBePlaced(Tile tile)
+        {
+            var unclaimedPegs = Board.Instance.GetUnclaimedPegs();
+            if (unclaimedPegs.Length == 0) return false;
+            foreach (var peg in unclaimedPegs)
+            {
+                if (IsValidCoordinate(peg.Coordinates, tile)) return true;
+            }
+            return false;
+        }
+        
         public void SetHighlight(Vector2Int coordinates, Tile tile)
         {
             ClearHighlight();

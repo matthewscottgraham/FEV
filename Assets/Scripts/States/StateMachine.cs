@@ -24,7 +24,12 @@ namespace States
 
             NextState();
         }
-
+        
+        public static void EndGame()
+        {
+            ChangeState(new EndGamePhase());
+        }
+        
         public static void EndTurn()
         {
             while (CurrentState.GetType() != typeof(StartTurnPhase))
@@ -32,6 +37,7 @@ namespace States
                 NextState();
             }
         }
+        
         public static void NextState()
         {
             var nextState = StatesQueue.Dequeue();

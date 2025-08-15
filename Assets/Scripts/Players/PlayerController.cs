@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Commands;
-using FEV;
 using States;
 using UnityEngine;
 using Utils;
@@ -71,9 +70,24 @@ namespace Players
         private void HandleStateChanged()
         {
             if (StateMachine.CurrentState.GetType() == typeof(EndTurnPhase))
+            {
                 NextPlayer();
+            }
+            else if (StateMachine.CurrentState.GetType() == typeof(EndGamePhase))
+            {
+                FindWinningPlayer();
+            }
         }
-        
+
+        private void FindWinningPlayer()
+        {
+            var playerRankings = _players.ToList().OrderBy(x => x.Score);
+            foreach (var player in playerRankings)
+            {
+                Debug.Log($"{player}: {player.Score}");    
+            }
+        }
+
         private void NextPlayer()
         {
             GetCurrentPlayer()?.EndTurn();
