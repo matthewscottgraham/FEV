@@ -56,12 +56,6 @@ namespace Players
             await Task.Delay(TimeSpan.FromSeconds(2f));
         }
 
-        public void NextPlayer()
-        {
-            _currentPlayerIndex++;
-            _currentPlayerIndex %= _players.Length;
-        }
-
         public void Dispose()
         {
             _players = null;
@@ -78,6 +72,13 @@ namespace Players
         {
             if (StateMachine.CurrentState.GetType() == typeof(EndTurnPhase))
                 NextPlayer();
+        }
+        
+        private void NextPlayer()
+        {
+            GetCurrentPlayer()?.EndTurn();
+            _currentPlayerIndex++;
+            _currentPlayerIndex %= _players.Length;
         }
     }
 }

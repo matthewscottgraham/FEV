@@ -13,12 +13,19 @@ namespace Players
         public int Score { get; private set; } = 0;
         public List<Tile> Tiles { get; private set; } = new();
         public Tile SelectedTile { get; private set; }
+        
         public void Initialize(int index, Color color, Sprite icon, bool isHuman = true)
         {
             Index = index;
             Color = color;
             Icon = icon;
             IsHuman = isHuman;
+        }
+
+        public void EndTurn()
+        {
+            SelectedTile = null;
+            Tiles.Clear();
         }
 
         public void SetScore(int score)
