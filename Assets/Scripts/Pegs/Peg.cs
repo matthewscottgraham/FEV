@@ -1,5 +1,6 @@
 using Players;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Pegs
 {
@@ -9,6 +10,7 @@ namespace Pegs
         private bool _isHighlighted;
         private Player _player;
         private int _multiplier;
+        private Tween _tween;
         
         public Player Owner => _player;
         public Vector2Int Coordinates { get; private set; }
@@ -27,12 +29,22 @@ namespace Pegs
         {
             _isHighlighted = isHighlighted;
             SetMaterial();
+            if (_isHighlighted)
+            {
+                _tween = transform.DOScale(1.5f, 0.2f)
+                    .SetEase(Ease.OutCubic);
+            }
+            else { _tween?.Kill(); }
         }
 
         public void Claim(Player player)
         {
             _player = player;
             SetMaterial();
+            transform.localScale = Vector3.one * 2f;
+            transform.DOScale(Vector3.one * 3, 0.3f)
+                .SetEase(Ease.OutCubic)
+                .SetLoops(2, LoopType.Yoyo);
         }
 
         public int GetScore()
@@ -52,14 +64,12 @@ namespace Pegs
             {
                 _spriteRenderer.sprite = _player.Icon;
                 _spriteRenderer.color = _isHighlighted ? Color.cyan : _player.Color;
-                transform.localScale = Vector3.one * 2f;
                 return;
             }
             
             if (_isHighlighted)
             {
                 _spriteRenderer.color = Color.cyan;
-                transform.localScale = Vector3.one * 0.75f;
             }
             else
             {
