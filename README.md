@@ -1,2 +1,2 @@
 # FEV
-A tile and peg game in unity.
+ A tile game where you place features on faces, edges and vertices.
