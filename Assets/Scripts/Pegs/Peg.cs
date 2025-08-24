@@ -1,44 +1,60 @@
-using System;
-using Players;
-using UnityEngine;
 using DG.Tweening;
+using Effects;
+using Players;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Pegs
 {
     public class Peg : MonoBehaviour
     {
         private SpriteRenderer _spriteRenderer;
-        private PegState _pegState;
-        private Player _player;
         private int _multiplier;
         private Tween _tween;
         
         private static readonly Color DefaultColor = Color.gray;
         private static readonly Color HighlightColor = Color.cyan;
         private static readonly Color SelectedColor = Color.magenta;
-        private static readonly Color DeactivatedColor = Color.black;
+        private static readonly Color DeactivatedColor = Color.yellow;
         
-        public PegState PegState => _pegState;
-        public Player Owner => _player;
+        public PegState PegState { get; private set; }
+        public Player Owner { get; private set; }
+        public IEffect Effect { get; private set; }
         public Vector2Int Coordinates { get; private set; }
 
         public void Init(Vector2Int coordinates)
         {
             Coordinates = coordinates;
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            SetMaterial();
         }
 
         public void SetMultiplier(int multiplier)
         {
             _multiplier = multiplier;
         }
+
+        public void AddEffect(IEffect effect, Sprite sprite)
+        {
+            Effect = effect;
+            _spriteRenderer.sprite = sprite;
+        }
+
+        public void ConsumeEffect(Player player, List<Peg> pegs)
+        {
+            if (Effect == null) return;
+            Effect.Apply(player, pegs);
+            Effect = null;
+        }
         
         public void Highlight(bool isHighlighted)
         {
-            if (_pegState == PegState.Deactivated) return;
-            _pegState = isHighlighted? PegState.Highlighted : PegState.Normal;
+            if (PegState == PegState.Deactivated) return;
+            PegState = isHighlighted? PegState.Highlighted : PegState.Normal;
             
             SetMaterial();
-            if (_pegState == PegState.Highlighted)
+            if (PegState == PegState.Highlighted)
             {
                 _tween = transform.DOScale(1.5f, 0.2f)
                     .SetEase(Ease.OutCubic);
@@ -48,10 +64,10 @@ namespace Pegs
 
         public bool Claim(Player player)
         {
-            if (_pegState == PegState.Deactivated) return false;
-            _pegState = PegState.Claimed;
-            _player = player;
-            _spriteRenderer.sprite = _player.Icon;
+            if (PegState == PegState.Deactivated) return false;
+            PegState = PegState.Claimed;
+            Owner = player;
+            _spriteRenderer.sprite = Owner.Icon;
             SetMaterial();
             transform.localScale = Vector3.one * 2f;
             transform.DOScale(Vector3.one * 3, 0.3f)
@@ -62,28 +78,24 @@ namespace Pegs
 
         public void Deactivate()
         {
-            _pegState = PegState.Deactivated;
+            PegState = PegState.Deactivated;
             SetMaterial();
         }
+        
         public int GetScore()
         {
             return 1 * _multiplier;
         }
         
-        private void OnEnable()
-        {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
-            SetMaterial();
-        }
 
         private void SetMaterial()
         {
-            _spriteRenderer.color = _pegState switch
+            _spriteRenderer.color = PegState switch
             {
                 PegState.Normal => DefaultColor,
                 PegState.Highlighted => HighlightColor,
                 PegState.Selected => SelectedColor,
-                PegState.Claimed => _player.Color,
+                PegState.Claimed => Owner.Color,
                 PegState.Deactivated => DeactivatedColor,
                 _ => throw new ArgumentOutOfRangeException()
             };

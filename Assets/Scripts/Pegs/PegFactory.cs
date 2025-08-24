@@ -1,3 +1,4 @@
+using Effects;
 using States;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,15 +10,17 @@ namespace Pegs
         private readonly Vector3 _pegOffset = new Vector3(-1f, 0, -1f);
         private Peg _pegPrototype;
         private Sprite _pegSprite;
+        private Sprite _effectSprite;
 
         public void Initialize(Vector2Int gridSize)
         {
             _pegSprite = Resources.LoadAll<Sprite>("Sprites/icons")[4];
+            _effectSprite = Resources.LoadAll<Sprite>("Sprites/icons")[34];
             CreatePegPrototype();
             new Board(CreatePegs(gridSize.x, gridSize.y));
         }
-        
-        public Peg[,] CreatePegs(int gridSizeX, int gridSizeY)
+
+        private Peg[,] CreatePegs(int gridSizeX, int gridSizeY)
         {
             var pegs = new Peg[gridSizeX, gridSizeY];
             for (int x = 0; x < gridSizeX; x++)
@@ -51,12 +54,21 @@ namespace Pegs
             peg.transform.position = new Vector3(x, 0, y) + _pegOffset;
             peg.Init(new Vector2Int(x,y));
             if (!IsPegActive()) peg.Deactivate();
+            TryAddEffect(peg);
             return peg;
         }
 
         private bool IsPegActive()
         {
             return Random.Range(0,100) >= 5;
+        }
+
+        private void TryAddEffect(Peg peg)
+        {
+            var random = Random.Range(0,100);
+            if (random > 5) return;
+            
+            peg.AddEffect(new RadialGrow(1), _effectSprite);
         }
     }
 }
