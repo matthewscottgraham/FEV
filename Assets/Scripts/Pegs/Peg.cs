@@ -50,7 +50,7 @@ namespace Pegs
         
         public void Highlight(bool isHighlighted)
         {
-            if (PegState == PegState.Deactivated) return;
+            if (PegState is PegState.Deactivated or PegState.Claimed) return;
             PegState = isHighlighted? PegState.Highlighted : PegState.Normal;
             
             SetMaterial();
