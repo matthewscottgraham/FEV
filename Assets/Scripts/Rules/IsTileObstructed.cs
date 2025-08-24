@@ -8,11 +8,10 @@ namespace Rules
     public class IsTileObstructed: IRule
     {
         /// <summary>
-        /// Checks to see if the tile will intersect any claimed pegs
+        /// Checks to see if the tile will intersect any claimed or deactivated pegs
         /// </summary>
         /// <param name="coordinates"></param>
         /// <param name="tile"></param>
-        /// <param name="board"></param>
         /// <returns></returns>
         public bool IsSatisfied(Vector2Int coordinates, Tile tile)
         {
@@ -25,15 +24,24 @@ namespace Rules
             {
                 for (var x = 0; x < dimensions.x; x++)
                 {
-                    if (!tile.Shape.GetValue(x,y)) continue;
-                    if (Board.Instance.GetPeg(
-                            coordinates.x + x - offset.x,
-                            coordinates.y + y - offset.y)
-                            .Owner is not null)
-                        return false;
+                    if (!tile.Shape.GetValue(x, y)) continue;
+                    var peg = Board.Instance.GetPeg(
+                        coordinates.x + x - offset.x,
+                        coordinates.y + y - offset.y);
+                    
+                    if (IsPegOwnedOrDeactivated(peg)) return false;
                 }
             }
             return true;
+        }
+
+        private bool IsPegOwnedOrDeactivated(Peg peg)
+        {
+            return peg.PegState switch
+            {
+                PegState.Claimed or PegState.Deactivated => true,
+                _ => false
+            };
         }
     }
 }

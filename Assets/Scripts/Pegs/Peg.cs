@@ -1,3 +1,4 @@
+using System;
 using Players;
 using UnityEngine;
 using DG.Tweening;
@@ -7,11 +8,17 @@ namespace Pegs
     public class Peg : MonoBehaviour
     {
         private SpriteRenderer _spriteRenderer;
-        private bool _isHighlighted;
+        private PegState _pegState;
         private Player _player;
         private int _multiplier;
         private Tween _tween;
         
+        private static readonly Color DefaultColor = Color.gray;
+        private static readonly Color HighlightColor = Color.cyan;
+        private static readonly Color SelectedColor = Color.magenta;
+        private static readonly Color DeactivatedColor = Color.black;
+        
+        public PegState PegState => _pegState;
         public Player Owner => _player;
         public Vector2Int Coordinates { get; private set; }
 
@@ -27,9 +34,11 @@ namespace Pegs
         
         public void Highlight(bool isHighlighted)
         {
-            _isHighlighted = isHighlighted;
+            if (_pegState == PegState.Deactivated) return;
+            _pegState = isHighlighted? PegState.Highlighted : PegState.Normal;
+            
             SetMaterial();
-            if (_isHighlighted)
+            if (_pegState == PegState.Highlighted)
             {
                 _tween = transform.DOScale(1.5f, 0.2f)
                     .SetEase(Ease.OutCubic);
@@ -37,16 +46,25 @@ namespace Pegs
             else { _tween?.Kill(); }
         }
 
-        public void Claim(Player player)
+        public bool Claim(Player player)
         {
+            if (_pegState == PegState.Deactivated) return false;
+            _pegState = PegState.Claimed;
             _player = player;
+            _spriteRenderer.sprite = _player.Icon;
             SetMaterial();
             transform.localScale = Vector3.one * 2f;
             transform.DOScale(Vector3.one * 3, 0.3f)
                 .SetEase(Ease.OutCubic)
                 .SetLoops(2, LoopType.Yoyo);
+            return true;
         }
 
+        public void Deactivate()
+        {
+            _pegState = PegState.Deactivated;
+            SetMaterial();
+        }
         public int GetScore()
         {
             return 1 * _multiplier;
@@ -60,22 +78,16 @@ namespace Pegs
 
         private void SetMaterial()
         {
-            if (_player)
+            _spriteRenderer.color = _pegState switch
             {
-                _spriteRenderer.sprite = _player.Icon;
-                _spriteRenderer.color = _isHighlighted ? Color.cyan : _player.Color;
-                return;
-            }
-            
-            if (_isHighlighted)
-            {
-                _spriteRenderer.color = Color.cyan;
-            }
-            else
-            {
-                _spriteRenderer.color = Color.gray;
-                transform.localScale = Vector3.one * 0.75f;
-            }
+                PegState.Normal => DefaultColor,
+                PegState.Highlighted => HighlightColor,
+                PegState.Selected => SelectedColor,
+                PegState.Claimed => _player.Color,
+                PegState.Deactivated => DeactivatedColor,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            transform.localScale = Vector3.one * 0.75f;
         }
     }
 }
