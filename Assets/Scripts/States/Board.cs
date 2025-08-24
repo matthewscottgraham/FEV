@@ -28,6 +28,10 @@ namespace States
             return true;
         }
 
+        public Peg GetPeg(Vector2Int coordinates)
+        {
+            return GetPeg(coordinates.x, coordinates.y);
+        }
         public Peg GetPeg(int x, int y)
         {
             try

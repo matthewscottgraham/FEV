@@ -42,6 +42,8 @@ namespace Tiles
             {
                 > 90 => new ScoreMultiplier(Random.Range(2,4)),
                 > 80 => new RadialGrow(Random.Range(1,3)),
+                > 75 => new HorizontalFill(),
+                > 70 => new VerticalFill(),
                 _ => null
             };
         }
