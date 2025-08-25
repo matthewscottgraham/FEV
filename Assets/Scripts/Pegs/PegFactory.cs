@@ -1,6 +1,5 @@
 using Effects;
 using States;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Pegs
@@ -68,7 +67,7 @@ namespace Pegs
             var random = Random.Range(0,100);
             if (random > 5) return;
             
-            peg.AddEffect(new RadialGrow(1), _effectSprite);
+            peg.AddEffect(EffectFactory.GetRandomEffect(), _effectSprite);
         }
     }
 }

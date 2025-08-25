@@ -76,6 +76,14 @@ namespace Pegs
             return true;
         }
 
+        public void Unclaim()
+        {
+            if (PegState == PegState.Deactivated) return;
+            PegState = PegState.Normal;
+            Owner = null;
+            SetMaterial();
+        }
+
         public void Deactivate()
         {
             PegState = PegState.Deactivated;

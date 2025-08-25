@@ -36,6 +36,13 @@ namespace Players
             return _players[_currentPlayerIndex];
         }
 
+        public Player GetNextPlayer()
+        {
+            var index = _currentPlayerIndex + 1;
+            index %= _players.Length;
+            return _players[index];
+        }
+
         public void UpdateScores(Dictionary<Player, int> scores)
         {
             foreach (var player in _players)

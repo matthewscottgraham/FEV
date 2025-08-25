@@ -8,6 +8,12 @@ namespace Effects
 {
     public class VerticalFill : IEffect
     {
+        private readonly IEffectResult _effectResult;
+        public VerticalFill(IEffectResult effectResult)
+        {
+            _effectResult = effectResult;
+        }
+        
         public void Apply(Player player, List<Peg> pegs)
         {
             foreach (var peg in pegs)
@@ -26,7 +32,7 @@ namespace Effects
                 if (peg == null) break;
                 if (peg.PegState is PegState.Claimed or PegState.Deactivated) break;
                 
-                peg.Claim(player);
+                _effectResult.AffectPeg(player, peg);
                 coordinates.y -= 1;
             }
         }
@@ -40,7 +46,7 @@ namespace Effects
                 if (peg == null) break;
                 if (peg.PegState is PegState.Claimed or PegState.Deactivated) break;
                 
-                peg.Claim(player);
+                _effectResult.AffectPeg(player, peg);
                 coordinates.y += 1;
             }
         }

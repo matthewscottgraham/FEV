@@ -8,10 +8,12 @@ namespace Effects
 {
     public class RadialGrow : IEffect
     {
+        private readonly IEffectResult _effectResult;
         private readonly int _radius;
 
-        public RadialGrow(int radius)
+        public RadialGrow(IEffectResult effectResult, int radius)
         {
+            _effectResult = effectResult;
             _radius = radius;
         }
 
@@ -31,8 +33,7 @@ namespace Effects
 
             foreach (var peg in affectedPegs)
             {
-                if (peg != null && peg.Owner == null)
-                    peg.Claim(player);
+                if (peg != null) _effectResult.AffectPeg(player, peg);
             }
         }
 
