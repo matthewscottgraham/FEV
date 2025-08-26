@@ -4,6 +4,7 @@ using Players;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Utils;
 
 namespace Pegs
 {
@@ -16,7 +17,7 @@ namespace Pegs
         private static readonly Color DefaultColor = Color.gray;
         private static readonly Color HighlightColor = Color.cyan;
         private static readonly Color SelectedColor = Color.magenta;
-        private static readonly Color DeactivatedColor = Color.yellow;
+        private static readonly Color DeactivatedColor = Color.black;
         
         public PegState PegState { get; private set; }
         public Player Owner { get; private set; }
@@ -107,7 +108,18 @@ namespace Pegs
                 PegState.Deactivated => DeactivatedColor,
                 _ => throw new ArgumentOutOfRangeException()
             };
-            transform.localScale = Vector3.one * 0.75f;
+
+            _spriteRenderer.sprite = PegState switch
+            {
+                PegState.Normal => IconUtility.GetPegSprite(),
+                PegState.Highlighted => IconUtility.GetPegSprite(),
+                PegState.Selected => IconUtility.GetPegSprite(),
+                PegState.Claimed => Owner.Icon,
+                PegState.Deactivated => IconUtility.GetPegSprite(),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            
+            transform.localScale = Vector3.one;
         }
     }
 }

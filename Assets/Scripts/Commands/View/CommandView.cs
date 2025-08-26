@@ -1,5 +1,3 @@
-using FEV;
-using Pegs;
 using Players;
 using States;
 using Tiles;
@@ -59,21 +57,21 @@ namespace Commands.View
 
         private void DisplayDrawTilesButton(Player player)
         {
-            _drawTileButton.visible = false;
+            _drawTileButton.SetVisibility(false);
             
             if (!StateMachine.CurrentState.CanDrawTiles) return;
             if (player.Tiles.Count >= _matchConfiguration.MaxPlayerTileCount) return;
             
-            _drawTileButton.visible = true;
+            _drawTileButton.SetVisibility(true);
         }
 
         private void DisplayEndTurnButton()
         {
-            _endTurnButton.visible = StateMachine.CurrentState.CanEndTurn;
+            _endTurnButton.SetVisibility(StateMachine.CurrentState.CanEndTurn);
         }
         private void DisplayPlayerTiles(Player player)
         {
-            _commandContainer.visible = true;
+            _commandContainer.SetVisibility(true);
             _effectLabel.text = "";
             
             if (player.Tiles.Count == 0)
@@ -84,7 +82,7 @@ namespace Commands.View
                 var button = CreateTileButton(tile, _tileContainer);
                 if (player.SelectedTile == tile)
                 {
-                    button.style.backgroundColor = Color.green;
+                    button.AddToClassList("selected");
                     _effectLabel.text = tile.ToString();
                 }
             }
@@ -92,7 +90,7 @@ namespace Commands.View
 
         private void DisplayPlayerName(Player player)
         {
-            var suffix = !player.IsHuman ? "Bot" : "Human";
+            //var suffix = !player.IsHuman ? "Bot" : "Human";
             _playerLabel.text = $"{player}";// ({suffix})";
             _playerLabel.style.color = player.Color;
         }
@@ -106,7 +104,7 @@ namespace Commands.View
         private void ClearCommandButtons()
         {
             _tileContainer.Clear();
-            _commandContainer.visible = false;
+            _commandContainer.SetVisibility(false);
         }
         
         private static Button CreateCommandButton(ICommand command, VisualElement container)

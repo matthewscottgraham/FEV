@@ -1,5 +1,6 @@
 using UnityEngine.UIElements;
 using System;
+using Unity.VisualScripting;
 
 public static class VisualElementExtensions
 {
@@ -35,5 +36,10 @@ public static class VisualElementExtensions
         }
 
         return newElement;
+    }
+
+    public static void SetVisibility(this VisualElement visualElement, bool visible)
+    {
+        visualElement.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
     }
 }
