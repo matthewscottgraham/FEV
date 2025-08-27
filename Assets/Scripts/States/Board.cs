@@ -61,9 +61,9 @@ namespace States
             foreach (var peg in _pegs)
             {
                 if (!peg.Owner) continue;
-                if (!scores.TryAdd(peg.Owner, peg.GetScore()))
+                if (!scores.TryAdd(peg.Owner, peg.Score))
                 {
-                    scores[peg.Owner] += peg.GetScore();
+                    scores[peg.Owner] += peg.Score;
                 }
             }
 

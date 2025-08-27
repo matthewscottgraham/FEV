@@ -92,13 +92,13 @@ namespace Commands.View
         {
             //var suffix = !player.IsHuman ? "Bot" : "Human";
             _playerLabel.text = $"{player}";// ({suffix})";
-            _playerLabel.style.color = player.Color;
+            _playerLabel.style.color = player.PegStyle.Color;
         }
         
         private void DisplayPlayerScore(Player player)
         {
             _scoreLabel.text = "$ " + player.Score;
-            _scoreLabel.style.color = player.Color;
+            _scoreLabel.style.color = player.PegStyle.Color;
         }
 
         private void ClearCommandButtons()

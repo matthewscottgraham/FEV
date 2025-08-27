@@ -1,6 +1,8 @@
 using Effects;
 using States;
+using System.Collections.Generic;
 using UnityEngine;
+using Utils;
 
 namespace Pegs
 {
@@ -8,17 +10,29 @@ namespace Pegs
     {
         private readonly Vector3 _pegOffset = new Vector3(-1f, 0, -1f);
         private Peg _pegPrototype;
-        private Sprite _pegSprite;
         private Sprite _effectSprite;
-
+        private static readonly Dictionary<PegState, PegStyle> PegStyles = new();
+        
+        public static PegStyle? GetStyle(PegState pegState)
+        {
+            if (!PegStyles.TryGetValue(pegState, out var pegStyle)) return null;
+            return pegStyle;
+        }
+        
         public void Initialize(Vector2Int gridSize)
         {
-            _pegSprite = Resources.LoadAll<Sprite>("Sprites/icons")[4];
             _effectSprite = Resources.LoadAll<Sprite>("Sprites/icons")[34];
+            CreateStyles();
             CreatePegPrototype();
             new Board(CreatePegs(gridSize.x, gridSize.y));
         }
-
+        private void CreateStyles()
+        {
+            PegStyles.Add(PegState.Normal, new PegStyle(Color.gray, IconUtility.GetPegSprite(), 0.7f));
+            PegStyles.Add(PegState.Highlighted, new PegStyle(Color.cyan, IconUtility.GetPegSprite(), 1f));
+            PegStyles.Add(PegState.Selected, new PegStyle(Color.magenta, IconUtility.GetPegSprite()));
+            PegStyles.Add(PegState.Deactivated, new PegStyle(Color.black, IconUtility.GetPegSprite()));
+        }
         private Peg[,] CreatePegs(int gridSizeX, int gridSizeY)
         {
             var pegs = new Peg[gridSizeX, gridSizeY];
@@ -36,7 +50,7 @@ namespace Pegs
         private void CreatePegPrototype()
         {
             var go = new GameObject();
-            var spriteRenderer = go.AddComponent<SpriteRenderer>();
+            go.AddComponent<SpriteRenderer>();
             _pegPrototype = go.AddComponent<Peg>();
             
             _pegPrototype.name = "Peg";
@@ -44,7 +58,6 @@ namespace Pegs
             _pegPrototype.transform.position = new Vector3(1000, 0, 0);
             _pegPrototype.transform.rotation = Quaternion.Euler(90, 0, 0);
             
-            spriteRenderer.sprite = _pegSprite;
         }
         
         private Peg CreatePeg(int x, int y)

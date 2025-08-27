@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using DG.Tweening;
+using Pegs;
 using Tiles;
 using UnityEngine;
 
@@ -7,8 +9,7 @@ namespace Players
     public class Player : ScriptableObject
     {
         public int Index { get; private set; }
-        public Color Color { get; private set; }
-        public Sprite Icon { get; private set; }
+        public PegStyle PegStyle { get; private set; }
         public bool IsHuman { get; private set; }
         public int Score { get; private set; } = 0;
         public List<Tile> Tiles { get; private set; } = new();
@@ -17,8 +18,7 @@ namespace Players
         public void Initialize(int index, Color color, Sprite icon, bool isHuman = true)
         {
             Index = index;
-            Color = color;
-            Icon = icon;
+            PegStyle = new PegStyle(color, icon, 3f, 0.5f, Ease.OutBack);
             IsHuman = isHuman;
         }
 

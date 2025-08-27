@@ -17,7 +17,7 @@ namespace Effects
         {
             foreach (var peg in pegs)
             {
-                peg.SetMultiplier(_multiplier);
+                peg.Score = _multiplier;
             }
         }
     }
