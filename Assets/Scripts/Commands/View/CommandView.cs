@@ -20,8 +20,6 @@ namespace Commands.View
         private VisualElement _tileContainer;
 
         private Button _menuButton;
-        private Button _drawTileButton;
-        private Button _endTurnButton;
         
         public void Initialize(MatchConfiguration matchConfiguration, CommandController commandController)
         {
@@ -34,56 +32,32 @@ namespace Commands.View
             _tileContainer = _uiDocument.rootVisualElement.Q("cardContainer");
             _menuButton = _uiDocument.rootVisualElement.Q<Button>("menuButton");
             _menuButton.clicked += HandleMenuButtonClicked;
-            
-            var drawTileCommand = new DrawTileCommand();
-            _drawTileButton = CreateCommandButton(drawTileCommand, null);
-            _commandContainer.Insert(0, _drawTileButton);
-            
-            var endTurnCommand = new EndTurnCommand();
-            _endTurnButton = CreateCommandButton(endTurnCommand, _commandContainer);
         }
 
         public void Redraw(Player player)
         {
             ClearCommandButtons();
-
-            DisplayDrawTilesButton(player);
-            DisplayEndTurnButton();
             
             DisplayPlayerName(player);
             DisplayPlayerScore(player);
             DisplayPlayerTiles(player);
         }
-
-        private void DisplayDrawTilesButton(Player player)
-        {
-            _drawTileButton.SetVisibility(false);
-            
-            if (!StateMachine.CurrentState.CanDrawTiles) return;
-            if (player.Tiles.Count >= _matchConfiguration.MaxPlayerTileCount) return;
-            
-            _drawTileButton.SetVisibility(true);
-        }
-
-        private void DisplayEndTurnButton()
-        {
-            _endTurnButton.SetVisibility(StateMachine.CurrentState.CanEndTurn);
-        }
+        
         private void DisplayPlayerTiles(Player player)
         {
             _commandContainer.SetVisibility(true);
             _effectLabel.text = "";
             
-            if (player.Tiles.Count == 0)
+            if (player.AvailableCommands.Count == 0)
                 return;
             
-            foreach (var tile in player.Tiles)
+            foreach (var command in player.AvailableCommands)
             {
-                var button = CreateTileButton(tile, _tileContainer);
-                if (player.SelectedTile == tile)
+                var button = CreateCommandButton(command, _tileContainer);
+                if (player.SelectedTile == command)
                 {
                     button.AddToClassList("selected");
-                    _effectLabel.text = tile.ToString();
+                    _effectLabel.text = command.ToString();
                 }
             }
         }
@@ -109,6 +83,7 @@ namespace Commands.View
         
         private static Button CreateCommandButton(ICommand command, VisualElement container)
         {
+            if (command.GetType() == typeof(Tile)) return CreateTileButton(command as Tile, container);
             var button = new Button { text = command.Label };
             container?.Add(button);
             button.clicked += command.Execute;

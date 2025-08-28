@@ -53,11 +53,11 @@ namespace Players
             OnScoreUpdated?.Invoke();
         }
 
-        public async void RemoveTile(Tiles.Tile tile, Player player)
+        public async void RemoveTile(Commands.ICommand command, Player player)
         {
-            player.RemoveTile(tile);
+            player.RemoveCommand(command);
 
-            if (GetCurrentPlayer().Tiles.Count > 0) return;
+            if (GetCurrentPlayer().AvailableCommands.Count > 0) return;
             
             await Task.Delay(TimeSpan.FromSeconds(2f));
         }

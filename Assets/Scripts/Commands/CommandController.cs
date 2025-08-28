@@ -33,6 +33,8 @@ namespace Commands
             StateMachine.OnStateChanged += HandleStateChange;
 
             _playerController.OnScoreUpdated += UpdateView;
+            
+            HandleStateChange();
         }
 
         public void Dispose()
@@ -50,8 +52,16 @@ namespace Commands
 
         private void HandleStateChange()
         {
+            if (StateMachine.CurrentState.GetType() == typeof(StartTurnPhase))
+            {
+                var player = _playerController.GetCurrentPlayer();
+                player.AddCommand(new DrawTileCommand(player));
+            }
+
             if (StateMachine.CurrentState.GetType() == typeof(DrawTilePhase))
+            {
                 HandleDrawTiles();
+            }
 
             _view.Redraw(_playerController.GetCurrentPlayer());
         }
@@ -59,14 +69,17 @@ namespace Commands
         private void HandleDrawTiles()
         {
             var player = _playerController.GetCurrentPlayer();
-            while (player.Tiles.Count < _matchConfiguration.MaxPlayerTileCount)
+            
+            while (player.AvailableCommands.Count < _matchConfiguration.MaxPlayerTileCount)
             {
-                player.AddTile(_tileFactory.DrawRandomTile());
+                player.AddCommand(_tileFactory.DrawRandomTile());
             }
+            player.AddCommand(new EndTurnCommand());
 
-            foreach (var tile in player.Tiles)
+            foreach (var command in player.AvailableCommands)
             {
-                if (_pegController.CanTileBePlaced(tile)) return;
+                if (command.GetType() != typeof(Tile)) continue;
+                if (_pegController.CanTileBePlaced((Tile)command)) return;
             }
 
             StateMachine.EndGame();
