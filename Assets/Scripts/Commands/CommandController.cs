@@ -52,13 +52,13 @@ namespace Commands
 
         private void HandleStateChange()
         {
-            if (StateMachine.CurrentState.GetType() == typeof(StartTurnPhase))
+            if (StateMachine.CurrentState.GetType() == typeof(StartTurnState))
             {
                 var player = _playerController.GetCurrentPlayer();
                 player.AddCommand(new DrawTileCommand(player));
             }
 
-            if (StateMachine.CurrentState.GetType() == typeof(DrawTilePhase))
+            if (StateMachine.CurrentState.GetType() == typeof(DrawTileState))
             {
                 HandleDrawTiles();
             }

@@ -8,31 +8,27 @@ namespace States
     {
         public static Action OnStateChanged;
         
-        private static readonly Queue<State> StatesQueue = new();
+        private static readonly Queue<IState> StatesQueue = new();
         
-        public static State CurrentState { get; private set; }
+        public static IState CurrentState { get; private set; }
         
         public StateMachine()
         {
-            StatesQueue.Enqueue(new StartTurnPhase());
-            StatesQueue.Enqueue(new DrawTilePhase());
-            StatesQueue.Enqueue(new PlaceTilePhase());
-            StatesQueue.Enqueue(new PlaceAdditionalTilePhase());
-            StatesQueue.Enqueue(new PlaceAdditionalTilePhase());
-            StatesQueue.Enqueue(new NoMoreTilesPhase());
-            StatesQueue.Enqueue(new EndTurnPhase());
+            StatesQueue.Enqueue(new StartTurnState());
+            StatesQueue.Enqueue(new DrawTileState());
+            StatesQueue.Enqueue(new EndTurnState());
 
             NextState();
         }
         
         public static void EndGame()
         {
-            ChangeState(new EndGamePhase());
+            ChangeState(new EndGameState());
         }
         
         public static void EndTurn()
         {
-            while (CurrentState.GetType() != typeof(StartTurnPhase))
+            while (CurrentState.GetType() != typeof(StartTurnState))
             {
                 NextState();
             }
@@ -45,7 +41,7 @@ namespace States
             StatesQueue.Enqueue(nextState);
             CurrentState.EnterState();
         }
-        private static void ChangeState(State newState)
+        private static void ChangeState(IState newState)
         {
             if (newState == null) return;
             CurrentState?.ExitState();

@@ -53,13 +53,10 @@ namespace Players
             OnScoreUpdated?.Invoke();
         }
 
-        public async void RemoveTile(Commands.ICommand command, Player player)
+        public void RemoveTile(Commands.ICommand command, Player player)
         {
             player.RemoveCommand(command);
-
-            if (GetCurrentPlayer().AvailableCommands.Count > 0) return;
-            
-            await Task.Delay(TimeSpan.FromSeconds(2f));
+            OnScoreUpdated?.Invoke();
         }
 
         public void Dispose()
@@ -76,11 +73,11 @@ namespace Players
 
         private void HandleStateChanged()
         {
-            if (StateMachine.CurrentState.GetType() == typeof(EndTurnPhase))
+            if (StateMachine.CurrentState.GetType() == typeof(EndTurnState))
             {
                 NextPlayer();
             }
-            else if (StateMachine.CurrentState.GetType() == typeof(EndGamePhase))
+            else if (StateMachine.CurrentState.GetType() == typeof(EndGameState))
             {
                 FindWinningPlayer();
             }

@@ -76,7 +76,6 @@ namespace Pegs
             }
             _playerController.RemoveTile(tile, currentPlayer);
             tile.Effect?.Apply(currentPlayer, pegs);
-            StateMachine.NextState();
         }
 
         private List<Peg> GetTilePegs(Vector2Int coordinates, Tile tile)
@@ -137,7 +136,7 @@ namespace Pegs
 
         private void CalculateScores()
         {
-            if (StateMachine.CurrentState.GetType() != typeof(EndTurnPhase))
+            if (StateMachine.CurrentState.GetType() != typeof(EndTurnState))
                 return;
             
             _playerController.UpdateScores(Board.Instance.CalculateScores());
