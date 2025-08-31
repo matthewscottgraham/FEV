@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6994d9caf93844d08a5af56f033a820f, type: 3}
   m_Name: Shape_med_t_right
   m_EditorClassIdentifier: 
-  dimensions: {x: 3, y: 3}
-  values: 000001000101000001
+  dimensions: {x: 2, y: 3}
+  values: 000101010001
