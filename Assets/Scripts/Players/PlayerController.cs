@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using States;
 using UnityEngine;
 using Utils;
@@ -15,7 +14,13 @@ namespace Players
         private MatchConfiguration _matchConfiguration;
         private Player[] _players;
         private int _currentPlayerIndex = 0;
-        private readonly Color[] _colors = new []{Color.blue, Color.red, Color.green, Color.yellow};
+        private readonly Color[] _colors = new []
+        {
+            new Color(0.690f, 0.518f, 0.797f),
+            new Color(0.941f, 0.598f, 0.332f),
+            new Color(0.465f, 0.730f, 0.625f),
+            new Color(0.699f, 0.223f, 0.315f)
+        };
         
         public void Initialize(MatchConfiguration matchConfiguration)
         {

@@ -11,7 +11,7 @@ namespace Pegs
         public readonly float TransitionDuration;
         public readonly Ease Ease;
         
-        public PegStyle(Color color, Sprite sprite, float scale = 1f,
+        public PegStyle(Color color, Sprite sprite, float scale = 0.8f,
             float transitionDuration = 0.2f, Ease ease = Ease.InOutCubic)
         {
             Color = color;

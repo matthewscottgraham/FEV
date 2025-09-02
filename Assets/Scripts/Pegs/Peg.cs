@@ -41,10 +41,20 @@ namespace Pegs
             Effect = null;
         }
         
-        public void Highlight(bool isHighlighted)
+        public void Highlight(bool isHighlighted, bool ignoreClaimedPegs)
         {
-            if (PegState is PegState.Deactivated or PegState.Claimed) return;
-            PegState = isHighlighted? PegState.Highlighted : PegState.Normal;
+            if (PegState is PegState.Deactivated) return;
+            if (PegState is PegState.Claimed && !ignoreClaimedPegs) return;
+            
+            if (isHighlighted)
+            {
+                PegState = PegState.Highlighted;
+            }
+            else
+            {
+                PegState = Owner ? PegState.Claimed : PegState.Normal;
+            }
+            
             SetMaterial();
         }
 
@@ -74,7 +84,7 @@ namespace Pegs
         private void SetMaterial()
         {
             var pegStyle = PegFactory.GetStyle(PegState);
-            if (Owner) pegStyle = Owner.PegStyle;
+            if (PegState == PegState.Claimed) pegStyle = Owner.PegStyle;
             if (pegStyle == null) return;
 
             var style = pegStyle.Value;

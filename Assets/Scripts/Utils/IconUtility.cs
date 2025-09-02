@@ -2,18 +2,39 @@ using UnityEngine;
 
 namespace Utils
 {
-    public class IconUtility
+    public static class IconUtility
     {
-        private static Sprite _pegSprite;
+        private static Sprite[] _sprites = null;
+
         public static Sprite GetPlayerSprite(int playerIndex)
         {
-            return Resources.LoadAll<Sprite>($"Sprites/")[playerIndex];
+            return GetSprite(playerIndex + 8);
         }
 
         public static Sprite GetPegSprite()
         {
-            if (!_pegSprite) _pegSprite = Resources.Load<Sprite>($"Sprites/PegIcon");
-            return _pegSprite;
+            return GetSprite(1);
+        }
+
+        public static Sprite GetEffectPegSprite()
+        {
+            return GetSprite(3);
+        }
+        
+        public static Sprite GetInactivePegSprite()
+        {
+            return GetSprite(0);
+        }
+
+        public static Sprite GetSelectedPegSprite()
+        {
+            return GetSprite(2);
+        }
+
+        private static Sprite GetSprite(int index)
+        {
+            _sprites ??= Resources.LoadAll<Sprite>("Sprites/sprite_atlas");
+            return _sprites[index];
         }
     }
 }

@@ -55,7 +55,7 @@ namespace Pegs
             var pegs = GetTilePegs(coordinates, tile);
             foreach (var peg in pegs)
             {
-                peg.Highlight(true);
+                peg.Highlight(true, tile.CanTileIgnoreRule(typeof(IsTileObstructed)));
                 _highlightedPegs.Add(peg);
             }
         }
@@ -124,7 +124,7 @@ namespace Pegs
         {
             foreach (var peg in _highlightedPegs)
             {
-                peg.Highlight(false);
+                peg.Highlight(false, false);
             }
             _highlightedPegs.Clear();
         }

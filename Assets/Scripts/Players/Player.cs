@@ -19,7 +19,7 @@ namespace Players
         public void Initialize(int index, Color color, Sprite icon, bool isHuman = true)
         {
             Index = index;
-            PegStyle = new PegStyle(color, icon, 3f, 0.5f, Ease.OutBack);
+            PegStyle = new PegStyle(color, icon, 0.8f, 0.5f, Ease.OutBack);
             IsHuman = isHuman;
         }
 
@@ -54,7 +54,7 @@ namespace Players
         
         public override string ToString()
         {
-            return $"Player: {Index}";
+            return $"Player: {Index + 1}";
         }
     }
 }
