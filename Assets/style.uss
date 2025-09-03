@@ -39,12 +39,15 @@ TileElement {
     width: 64px;
     height: 64px;
     padding: 0;
-    margin: 0;
+    margin: 6px;
+    background-color: transparent;
+    border-color: black;
+    border-radius: 12px;
+    border-width: 1px;
 }
 
 TileElement .unity-button__image {
-    width: 48px;
-    height: 48px;
+    scale: 10;
 }
 
 .tile-badge__effect {
@@ -70,7 +73,12 @@ TileElement .unity-button__image {
 }
 
 .selected {
-    background-color: greenyellow;
+    background-color: #464646;
+    border-color: white;
+    bottom: 12px;
+    transition-property: all;
+    transition-duration: 1s;
+    transition-timing-function: ease-in-cubic;
 }
 
 .effect-label {

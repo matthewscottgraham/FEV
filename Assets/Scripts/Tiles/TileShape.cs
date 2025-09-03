@@ -17,31 +17,35 @@ namespace Tiles
 
         public bool GetValue(int x, int y)
         {
-            return values[y * dimensions.x + x];
+            return GetValue(x, y, dimensions.x, values);
         }
 
         public Texture2D GetTexture()
         {
             if (_texture == null)
-                CreateTexture();
+                _texture = CreateTexture(dimensions.x, dimensions.y, values);
             return _texture;
         }
 
-        private void CreateTexture()
+        private static bool GetValue(int x, int y, int width, bool[] valueArray)
         {
-            var textureSize = 5;
-            var texture = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
-            Vector2Int offset = new Vector2Int((textureSize - dimensions.x) / 2, (textureSize - dimensions.y) / 2);
-            for (int y = offset.y; y < dimensions.y + offset.y; y++)
+            return valueArray[y * width + x];
+        }
+
+        private static Texture2D CreateTexture(int width, int height, bool[] valueArray)
+        {
+            var texture = new Texture2D(width, height, TextureFormat.ARGB32, false);
+            for (int y = 0; y < height; y++)
             {
-                for (int x = offset.x; x < dimensions.x + offset.x; x++)
+                for (int x = 0; x < width; x++)
                 {
-                    texture.SetPixel(x, y, GetValue(x - offset.x, y - offset.y) ? Color.black: Color.white);
+                    var value = GetValue(x, y, width, valueArray);
+                    texture.SetPixel(x, y, value ? Color.white: Color.clear);
                 }
             }
             texture.filterMode = FilterMode.Point;
             texture.Apply(false);
-            _texture = texture;
+            return texture;
         }
     }
 }

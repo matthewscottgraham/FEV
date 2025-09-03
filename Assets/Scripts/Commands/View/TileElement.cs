@@ -5,7 +5,7 @@ namespace Commands.View
 {
     public class TileElement : Button
     {
-        public TileElement(Texture2D texture, bool hasEffect, bool canIgnoreRule)
+        public TileElement(Texture2D texture, Color color, bool hasEffect, bool canIgnoreRule)
         {
             iconImage = texture;
             if (hasEffect) AddBadge("tile-badge__effect");

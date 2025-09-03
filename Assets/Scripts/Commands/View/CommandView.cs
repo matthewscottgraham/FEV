@@ -53,7 +53,7 @@ namespace Commands.View
             
             foreach (var command in player.AvailableCommands)
             {
-                var button = CreateCommandButton(command, _tileContainer);
+                var button = CreateCommandButton(command, player.PegStyle.Color, _tileContainer);
                 if (player.SelectedTile == command)
                 {
                     button.AddToClassList("selected");
@@ -81,17 +81,19 @@ namespace Commands.View
             _commandContainer.SetVisibility(false);
         }
         
-        private static Button CreateCommandButton(ICommand command, VisualElement container)
+        private static Button CreateCommandButton(ICommand command, Color color, VisualElement container)
         {
-            if (command.GetType() == typeof(Tile)) return CreateTileButton(command as Tile, container);
+            if (command.GetType() == typeof(Tile)) return CreateTileButton(command as Tile, color, container);
             var button = new Button { text = command.Label };
             container?.Add(button);
             button.clicked += command.Execute;
             return button;
         }
-        private static Button CreateTileButton(Tile tile, VisualElement container)
+        private static Button CreateTileButton(Tile tile, Color color, VisualElement container)
         {
-            var button = new TileElement(tile.Shape.GetTexture(),
+            var button = new TileElement(
+                tile.Shape.GetTexture(),
+                color,
                 tile.HasEffect,
                 tile.CanIgnoreAnyRule );
             container?.Add(button);
