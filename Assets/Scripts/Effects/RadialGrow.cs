@@ -16,6 +16,11 @@ namespace Effects
             _effectResult = effectResult;
             _radius = radius;
         }
+        
+        public override string ToString()
+        {
+            return _effectResult.ToString() + " pegs surrounding tile.";
+        }
 
         public void Apply(Player player, List<Peg> pegs)
         {

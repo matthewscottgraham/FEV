@@ -3,6 +3,7 @@ using System.Text;
 using Commands;
 using Effects;
 using FEV;
+using Rules;
 
 namespace Tiles
 {
@@ -42,7 +43,7 @@ namespace Tiles
         public override string ToString()
         {
             var sb = new StringBuilder();
-            if (_ignoredRule != null) sb.AppendLine(_ignoredRule.ToString());
+            if (_ignoredRule != null) sb.AppendLine("Ignore: " + RuleFactory.GetRuleText(_ignoredRule));
             if (Effect != null) sb.AppendLine(Effect.ToString());
             return sb.ToString();
         }

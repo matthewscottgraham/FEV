@@ -13,6 +13,11 @@ namespace Effects
             _multiplier = multiplier;
         }
         
+        public override string ToString()
+        {
+            return "Pegs are worth more.";
+        }
+        
         public void Apply(Player player, List<Peg> pegs)
         {
             foreach (var peg in pegs)

@@ -13,6 +13,11 @@ namespace Effects
         {
             _effectResult = effectResult;
         }
+
+        public override string ToString()
+        {
+            return _effectResult.ToString() + " additional pegs vertically.";
+        }
         
         public void Apply(Player player, List<Peg> pegs)
         {

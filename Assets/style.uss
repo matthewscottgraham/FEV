@@ -36,8 +36,8 @@
 }
 
 TileElement {
-    width: 64px;
-    height: 64px;
+    width: 48px;
+    height: 48px;
     padding: 0;
     margin: 6px;
     background-color: transparent;
@@ -48,6 +48,11 @@ TileElement {
 
 TileElement .unity-button__image {
     scale: 10;
+}
+
+.tile-badge-container {
+    top: -24;
+    height: 16px;
 }
 
 .tile-badge__effect {
@@ -84,5 +89,7 @@ TileElement .unity-button__image {
 .effect-label {
     color: black;
     font-size: 18px;
-    -unity-text-align: lower-center;
+    height: 60px;
+    -unity-text-align: middle-center;
+    white-space: normal;
 }

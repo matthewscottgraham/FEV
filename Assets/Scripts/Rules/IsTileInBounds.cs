@@ -7,6 +7,11 @@ namespace Rules
 {
     public class IsTileInBounds : IRule
     {
+        
+        public override string ToString()
+        {
+            return "Tile must be wholly in bounds.";
+        }
         /// <summary>
         /// Checks if the tiles shape falls within the peg boards boundries
         /// </summary>

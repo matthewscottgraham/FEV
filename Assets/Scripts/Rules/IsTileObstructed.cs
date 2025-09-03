@@ -7,6 +7,10 @@ namespace Rules
 {
     public class IsTileObstructed: IRule
     {
+        public override string ToString()
+        {
+            return "Tile must be played on empty pegs.";
+        }
         /// <summary>
         /// Checks to see if the tile will intersect any claimed or deactivated pegs
         /// </summary>

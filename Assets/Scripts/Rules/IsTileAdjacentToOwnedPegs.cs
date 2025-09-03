@@ -9,10 +9,19 @@ namespace Rules
     public class IsTileAdjacentToOwnedPegs: IRule
     {
         private readonly PlayerController _playerController;
-        
+
+        public IsTileAdjacentToOwnedPegs()
+        {
+            
+        }
         public IsTileAdjacentToOwnedPegs(PlayerController playerController)
         {
             _playerController = playerController;
+        }
+        
+        public override string ToString()
+        {
+            return "Tile must touch another owned peg.";
         }
         
         /// <summary>
