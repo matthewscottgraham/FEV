@@ -31,7 +31,10 @@ namespace Pegs
             var pegFactory = gameObject.AddComponent<PegFactory>();
             pegFactory.Initialize(matchConfiguration.GridSize);
 
-            ClaimInitialPegs(matchConfiguration.PlayerCount, matchConfiguration.GridSize);
+            ClaimInitialPegs(
+                matchConfiguration.PlayerCount, 
+                matchConfiguration.GridSize, 
+                matchConfiguration.StartingPegCount);
         }
 
         public bool CanTileBePlaced(Tile tile)
@@ -100,13 +103,13 @@ namespace Pegs
             StateMachine.OnStateChanged -= CalculateScores;
         }
 
-        private void ClaimInitialPegs(int playerCount, Vector2Int boardSize)
+        private void ClaimInitialPegs(int playerCount, Vector2Int boardSize, int startingPegCount)
         {
             for (var playerIndex = 0; playerIndex < playerCount; playerIndex++)
             {
                 var player = _playerController.GetPlayer(playerIndex);
-                var claimed = false;
-                while (!claimed)
+                var claimed = 0;
+                while (claimed < startingPegCount)
                 {
                     // get random peg coordinate that is not around the border
                     var randomX = Random.Range(3, boardSize.x - 3);
@@ -114,8 +117,9 @@ namespace Pegs
                     
                     var peg = Board.Instance.GetPeg(randomX, randomY);
                     if (peg.Owner != null) continue;
+                    if (peg.PegState == PegState.Deactivated) continue;
                     peg.Claim(player);
-                    claimed = true;
+                    claimed++;
                 }
             }
         }
