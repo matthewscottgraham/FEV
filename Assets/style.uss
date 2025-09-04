@@ -93,3 +93,13 @@ TileElement .unity-button__image {
     -unity-text-align: middle-center;
     white-space: normal;
 }
+
+Label {
+    white-space: normal;
+    font-size: 18px;
+}
+
+.heading {
+    font-size: 26px;
+    -unity-font-style: bold;
+}
