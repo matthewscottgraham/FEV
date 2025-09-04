@@ -60,20 +60,17 @@ namespace Commands
 
             if (StateMachine.CurrentState.GetType() == typeof(DrawTileState))
             {
-                HandleDrawTiles();
+                HandleDrawTile();
             }
 
             _view.Redraw(_playerController.GetCurrentPlayer());
         }
 
-        private void HandleDrawTiles()
+        private void HandleDrawTile()
         {
             var player = _playerController.GetCurrentPlayer();
             
-            while (player.AvailableCommands.Count < _matchConfiguration.MaxPlayerTileCount)
-            {
-                player.AddCommand(_tileFactory.DrawRandomTile());
-            }
+            player.AddCommand(_tileFactory.DrawRandomTile());
             player.AddCommand(new EndTurnCommand());
 
             foreach (var command in player.AvailableCommands)
