@@ -28,10 +28,11 @@ namespace Pegs
             SetMaterial();
         }
 
-        public void AddEffect(IEffect effect, Sprite sprite)
+        public void AddEffect(IEffect effect)
         {
             Effect = effect;
-            _spriteRenderer.sprite = sprite;
+            SetState();
+            SetMaterial();
         }
 
         public void ConsumeEffect(Player player, List<Peg> pegs)
@@ -39,6 +40,8 @@ namespace Pegs
             if (Effect == null) return;
             Effect.Apply(player, pegs);
             Effect = null;
+            SetState();
+            SetMaterial();
         }
         
         public void Highlight(bool isHighlighted, bool ignoreClaimedPegs)
@@ -46,23 +49,15 @@ namespace Pegs
             if (PegState is PegState.Deactivated) return;
             if (PegState is PegState.Claimed && !ignoreClaimedPegs) return;
             
-            if (isHighlighted)
-            {
-                PegState = PegState.Highlighted;
-            }
-            else
-            {
-                PegState = Owner ? PegState.Claimed : PegState.Normal;
-            }
-            
+            SetState(isHighlighted);
             SetMaterial();
         }
 
         public bool Claim(Player player)
         {
             if (PegState == PegState.Deactivated) return false;
-            PegState = PegState.Claimed;
             Owner = player;
+            SetState();
             SetMaterial();
             return true;
         }
@@ -70,8 +65,8 @@ namespace Pegs
         public void Unclaim()
         {
             if (PegState == PegState.Deactivated) return;
-            PegState = PegState.Normal;
             Owner = null;
+            SetState();
             SetMaterial();
         }
 
@@ -79,6 +74,15 @@ namespace Pegs
         {
             PegState = PegState.Deactivated;
             SetMaterial();
+        }
+
+        private void SetState(bool isHighlighted = false)
+        {
+            if (isHighlighted && Effect != null) PegState = PegState.HighlightedEffect;
+            else if (isHighlighted) PegState = PegState.Highlighted;
+            else if (Owner) PegState = PegState.Claimed;
+            else if (Effect != null) PegState = PegState.Effect;
+            else PegState = PegState.Normal;
         }
         
         private void SetMaterial()

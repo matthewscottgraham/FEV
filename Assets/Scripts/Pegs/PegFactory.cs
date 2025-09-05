@@ -11,7 +11,6 @@ namespace Pegs
         private readonly Vector3 _pegOffset = new Vector3(-1f, 0, -1f);
         private Peg _pegPrototype;
         private static readonly Dictionary<PegState, PegStyle> PegStyles = new();
-        
         public static PegStyle? GetStyle(PegState pegState)
         {
             if (!PegStyles.TryGetValue(pegState, out var pegStyle)) return null;
@@ -28,7 +27,8 @@ namespace Pegs
         {
             PegStyles.Add(PegState.Normal, new PegStyle(new Color(0.8f,0.8f, 0.8f), IconUtility.GetPegSprite(), 0.6f));
             PegStyles.Add(PegState.Highlighted, new PegStyle(Color.cyan, IconUtility.GetSelectedPegSprite()));
-            PegStyles.Add(PegState.Selected, new PegStyle(Color.magenta, IconUtility.GetSelectedPegSprite()));
+            PegStyles.Add(PegState.Effect, new PegStyle(Color.magenta, IconUtility.GetEffectPegSprite()));
+            PegStyles.Add(PegState.HighlightedEffect, new PegStyle(Color.cyan, IconUtility.GetEffectPegSprite()));
             PegStyles.Add(PegState.Deactivated, new PegStyle(new Color(0.4f,0.4f, 0.4f), IconUtility.GetInactivePegSprite(), 0.6f));
         }
         private Peg[,] CreatePegs(int gridSizeX, int gridSizeY)
@@ -78,7 +78,7 @@ namespace Pegs
             var random = Random.Range(0,100);
             if (random > 5) return;
             
-            peg.AddEffect(EffectFactory.GetRandomEffect(), IconUtility.GetEffectPegSprite());
+            peg.AddEffect(EffectFactory.GetRandomEffect());
         }
     }
 }
