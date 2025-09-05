@@ -11,6 +11,7 @@ namespace Pegs
         private readonly Vector3 _pegOffset = new Vector3(-1f, 0, -1f);
         private Peg _pegPrototype;
         private static readonly Dictionary<PegState, PegStyle> PegStyles = new();
+        
         public static PegStyle? GetStyle(PegState pegState)
         {
             if (!PegStyles.TryGetValue(pegState, out var pegStyle)) return null;
@@ -23,6 +24,7 @@ namespace Pegs
             CreatePegPrototype();
             new Board(CreatePegs(gridSize.x, gridSize.y));
         }
+        
         private void CreateStyles()
         {
             PegStyles.Add(PegState.Normal, new PegStyle(new Color(0.8f,0.8f, 0.8f), IconUtility.GetPegSprite(), 0.6f));

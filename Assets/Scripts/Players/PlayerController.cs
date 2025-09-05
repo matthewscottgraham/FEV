@@ -58,12 +58,6 @@ namespace Players
             OnScoreUpdated?.Invoke();
         }
 
-        public void RemoveTile(Commands.ICommand command, Player player)
-        {
-            player.RemoveCommand(command);
-            OnScoreUpdated?.Invoke();
-        }
-
         public void Dispose()
         {
             _players = null;

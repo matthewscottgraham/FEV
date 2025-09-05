@@ -13,6 +13,7 @@ namespace Effects
                 > 80 => new RadialGrow(GetEffectResult(), 1),
                 > 75 => new HorizontalFill(GetEffectResult()),
                 > 70 => new VerticalFill(GetEffectResult()),
+                > 65 => new DrawTileEffect(),
                 _ => null
             };
         }

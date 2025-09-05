@@ -1,6 +1,6 @@
 namespace States
 {
-    public class DrawTileState : IState
+    public class PlayState : IState
     {
         public void EnterState()
         {

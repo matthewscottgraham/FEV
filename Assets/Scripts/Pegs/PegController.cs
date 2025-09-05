@@ -77,7 +77,7 @@ namespace Pegs
                 peg.ConsumeEffect(currentPlayer, pegs);
                 peg.Claim(currentPlayer);
             }
-            _playerController.RemoveTile(tile, currentPlayer);
+            currentPlayer.RemoveCommand(tile);
             tile.Effect?.Apply(currentPlayer, pegs);
         }
 

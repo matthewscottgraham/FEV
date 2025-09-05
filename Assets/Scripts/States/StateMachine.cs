@@ -15,7 +15,7 @@ namespace States
         public StateMachine()
         {
             StatesQueue.Enqueue(new StartTurnState());
-            StatesQueue.Enqueue(new DrawTileState());
+            StatesQueue.Enqueue(new PlayState());
             StatesQueue.Enqueue(new EndTurnState());
 
             NextState();

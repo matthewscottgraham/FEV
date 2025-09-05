@@ -18,7 +18,6 @@ namespace Utils
         private CommandController _commandController;
         private InputController _inputController;
         private SelectionController _selectionController;
-        private TileFactory _tileFactory;
         private StateMachine _stateMachine;
         private void Start()
         {
@@ -31,9 +30,8 @@ namespace Utils
         
             _pegController = Create<PegController>() as PegController;
             _pegController?.Initialize(matchConfiguration, _playerController);
-        
-            _tileFactory = new TileFactory();
-            _commandController = new CommandController(matchConfiguration, commandView, _playerController, _tileFactory, _pegController);
+            
+            _commandController = new CommandController(matchConfiguration, commandView, _playerController);
         
             _inputController = Create<InputController>() as InputController;
             _inputController?.Initialize();
@@ -55,9 +53,6 @@ namespace Utils
         
             _selectionController?.Dispose();
             _selectionController = null;
-        
-            _tileFactory?.Dispose();
-            _tileFactory = null;
 
             _stateMachine?.Dispose();
             _stateMachine = null;

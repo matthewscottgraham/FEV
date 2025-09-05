@@ -1,5 +1,6 @@
 using States;
 using Players;
+using Tiles;
 
 namespace Commands
 {
@@ -14,6 +15,7 @@ namespace Commands
         }
         public void Execute()
         {
+            _player.AddCommand(TileFactory.DrawRandomTile());
             _player.RemoveCommand(this);
             StateMachine.NextState();
         }

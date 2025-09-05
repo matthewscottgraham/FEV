@@ -1,3 +1,4 @@
+using System;
 using Players;
 using States;
 using Tiles;
@@ -42,7 +43,7 @@ namespace Commands.View
             DisplayPlayerScore(player);
             DisplayPlayerTiles(player);
         }
-        
+
         private void DisplayPlayerTiles(Player player)
         {
             _commandContainer.SetVisibility(true);

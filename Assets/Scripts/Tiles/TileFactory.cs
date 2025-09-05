@@ -5,20 +5,16 @@ using UnityEngine;
 
 namespace Tiles
 {
-    public class TileFactory : IDisposable
+    public class TileFactory
     {
-        private TileShape[] _tileShapes = Resources.LoadAll<TileShape>("TileShapes");
+        private static TileShape[] _tileShapes = null;
 
-        public Tile DrawRandomTile()
+        public static Tile DrawRandomTile()
         {
+            _tileShapes ??= Resources.LoadAll<TileShape>("TileShapes");
             var shape = _tileShapes[UnityEngine.Random.Range(0, _tileShapes.Length)];
             var ignoredRuleType = RuleFactory.GetRandomIgnoredRuleType();
             return new Tile(shape, ignoredRuleType, EffectFactory.GetRandomEffect());
-        }
-
-        public void Dispose()
-        {
-            _tileShapes = null;
         }
     }
 }
