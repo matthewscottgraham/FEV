@@ -1,6 +1,5 @@
 using UnityEngine.UIElements;
 using System;
-using Unity.VisualScripting;
 
 public static class VisualElementExtensions
 {
