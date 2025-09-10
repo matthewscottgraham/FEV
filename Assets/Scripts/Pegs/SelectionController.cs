@@ -13,8 +13,6 @@ namespace Pegs
         private Camera _camera;
         
         private Vector2Int? _lastHoveredCoordinate;
-        private float _lastZoomTime = 0;
-        private const float ZoomDelay = 0.5f;
         
         public void Initialize(PlayerController playerController, InputController inputController, PegController pegController)
         {
@@ -72,10 +70,7 @@ namespace Pegs
 
         private void HandleZoom(float delta)
         {
-            if (Time.time - _lastZoomTime < ZoomDelay) return;
-            _playerController.GetCurrentPlayer().SelectedTile.Rotate(delta >= 0);
             _lastHoveredCoordinate = null;
-            _lastZoomTime = Time.time;
         }
     }
 }

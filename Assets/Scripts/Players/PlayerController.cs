@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FEV;
 using States;
 using UnityEngine;
 using Utils;
@@ -11,6 +12,7 @@ namespace Players
     {
         public Action OnScoreUpdated { get; set; }
         
+        private InputController _inputController;
         private MatchConfiguration _matchConfiguration;
         private Player[] _players;
         private int _currentPlayerIndex = 0;
@@ -22,9 +24,13 @@ namespace Players
             new Color(0.699f, 0.223f, 0.315f)
         };
         
-        public void Initialize(MatchConfiguration matchConfiguration)
+        private float _lastRotateTime = 0;
+        private const float RotateDelay = 0.5f;
+        
+        public void Initialize(MatchConfiguration matchConfiguration, InputController inputController)
         {
             _matchConfiguration = matchConfiguration;
+            _inputController = inputController;
             _players = new Player[_matchConfiguration.PlayerCount];
             
             for (int i = 0; i < _players.Length; ++i)
@@ -34,6 +40,7 @@ namespace Players
             }
 
             StateMachine.OnStateChanged += HandleStateChanged;
+            _inputController.Zoomed += HandleZoom;
         }
 
         public Player GetCurrentPlayer()
@@ -62,6 +69,8 @@ namespace Players
         {
             _players = null;
             StateMachine.OnStateChanged -= HandleStateChanged;
+            _inputController.Zoomed -= HandleZoom;
+            _inputController = null;
         }
 
         public Player GetPlayer(int playerIndex)
@@ -96,6 +105,13 @@ namespace Players
             GetCurrentPlayer()?.EndTurn();
             _currentPlayerIndex++;
             _currentPlayerIndex %= _players.Length;
+        }
+
+        private void HandleZoom(float delta)
+        {
+            if (Time.time - _lastRotateTime < RotateDelay) return;
+            GetCurrentPlayer().SelectedTile.Rotate(delta >= 0);
+            _lastRotateTime = Time.time;
         }
     }
 }

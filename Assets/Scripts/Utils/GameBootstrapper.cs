@@ -25,16 +25,16 @@ namespace Utils
         
             _stateMachine = new StateMachine();
         
+            _inputController = Create<InputController>() as InputController;
+            _inputController?.Initialize();
+            
             _playerController = Create<PlayerController>() as PlayerController;
-            _playerController?.Initialize(matchConfiguration);
+            _playerController?.Initialize(matchConfiguration, _inputController);
         
             _pegController = Create<PegController>() as PegController;
             _pegController?.Initialize(matchConfiguration, _playerController);
             
             _commandController = new CommandController(matchConfiguration, commandView, _playerController);
-        
-            _inputController = Create<InputController>() as InputController;
-            _inputController?.Initialize();
 
             _selectionController = Create<SelectionController>() as SelectionController;
             _selectionController?.Initialize(_playerController, _inputController, _pegController);
