@@ -115,7 +115,7 @@ namespace Players
         private void HandleZoom(float delta)
         {
             if (Time.time - _lastRotateTime < RotateDelay) return;
-            GetCurrentPlayer().SelectedTile.Rotate(delta >= 0);
+            GetCurrentPlayer().SelectedTile?.Rotate((int)Mathf.Clamp(delta, -1f, 1f));
             _lastRotateTime = Time.time;
         }
     }

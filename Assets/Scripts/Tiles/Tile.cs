@@ -30,9 +30,9 @@ namespace Tiles
             return _ignoredRule != null && _ignoredRule == type;
         }
 
-        public void Rotate(bool clockwise)
+        public void Rotate(int direction)
         {
-            Shape.Rotate(clockwise);
+            Shape.Rotate(direction);
             OnTileSelected?.Invoke(this);
         }
         

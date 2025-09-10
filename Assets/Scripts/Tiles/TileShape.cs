@@ -9,7 +9,7 @@ namespace Tiles
         [SerializeField] private Vector2Int dimensions = new Vector2Int(3, 3);
         [SerializeField] private bool[] values = new bool[9];
         private Texture2D _texture = null;
-        private bool _rotated = false;
+        private int _rotation = 0;
 
         public void SetData(TileShape tileShape)
         {
@@ -34,28 +34,55 @@ namespace Tiles
             return _texture;
         }
 
-        public void Rotate(bool clockwise = true)
+        public void Rotate(int direction)
         {
-            var rotated = new bool[dimensions.y, dimensions.x];
+            _rotation = (_rotation + direction + 4) % 4;
 
-            for (int y = 0; y < dimensions.y; y++)
+            var rotated = _rotation % 2 == 0 ?
+                new bool[dimensions.y, dimensions.x] : 
+                new bool[dimensions.x, dimensions.y];
+            
+            for (var y = 0; y < dimensions.y; y++)
             {
-                for (int x = 0; x < dimensions.x; x++)
+                for (var x = 0; x < dimensions.x; x++)
                 {
-                    if (clockwise) rotated[y, dimensions.x - 1 - x] = GetValue(x, y);
-                    else rotated[dimensions.y - 1 - y, x] = GetValue(x, y);
+                    Rotate(rotated, x, y);
                 }
             }
 
+            FlattenArray(rotated);
+
+            dimensions = new Vector2Int(rotated.GetLength(1), rotated.GetLength(0));
+            _texture = CreateTexture(dimensions.x, dimensions.y, values);
+        }
+
+        private void FlattenArray(bool[,] rotated)
+        {
             values = new bool[rotated.Length];
-            int i = 0;
+            var i = 0;
             foreach (var val in rotated)
             {
                 values[i++] = val;
             }
-            
-            dimensions = new Vector2Int(rotated.GetLength(1), rotated.GetLength(0));
-            _texture = CreateTexture(dimensions.x, dimensions.y, values);
+        }
+
+        private void Rotate(bool[,] array, int x, int y)
+        {
+            switch (_rotation)
+            {
+                case 0:
+                    array[y, x] = GetValue(x, y);
+                    break;
+                case 1:
+                    array[x, dimensions.y - 1 - y] = GetValue(x, y);
+                    break;
+                case 2:
+                    array[dimensions.y - 1 - y, dimensions.x - 1 - x] = GetValue(x, y);
+                    break;
+                case 3:
+                    array[dimensions.x - 1 - x, y] = GetValue(x, y);
+                    break;
+            }
         }
 
         private static bool GetValue(int x, int y, int width, bool[] valueArray)
