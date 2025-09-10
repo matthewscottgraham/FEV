@@ -55,12 +55,12 @@ namespace Pegs
             if (tile == null) return;
             
             var pegs = GetTilePegs(coordinates, tile);
-            var validPegs = GetValidPegs(pegs, coordinates, tile);
+            var isValidPlacement = IsValidCoordinate(coordinates, tile);
             
             foreach (var peg in pegs)
             {
                 if (!peg) continue;
-                peg.Highlight(true, validPegs.Contains(peg), tile.CanTileIgnoreRule(typeof(IsTileObstructed)));
+                peg.Highlight(true, isValidPlacement, tile.CanTileIgnoreRule(typeof(IsTileObstructed)));
                 _highlightedPegs.Add(peg);
             }
         }
