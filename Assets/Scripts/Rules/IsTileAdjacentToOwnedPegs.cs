@@ -10,6 +10,7 @@ namespace Rules
     {
         private readonly PlayerController _playerController;
         
+        public IsTileAdjacentToOwnedPegs(){}
         public IsTileAdjacentToOwnedPegs(PlayerController playerController)
         {
             _playerController = playerController;

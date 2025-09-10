@@ -29,6 +29,8 @@ namespace Players
         
         public void Initialize(MatchConfiguration matchConfiguration, InputController inputController)
         {
+            Player.OnCommandsModified += UpdateScores;
+            
             _matchConfiguration = matchConfiguration;
             _inputController = inputController;
             _players = new Player[_matchConfiguration.PlayerCount];
@@ -55,11 +57,12 @@ namespace Players
             return _players[index];
         }
 
-        public void UpdateScores(Dictionary<Player, int> scores)
+        public void UpdateScores()
         {
+            var scores = Board.Instance.CalculateScores();
             foreach (var player in _players)
             {
-                player.SetScore(scores.ContainsKey(player) ? scores[player] : 0);
+                player.SetScore(scores.GetValueOrDefault(player, 0));
             }
             
             OnScoreUpdated?.Invoke();
@@ -67,8 +70,9 @@ namespace Players
 
         public void Dispose()
         {
-            _players = null;
+            Player.OnCommandsModified -= UpdateScores;
             StateMachine.OnStateChanged -= HandleStateChanged;
+            _players = null;
             _inputController.Zoomed -= HandleZoom;
             _inputController = null;
         }
