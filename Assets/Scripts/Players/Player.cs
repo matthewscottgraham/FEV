@@ -38,6 +38,8 @@ namespace Players
         public void AddCommand(ICommand command)
         {
             AvailableCommands.Add(command);
+            if (command.GetType() == typeof(Tile))
+                SelectedTile = command as Tile;
             SortCommands();
             OnCommandsModified?.Invoke();
         }
