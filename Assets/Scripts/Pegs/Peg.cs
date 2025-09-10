@@ -50,9 +50,9 @@ namespace Pegs
             SetMaterial();
         }
         
-        public void Highlight(bool isHighlighted, bool isValidHighlight, bool canBePlacedOnObstructions)
+        public void Highlight(bool isHighlighted, bool isValidHighlight)
         {
-            SetState(isHighlighted, isValidHighlight, canBePlacedOnObstructions);
+            SetState(isHighlighted, isValidHighlight);
             SetMaterial();
         }
 
@@ -90,13 +90,10 @@ namespace Pegs
             }
         }
 
-        private void SetState(bool isHighlighted = false, bool isValidHighlight = false, bool canBePlacedOnObstructions = false)
+        private void SetState(bool isHighlighted = false, bool isValidHighlight = false)
         {
             switch (isHighlighted)
             {
-                case true when canBePlacedOnObstructions:
-                    PegState = PegState.Highlighted;
-                    break;
                 case true when !isValidHighlight:
                     PegState = PegState.Invalid;
                     break;

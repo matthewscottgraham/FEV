@@ -57,7 +57,7 @@ namespace Pegs
             foreach (var peg in pegs)
             {
                 if (!peg) continue;
-                peg.Highlight(true, isValidPlacement, tile.CanTileIgnoreRule(typeof(IsTileObstructed)));
+                peg.Highlight(true, isValidPlacement);
                 _highlightedPegs.Add(peg);
             }
         }
@@ -112,7 +112,7 @@ namespace Pegs
         {
             foreach (var peg in _highlightedPegs)
             {
-                peg.Highlight(false, false, false);
+                peg.Highlight(false, false);
             }
             _highlightedPegs.Clear();
         }

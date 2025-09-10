@@ -11,6 +11,7 @@ namespace Rules
         {
             return "Tile must be played on empty pegs.";
         }
+        
         /// <summary>
         /// Checks to see if the tile will intersect any claimed or deactivated pegs
         /// </summary>
