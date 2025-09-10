@@ -60,7 +60,7 @@ namespace Pegs
             foreach (var peg in pegs)
             {
                 if (!peg) continue;
-                peg.Highlight(true, validPegs.Contains(peg));
+                peg.Highlight(true, validPegs.Contains(peg), tile.CanTileIgnoreRule(typeof(IsTileObstructed)));
                 _highlightedPegs.Add(peg);
             }
         }
@@ -130,7 +130,7 @@ namespace Pegs
         {
             foreach (var peg in _highlightedPegs)
             {
-                peg.Highlight(false, false);
+                peg.Highlight(false, false, false);
             }
             _highlightedPegs.Clear();
         }
