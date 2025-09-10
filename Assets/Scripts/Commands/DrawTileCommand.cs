@@ -17,7 +17,6 @@ namespace Commands
         {
             _player.AddCommand(TileFactory.DrawRandomTile());
             _player.RemoveCommand(this);
-            StateMachine.NextState();
         }
 
         public void Destroy()

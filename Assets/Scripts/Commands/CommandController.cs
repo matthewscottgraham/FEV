@@ -24,8 +24,8 @@ namespace Commands
             _view.Redraw(_playerController.GetCurrentPlayer());
             
             StateMachine.OnStateChanged += UpdateView;
-            Tile.OnTileSelected += HandleTileSelected;
             StateMachine.OnStateChanged += HandleStateChange;
+            Tile.OnTileSelected += HandleTileSelected;
             Player.OnCommandsModified += UpdateView;
             
             _playerController.OnScoreUpdated += UpdateView;
@@ -36,9 +36,9 @@ namespace Commands
         public void Dispose()
         {
             StateMachine.OnStateChanged -= UpdateView;
+            StateMachine.OnStateChanged -= HandleStateChange;
             _playerController.OnScoreUpdated -= UpdateView;
             Tile.OnTileSelected -= HandleTileSelected;
-            StateMachine.OnStateChanged -= HandleStateChange;
             Player.OnCommandsModified -= UpdateView;
             
             _view = null;
@@ -53,6 +53,7 @@ namespace Commands
                 var player = _playerController.GetCurrentPlayer();
                 player.AddCommand(new DrawTileCommand(player));
                 player.AddCommand(new EndTurnCommand());
+                StateMachine.PlayState();
             }
 
             _view.Redraw(_playerController.GetCurrentPlayer());

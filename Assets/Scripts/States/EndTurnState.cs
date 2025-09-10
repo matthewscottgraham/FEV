@@ -4,7 +4,7 @@ namespace States
     {
         public void EnterState()
         {
-            StateMachine.NextState();
+            
         }
 
         public void ExitState()

@@ -8,52 +8,59 @@ namespace States
     {
         public static Action OnStateChanged;
         
-        private static readonly Queue<IState> StatesQueue = new();
-        
+        private static StateMachine _instance;
+        private StateFactory _factory;
         public static IState CurrentState { get; private set; }
         
         public StateMachine()
         {
-            StatesQueue.Enqueue(new StartTurnState());
-            StatesQueue.Enqueue(new PlayState());
-            StatesQueue.Enqueue(new EndTurnState());
+            _instance?.Dispose();
+            _instance = this;
+            _factory = new StateFactory();
 
-            NextState();
+            _instance.SetState(typeof(StartTurnState));
         }
-        
+
         public static void EndGame()
         {
-            ChangeState(new EndGameState());
+            _instance?.SetState(typeof(EndGameState));
         }
-        
+
         public static void EndTurn()
         {
-            while (CurrentState.GetType() != typeof(StartTurnState))
-            {
-                NextState();
-            }
+            _instance?.SetState(typeof(EndTurnState));
+        }
+
+        public static void PlayState()
+        {
+            _instance?.SetState(typeof(PlayState));
+        }
+
+        public static void StartTurnState()
+        {
+            _instance.SetState(typeof(StartTurnState));
+        }
+
+        public void Dispose()
+        {
+            CurrentState = null;
+            _factory = null;
+            _instance = null;
+        }
+
+        private void SetState(Type stateType)
+        {
+            SetState(_factory.GetState(stateType));
         }
         
-        public static void NextState()
-        {
-            var nextState = StatesQueue.Dequeue();
-            ChangeState(nextState);
-            StatesQueue.Enqueue(nextState);
-            CurrentState.EnterState();
-        }
-        private static void ChangeState(IState newState)
+        private void SetState(IState newState)
         {
             if (newState == null) return;
             CurrentState?.ExitState();
             CurrentState = newState;
             OnStateChanged?.Invoke();
+            CurrentState.EnterState();
             Debug.Log(CurrentState.ToString());
-        }
-
-        public void Dispose()
-        {
-            StatesQueue.Clear();
-            CurrentState = null;
         }
     }
 }

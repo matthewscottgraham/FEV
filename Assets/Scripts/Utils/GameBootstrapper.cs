@@ -19,6 +19,7 @@ namespace Utils
         private InputController _inputController;
         private SelectionController _selectionController;
         private StateMachine _stateMachine;
+        
         private void Start()
         {
             var matchConfiguration = new MatchConfiguration();

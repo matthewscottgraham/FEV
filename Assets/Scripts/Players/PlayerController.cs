@@ -105,6 +105,7 @@ namespace Players
             GetCurrentPlayer()?.EndTurn();
             _currentPlayerIndex++;
             _currentPlayerIndex %= _players.Length;
+            StateMachine.StartTurnState();
         }
 
         private void HandleZoom(float delta)
