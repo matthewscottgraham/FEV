@@ -12,7 +12,8 @@ namespace Tiles
         public static Tile DrawRandomTile()
         {
             _tileShapes ??= Resources.LoadAll<TileShape>("TileShapes");
-            var shape = _tileShapes[UnityEngine.Random.Range(0, _tileShapes.Length)];
+            var shape = ScriptableObject.CreateInstance<TileShape>();
+            shape.SetData(_tileShapes[UnityEngine.Random.Range(0, _tileShapes.Length)]);
             var ignoredRuleType = RuleFactory.GetRandomIgnoredRuleType();
             return new Tile(shape, ignoredRuleType, EffectFactory.GetRandomEffect());
         }

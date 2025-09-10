@@ -13,6 +13,8 @@ namespace Pegs
         private Camera _camera;
         
         private Vector2Int? _lastHoveredCoordinate;
+        private float _lastZoomTime = 0;
+        private const float ZoomDelay = 0.5f;
         
         public void Initialize(PlayerController playerController, InputController inputController, PegController pegController)
         {
@@ -22,11 +24,13 @@ namespace Pegs
             _camera = Camera.main;
             
             _inputController.Clicked += HandleCursorClick;
+            _inputController.Zoomed += HandleZoom;
         }
 
         public void Dispose()
         {
             _inputController.Clicked -= HandleCursorClick;
+            _inputController.Zoomed -= HandleZoom;
             _playerController = null;
             _inputController = null;
             _pegController = null;
@@ -64,6 +68,14 @@ namespace Pegs
             var clickedCoords = GetHoveredPegCoordinates(screenPosition);
             if (clickedCoords != null)
                 _pegController.ClaimPegs(clickedCoords.Value, _playerController.GetCurrentPlayer().SelectedTile);
+        }
+
+        private void HandleZoom(float delta)
+        {
+            if (Time.time - _lastZoomTime < ZoomDelay) return;
+            _playerController.GetCurrentPlayer().SelectedTile.Rotate(delta >= 0);
+            _lastHoveredCoordinate = null;
+            _lastZoomTime = Time.time;
         }
     }
 }

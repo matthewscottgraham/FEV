@@ -29,6 +29,12 @@ namespace Tiles
         {
             return _ignoredRule != null && _ignoredRule == type;
         }
+
+        public void Rotate(bool clockwise)
+        {
+            Shape.Rotate(clockwise);
+            OnTileSelected?.Invoke(this);
+        }
         
         public void Execute()
         {

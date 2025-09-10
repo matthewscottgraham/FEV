@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6994d9caf93844d08a5af56f033a820f, type: 3}
-  m_Name: Shape_med_t_left
+  m_Name: Shape_small_corner
   m_EditorClassIdentifier: 
-  dimensions: {x: 2, y: 3}
-  values: 010001010100
+  dimensions: {x: 2, y: 2}
+  values: 01010100
