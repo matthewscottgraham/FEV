@@ -14,7 +14,7 @@ namespace Pegs
         private IRule[] _placementRules;
         
         private readonly List<Peg> _highlightedPegs = new();
-        
+
         public void Initialize(MatchConfiguration matchConfiguration, PlayerController playerController)
         {
             StateMachine.OnStateChanged += CalculateScores;
@@ -53,12 +53,14 @@ namespace Pegs
             ClearHighlight();
             
             if (tile == null) return;
-            if (!IsValidCoordinate(coordinates, tile)) return;
             
             var pegs = GetTilePegs(coordinates, tile);
+            var validPegs = GetValidPegs(pegs, coordinates, tile);
+            
             foreach (var peg in pegs)
             {
-                peg.Highlight(true, tile.CanTileIgnoreRule(typeof(IsTileObstructed)));
+                if (!peg) continue;
+                peg.Highlight(true, validPegs.Contains(peg));
                 _highlightedPegs.Add(peg);
             }
         }
@@ -136,6 +138,17 @@ namespace Pegs
         private bool IsValidCoordinate(Vector2Int coordinates, Tile tile)
         {
             return _placementRules.All(rule => rule.IsSatisfied(coordinates, tile));
+        }
+
+        private List<Peg> GetValidPegs(List<Peg> pegs, Vector2Int coordinates, Tile tile)
+        {
+            var validPegs = new List<Peg>();
+            foreach (var peg in pegs)
+            {
+                if (_placementRules.All(rule => rule.IsPegValid(peg, coordinates, tile)))
+                  validPegs.Add(peg);  
+            }
+            return validPegs;
         }
 
         private void CalculateScores()

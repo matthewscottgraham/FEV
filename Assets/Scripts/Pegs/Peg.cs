@@ -13,6 +13,7 @@ namespace Pegs
         private SpriteRenderer _spriteRenderer;
         private Tween _tween;
         private float _randomDelay = 0.1f;
+        private bool _isDeactivated = false;
 
         public int Score { get; set; } = 1;
         public PegState PegState { get; private set; }
@@ -44,12 +45,10 @@ namespace Pegs
             SetMaterial();
         }
         
-        public void Highlight(bool isHighlighted, bool ignoreClaimedPegs)
+        public void Highlight(bool isHighlighted, bool isValidHighlight)
         {
-            if (PegState is PegState.Deactivated) return;
-            if (PegState is PegState.Claimed && !ignoreClaimedPegs) return;
-            
-            SetState(isHighlighted);
+            //if (PegState is PegState.Deactivated) return;
+            SetState(isHighlighted, isValidHighlight);
             SetMaterial();
         }
 
@@ -72,17 +71,32 @@ namespace Pegs
 
         public void Deactivate()
         {
-            PegState = PegState.Deactivated;
+            _isDeactivated = true;
             SetMaterial();
         }
 
-        private void SetState(bool isHighlighted = false)
+        private void SetState(bool isHighlighted = false, bool isValidHighlight = false)
         {
-            if (isHighlighted && Effect != null) PegState = PegState.HighlightedEffect;
-            else if (isHighlighted) PegState = PegState.Highlighted;
-            else if (Owner) PegState = PegState.Claimed;
-            else if (Effect != null) PegState = PegState.Effect;
-            else PegState = PegState.Normal;
+            switch (isHighlighted)
+            {
+                case true when !isValidHighlight:
+                    PegState = PegState.Invalid;
+                    break;
+                case true when Effect != null:
+                    PegState = PegState.HighlightedEffect;
+                    break;
+                case true:
+                    PegState = PegState.Highlighted;
+                    break;
+                default:
+                {
+                    if (_isDeactivated) PegState = PegState.Deactivated;
+                    else if (Owner) PegState = PegState.Claimed;
+                    else if (Effect != null) PegState = PegState.Effect;
+                    else PegState = PegState.Normal;
+                    break;
+                }
+            }
         }
         
         private void SetMaterial()

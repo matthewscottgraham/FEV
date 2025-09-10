@@ -55,6 +55,11 @@ namespace Rules
             return false;
         }
 
+        public bool IsPegValid(Peg peg, Vector2Int tileCoordinates, Tile tile)
+        {
+            return IsSatisfied(tileCoordinates, tile);
+        }
+
         private bool AreAnyNeighbouringPegsOwnedByPlayer(int x, int y, Player currentPlayer)
         {
              if (Board.Instance.GetPeg(x - 1, y)?.Owner == currentPlayer) return true;

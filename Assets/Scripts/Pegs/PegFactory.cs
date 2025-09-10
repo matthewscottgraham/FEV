@@ -32,6 +32,7 @@ namespace Pegs
             PegStyles.Add(PegState.Effect, new PegStyle(Color.magenta, IconUtility.GetEffectPegSprite()));
             PegStyles.Add(PegState.HighlightedEffect, new PegStyle(Color.cyan, IconUtility.GetEffectPegSprite()));
             PegStyles.Add(PegState.Deactivated, new PegStyle(new Color(0.4f,0.4f, 0.4f), IconUtility.GetInactivePegSprite(), 0.6f));
+            PegStyles.Add(PegState.Invalid, new PegStyle(Color.red, IconUtility.GetInactivePegSprite()));
         }
         private Peg[,] CreatePegs(int gridSizeX, int gridSizeY)
         {

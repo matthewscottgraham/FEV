@@ -7,6 +7,7 @@ namespace Pegs
         Effect,
         HighlightedEffect,
         Claimed,
-        Deactivated
+        Deactivated,
+        Invalid
     }
 }
