@@ -7,6 +7,5 @@ namespace Rules
     public interface IRule
     {
         public bool IsSatisfied(Vector2Int coordinates, Tile tile);
-        public bool IsPegValid(Peg peg, Vector2Int coordinates, Tile tile);
     }
 }

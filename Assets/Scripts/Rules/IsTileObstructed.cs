@@ -38,11 +38,6 @@ namespace Rules
             }
             return true;
         }
-        
-        public bool IsPegValid(Peg peg, Vector2Int tileCoordinates, Tile tile)
-        {
-            return !IsPegOwnedOrDeactivated(peg);
-        }
 
         private bool IsPegOwnedOrDeactivated(Peg peg)
         {

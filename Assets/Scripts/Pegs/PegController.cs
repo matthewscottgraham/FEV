@@ -12,13 +12,10 @@ namespace Pegs
     {
         private PlayerController _playerController;
         private IRule[] _placementRules;
-        
         private readonly List<Peg> _highlightedPegs = new();
 
         public void Initialize(MatchConfiguration matchConfiguration, PlayerController playerController)
         {
-            StateMachine.OnStateChanged += CalculateScores;
-            
             _playerController = playerController;
 
             _placementRules = new IRule[]
@@ -83,26 +80,11 @@ namespace Pegs
             tile.Effect?.Apply(currentPlayer, pegs);
         }
 
-        private List<Peg> GetTilePegs(Vector2Int coordinates, Tile tile)
-        {
-            var dimensions = tile.Shape.GetShapeDimensions();
-            var pegs = new List<Peg>();
-            
-            var offset = dimensions / 2;
-            for (int y = 0; y < dimensions.y; y++)
-            {
-                for (int x = 0; x < dimensions.x; x++)
-                {
-                    if (!tile.Shape.GetValue(x,y)) continue;
-                    pegs.Add(Board.Instance.GetPeg(coordinates.x + x - offset.x, coordinates.y + y - offset.y));
-                }
-            }
-            return pegs;
-        }
-
         private void OnDestroy()
         {
-            StateMachine.OnStateChanged -= CalculateScores;
+            _playerController = null;
+            _placementRules = null;
+            _highlightedPegs.Clear();
         }
 
         private void ClaimInitialPegs(int playerCount, Vector2Int boardSize, int startingPegCount)
@@ -134,29 +116,27 @@ namespace Pegs
             }
             _highlightedPegs.Clear();
         }
-        
+
+        private List<Peg> GetTilePegs(Vector2Int coordinates, Tile tile)
+        {
+            var dimensions = tile.Shape.GetShapeDimensions();
+            var pegs = new List<Peg>();
+            
+            var offset = dimensions / 2;
+            for (int y = 0; y < dimensions.y; y++)
+            {
+                for (int x = 0; x < dimensions.x; x++)
+                {
+                    if (!tile.Shape.GetValue(x,y)) continue;
+                    pegs.Add(Board.Instance.GetPeg(coordinates.x + x - offset.x, coordinates.y + y - offset.y));
+                }
+            }
+            return pegs;
+        }
+
         private bool IsValidCoordinate(Vector2Int coordinates, Tile tile)
         {
             return _placementRules.All(rule => rule.IsSatisfied(coordinates, tile));
-        }
-
-        private List<Peg> GetValidPegs(List<Peg> pegs, Vector2Int coordinates, Tile tile)
-        {
-            var validPegs = new List<Peg>();
-            foreach (var peg in pegs)
-            {
-                if (_placementRules.All(rule => rule.IsPegValid(peg, coordinates, tile)))
-                  validPegs.Add(peg);  
-            }
-            return validPegs;
-        }
-
-        private void CalculateScores()
-        {
-            if (StateMachine.CurrentState.GetType() != typeof(EndTurnState))
-                return;
-            
-            _playerController.UpdateScores(Board.Instance.CalculateScores());
         }
     }
 }

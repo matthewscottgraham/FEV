@@ -30,10 +30,5 @@ namespace Rules
             
             return true;
         }
-        
-        public bool IsPegValid(Peg peg, Vector2Int tileCoordinates, Tile tile)
-        {
-            return IsSatisfied(tileCoordinates, tile);
-        }
     }
 }

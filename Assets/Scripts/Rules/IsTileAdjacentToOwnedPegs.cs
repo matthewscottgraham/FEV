@@ -9,11 +9,7 @@ namespace Rules
     public class IsTileAdjacentToOwnedPegs: IRule
     {
         private readonly PlayerController _playerController;
-
-        public IsTileAdjacentToOwnedPegs()
-        {
-            
-        }
+        
         public IsTileAdjacentToOwnedPegs(PlayerController playerController)
         {
             _playerController = playerController;
@@ -53,11 +49,6 @@ namespace Rules
                 }
             }
             return false;
-        }
-
-        public bool IsPegValid(Peg peg, Vector2Int tileCoordinates, Tile tile)
-        {
-            return IsSatisfied(tileCoordinates, tile);
         }
 
         private bool AreAnyNeighbouringPegsOwnedByPlayer(int x, int y, Player currentPlayer)
