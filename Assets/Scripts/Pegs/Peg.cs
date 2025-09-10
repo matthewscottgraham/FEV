@@ -72,6 +72,7 @@ namespace Pegs
         public void Deactivate()
         {
             _isDeactivated = true;
+            SetState();
             SetMaterial();
         }
 
