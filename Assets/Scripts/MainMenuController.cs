@@ -20,8 +20,7 @@ public class MainMenuController : MonoBehaviour
         
         var label = _rootElement.AddNew<Label>();
         label.text = $"* {RuleFactory.GetRuleText(typeof(IsTileInBounds))}\n" +
-                     $"* {RuleFactory.GetRuleText(typeof(IsTileObstructed))}\n" +
-                     $"* {RuleFactory.GetRuleText(typeof(IsTileAdjacentToOwnedPegs))}";
+                     $"* {RuleFactory.GetRuleText(typeof(IsTileObstructed))}";
         
         var spacer = _rootElement.AddNew<VisualElement>();
         spacer.style.height = 24;
