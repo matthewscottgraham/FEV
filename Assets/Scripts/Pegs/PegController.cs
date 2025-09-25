@@ -29,8 +29,8 @@ namespace Pegs
             pegFactory.Initialize(matchConfiguration.GridSize);
 
             ClaimInitialPegs(
-                matchConfiguration.PlayerCount, 
-                matchConfiguration.GridSize, 
+                matchConfiguration.PlayerCount,
+                matchConfiguration.GridSize,
                 matchConfiguration.StartingPegCount);
         }
 
@@ -42,18 +42,19 @@ namespace Pegs
             {
                 if (IsValidCoordinate(peg.Coordinates, tile)) return true;
             }
+
             return false;
         }
-        
+
         public void SetHighlight(Vector2Int coordinates, Tile tile)
         {
             ClearHighlight();
-            
+
             if (tile == null) return;
-            
+
             var pegs = GetTilePegs(coordinates, tile);
             var isValidPlacement = IsValidCoordinate(coordinates, tile);
-            
+
             foreach (var peg in pegs)
             {
                 if (!peg) continue;
@@ -65,7 +66,7 @@ namespace Pegs
         public void ClaimPegs(Vector2Int coordinates, Tile tile)
         {
             ClearHighlight();
-            
+
             if (tile == null) return;
             if (!IsValidCoordinate(coordinates, tile)) return;
 
@@ -76,10 +77,11 @@ namespace Pegs
                 peg.ConsumeEffect(currentPlayer, pegs);
                 peg.Claim(currentPlayer);
             }
+
             currentPlayer.RemoveCommand(tile);
             tile.Effect?.Apply(currentPlayer, pegs);
-            
-            ClaimTrappedPegs();
+
+            Board.Instance.FindAndClaimTrappedPegs();
         }
 
         private void OnDestroy()
@@ -100,7 +102,7 @@ namespace Pegs
                     // get random peg coordinate that is not around the border
                     var randomX = Random.Range(3, boardSize.x - 3);
                     var randomY = Random.Range(3, boardSize.y - 3);
-                    
+
                     var peg = Board.Instance.GetPeg(randomX, randomY);
                     if (peg.Owner != null) continue;
                     if (peg.PegState == PegState.Deactivated) continue;
@@ -116,6 +118,7 @@ namespace Pegs
             {
                 peg.Highlight(false, false);
             }
+
             _highlightedPegs.Clear();
         }
 
@@ -123,73 +126,23 @@ namespace Pegs
         {
             var dimensions = tile.Shape.GetShapeDimensions();
             var pegs = new List<Peg>();
-            
+
             var offset = dimensions / 2;
             for (int y = 0; y < dimensions.y; y++)
             {
                 for (int x = 0; x < dimensions.x; x++)
                 {
-                    if (!tile.Shape.GetValue(x,y)) continue;
+                    if (!tile.Shape.GetValue(x, y)) continue;
                     pegs.Add(Board.Instance.GetPeg(coordinates.x + x - offset.x, coordinates.y + y - offset.y));
                 }
             }
+
             return pegs;
         }
 
         private bool IsValidCoordinate(Vector2Int coordinates, Tile tile)
         {
             return _placementRules.All(rule => rule.IsSatisfied(coordinates, tile));
-        }
-
-        private void ClaimTrappedPegs()
-        {
-            Dictionary<Peg, Player> trappedPegs = new();
-            Peg startPeg = null;
-            Peg lastPeg = null;
-            List<Peg> line = new();
-            for (var y = 0; y < Board.Instance.Height; y++)
-            {
-                for (var x = 0; x < Board.Instance.Width; x++)
-                {
-                    var currentPeg = Board.Instance.GetPeg(x, y);
-                    if (startPeg == null)
-                    {
-                        startPeg = currentPeg;
-                        line.Clear();
-                        continue;
-                    }
-                    
-                    if (currentPeg.PegState != PegState.Claimed)
-                    {
-                        startPeg = null;
-                        line.Clear();
-                        continue;
-                    }
-
-                    if (currentPeg.Owner == startPeg.Owner)
-                    {
-                        foreach (var peg in line) { trappedPegs.TryAdd(peg, startPeg.Owner); }
-                        line.Clear();
-                        startPeg = null;
-                        continue;
-                    }
-
-                    if (lastPeg != null && currentPeg.Owner != lastPeg.Owner)
-                    {
-                        line.Clear();
-                        startPeg = null;
-                        continue;
-                    }
-                    
-                    line.Add(currentPeg);
-                    lastPeg = currentPeg;
-                }
-            }
-
-            foreach (var peg in trappedPegs)
-            {
-                peg.Key.Claim(peg.Value);
-            }
         }
     }
 }

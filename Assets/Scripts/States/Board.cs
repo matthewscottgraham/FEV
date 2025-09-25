@@ -69,5 +69,92 @@ namespace States
 
             return scores;
         }
+        
+        public void FindAndClaimTrappedPegs()
+        {
+            Dictionary<Peg, Player> trappedPegs = new();
+
+            for (var y = 0; y < Board.Instance.Height; y++)
+            {
+                for (var x = 0; x < Board.Instance.Width; x++)
+                {
+                    var currentPeg = Board.Instance.GetPeg(x, y);
+                    var pegs = GetHorizontalPegLine(currentPeg);
+                    pegs.AddRange(GetVerticalPegLine(currentPeg));
+                    foreach (var peg in pegs)
+                    {
+                        trappedPegs.TryAdd(peg, currentPeg.Owner);
+                    }
+                }
+            }
+
+            ClaimPegs(trappedPegs);
+        }
+
+        private void ClaimPegs(Dictionary<Peg, Player> pegs)
+        {
+            foreach (var peg in pegs.Keys)
+            {
+                peg.Claim(pegs[peg]);
+            }
+        }
+
+        private List<Peg> GetHorizontalPegLine(Peg startPeg)
+        {
+            var line = new List<Peg>();
+            if (startPeg.PegState != PegState.Claimed) return line;
+
+            line.Add(startPeg);
+            var currentCoordinates = startPeg.Coordinates;
+            currentCoordinates.x += 1;
+
+            while (currentCoordinates.x < Width)
+            {
+                var currentPeg = GetPeg(currentCoordinates.x, currentCoordinates.y);
+                if (currentPeg == null) break;
+                if (currentPeg.PegState != PegState.Claimed) break;
+
+                line.Add(currentPeg);
+                currentCoordinates.x += 1;
+            }
+
+            return (IsLineValid(line)) ? line : new List<Peg>();
+        }
+
+        private List<Peg> GetVerticalPegLine(Peg startPeg)
+        {
+            var line = new List<Peg>();
+            if (startPeg.PegState != PegState.Claimed) return line;
+
+            line.Add(startPeg);
+            var currentCoordinates = startPeg.Coordinates;
+            currentCoordinates.y += 1;
+
+            while (currentCoordinates.y < Height)
+            {
+                var currentPeg = GetPeg(currentCoordinates.x, currentCoordinates.y);
+                if (currentPeg == null) break;
+                if (currentPeg.PegState != PegState.Claimed) break;
+
+                line.Add(currentPeg);
+                currentCoordinates.y += 1;
+            }
+
+            return (IsLineValid(line)) ? line : new List<Peg>();
+        }
+
+        private bool IsLineValid(List<Peg> line)
+        {
+            if (line == null || line.Count < 3) return false;
+            if (line[0].Owner != line[^1].Owner) return false;
+
+            if (line.Count == 3) return true;
+            for (var i = 2; i < line.Count - 1; i++)
+            {
+                if (line[i].Owner != line[1].Owner) return false;
+            }
+
+            return true;
+        }
     }
 }
