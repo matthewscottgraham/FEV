@@ -14,8 +14,10 @@ namespace Tiles
             _tileShapes ??= Resources.LoadAll<TileShape>("TileShapes");
             var shape = ScriptableObject.CreateInstance<TileShape>();
             shape.SetData(_tileShapes[UnityEngine.Random.Range(0, _tileShapes.Length)]);
-            var ignoredRuleType = RuleFactory.GetRandomIgnoredRuleType();
-            return new Tile(shape, ignoredRuleType, EffectFactory.GetRandomEffect());
+            return new Tile(shape, null, null);
+            
+            // var ignoredRuleType = RuleFactory.GetRandomIgnoredRuleType();
+            // return new Tile(shape, ignoredRuleType, EffectFactory.GetRandomEffect());
         }
     }
 }

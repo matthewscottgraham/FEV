@@ -81,7 +81,7 @@ namespace Pegs
             currentPlayer.RemoveCommand(tile);
             tile.Effect?.Apply(currentPlayer, pegs);
 
-            Board.Instance.FindAndClaimTrappedPegs();
+            Board.Instance.CaptureFlankedPegs();
         }
 
         private void OnDestroy()

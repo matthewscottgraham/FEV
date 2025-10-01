@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using Pegs;
 using Players;
@@ -8,7 +9,9 @@ namespace States
 {
     public class Board
     {
+        private readonly int[,] _directions = { {-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1} };
         private readonly Peg[,] _pegs;
+        
         public static Board Instance { get; private set; }
         public int Width => _pegs.GetLength(0);
         public int Height => _pegs.GetLength(1);
@@ -70,91 +73,73 @@ namespace States
             return scores;
         }
         
-        public void FindAndClaimTrappedPegs()
+        public void CaptureFlankedPegs()
         {
-            Dictionary<Peg, Player> trappedPegs = new();
-
-            for (var y = 0; y < Board.Instance.Height; y++)
+            var flankedPegs = new Dictionary<Player, HashSet<Peg>>();
+            
+            
+            for (var y = 0; y < Height; y++)
             {
-                for (var x = 0; x < Board.Instance.Width; x++)
+                for (var x = 0; x < Width; x++)
                 {
-                    var currentPeg = Board.Instance.GetPeg(x, y);
-                    var pegs = GetHorizontalPegLine(currentPeg);
-                    pegs.AddRange(GetVerticalPegLine(currentPeg));
-                    foreach (var peg in pegs)
+                    var currentPeg = GetPeg(x, y);
+                    if (currentPeg == null || currentPeg.Owner == null) continue;
+                    
+                    for (var dir = 0; dir < 8; dir++)
                     {
-                        trappedPegs.TryAdd(peg, currentPeg.Owner);
+                        var dy = _directions[dir, 0];
+                        var dx = _directions[dir, 1];
+
+                        var flankedLine = GetFlankedLine(x, y, dx, dy, currentPeg.Owner);
+
+                        if (flankedLine == null) continue;
+                        if (!flankedPegs.ContainsKey(currentPeg.Owner))
+                            flankedPegs.Add(currentPeg.Owner, new HashSet<Peg>());
+                        flankedPegs[currentPeg.Owner].Add(flankedLine);
                     }
                 }
             }
 
-            ClaimPegs(trappedPegs);
-        }
-
-        private void ClaimPegs(Dictionary<Peg, Player> pegs)
-        {
-            foreach (var peg in pegs.Keys)
+            foreach (var player in flankedPegs.Keys)
             {
-                peg.Claim(pegs[peg]);
+                foreach (var peg in flankedPegs[player])
+                {
+                    peg.Claim(player);
+                }
             }
         }
-
-        private List<Peg> GetHorizontalPegLine(Peg startPeg)
+        
+        private List<Peg>? GetFlankedLine(int startX, int startY, int dx, int dy, Player currentPlayer)
         {
-            var line = new List<Peg>();
-            if (startPeg.PegState != PegState.Claimed) return line;
+            var pegsInBetween = new List<Peg>();
+            var x = startX + dx;
+            var y = startY + dy;
 
-            line.Add(startPeg);
-            var currentCoordinates = startPeg.Coordinates;
-            currentCoordinates.x += 1;
-
-            while (currentCoordinates.x < Width)
+            while (x >= 0 && x < Width && y >= 0 && y < Height)
             {
-                var currentPeg = GetPeg(currentCoordinates.x, currentCoordinates.y);
-                if (currentPeg == null) break;
-                if (currentPeg.PegState != PegState.Claimed) break;
+                var peg = GetPeg(x, y);
 
-                line.Add(currentPeg);
-                currentCoordinates.x += 1;
+                if (peg == null || peg.Owner == null)
+                {
+                    return null;
+                }
+
+                if (peg.Owner != currentPlayer)
+                {
+                    pegsInBetween.Add(peg);
+                }
+                else
+                {
+                    return pegsInBetween.Count > 0 ? pegsInBetween : null;
+                }
+
+                x += dx;
+                y += dy;
             }
 
-            return (IsLineValid(line)) ? line : new List<Peg>();
+            return null;
         }
 
-        private List<Peg> GetVerticalPegLine(Peg startPeg)
-        {
-            var line = new List<Peg>();
-            if (startPeg.PegState != PegState.Claimed) return line;
-
-            line.Add(startPeg);
-            var currentCoordinates = startPeg.Coordinates;
-            currentCoordinates.y += 1;
-
-            while (currentCoordinates.y < Height)
-            {
-                var currentPeg = GetPeg(currentCoordinates.x, currentCoordinates.y);
-                if (currentPeg == null) break;
-                if (currentPeg.PegState != PegState.Claimed) break;
-
-                line.Add(currentPeg);
-                currentCoordinates.y += 1;
-            }
-
-            return (IsLineValid(line)) ? line : new List<Peg>();
-        }
-
-        private bool IsLineValid(List<Peg> line)
-        {
-            if (line == null || line.Count < 3) return false;
-            if (line[0].Owner != line[^1].Owner) return false;
-
-            if (line.Count == 3) return true;
-            for (var i = 2; i < line.Count - 1; i++)
-            {
-                if (line[i].Owner != line[1].Owner) return false;
-            }
-
-            return true;
-        }
+        
     }
 }
