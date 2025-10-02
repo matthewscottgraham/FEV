@@ -70,9 +70,7 @@ namespace Players
             ICommand endTurnCommand = null;
             foreach (var command in AvailableCommands)
             {
-                if (command.GetType() == typeof(DrawTileCommand))
-                    sortedCommands.Insert(0, command);
-                else if (command.GetType() == typeof(EndTurnCommand))
+                if (command.GetType() == typeof(EndTurnCommand))
                     endTurnCommand = command;
                 else sortedCommands.Add(command);
             }

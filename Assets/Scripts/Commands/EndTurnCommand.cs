@@ -10,10 +10,5 @@ namespace Commands
         {
             StateMachine.EndTurn();
         }
-        
-        public void Destroy()
-        {
-            // noop
-        }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Commands;
 using Pegs;
 using Players;
+using Tiles;
 
 namespace Effects
 {
@@ -14,7 +15,7 @@ namespace Effects
         
         public void Apply(Player player, List<Peg> pegs)
         {
-            player.AddCommand(new DrawTileCommand(player));
+            player.AddCommand(TileFactory.DrawRandomTile());
         }
     }
 }

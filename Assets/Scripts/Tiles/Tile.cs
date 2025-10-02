@@ -2,7 +2,6 @@ using System;
 using System.Text;
 using Commands;
 using Effects;
-using FEV;
 using Rules;
 
 namespace Tiles
@@ -24,7 +23,7 @@ namespace Tiles
             _ignoredRule = ignoredRule;
             Effect = effect;
         }
-        
+
         public bool CanTileIgnoreRule(Type type)
         {
             return _ignoredRule != null && _ignoredRule == type;

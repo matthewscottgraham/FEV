@@ -1,6 +1,5 @@
 using System;
 using Commands.View;
-using Pegs;
 using Players;
 using States;
 using Tiles;
@@ -51,7 +50,7 @@ namespace Commands
             if (StateMachine.CurrentState.GetType() == typeof(StartTurnState))
             {
                 var player = _playerController.GetCurrentPlayer();
-                player.AddCommand(new DrawTileCommand(player));
+                player.AddCommand(TileFactory.DrawRandomTile());
                 player.AddCommand(new EndTurnCommand());
                 StateMachine.PlayState();
             }
