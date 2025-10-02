@@ -1,10 +1,10 @@
 using Commands;
 using Commands.View;
+using DG.Tweening;
 using FEV;
 using Pegs;
 using Players;
 using States;
-using Tiles;
 using UnityEngine;
 
 namespace Utils
@@ -22,6 +22,7 @@ namespace Utils
         
         private void Start()
         {
+            DOTween.SetTweensCapacity(400, 50);
             var matchConfiguration = new MatchConfiguration();
         
             _stateMachine = new StateMachine();

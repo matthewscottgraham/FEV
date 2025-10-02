@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace States
@@ -38,7 +38,7 @@ namespace States
 
         public static void StartTurnState()
         {
-            _instance.SetState(typeof(StartTurnState));
+            _instance?.SetState(typeof(StartTurnState));
         }
 
         public void Dispose()
@@ -48,18 +48,18 @@ namespace States
             _instance = null;
         }
 
-        private void SetState(Type stateType)
+        private async void SetState(Type stateType)
         {
-            SetState(_factory.GetState(stateType));
+            await SetState(_factory.GetState(stateType));
         }
         
-        private void SetState(IState newState)
+        private async Task SetState(IState newState)
         {
             if (newState == null) return;
-            CurrentState?.ExitState();
+            if (CurrentState != null) await CurrentState.ExitState();
             CurrentState = newState;
             OnStateChanged?.Invoke();
-            CurrentState.EnterState();
+            await CurrentState.EnterState();
             Debug.Log(CurrentState.ToString());
         }
     }
