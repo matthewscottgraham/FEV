@@ -12,7 +12,7 @@ namespace States
         private readonly int[,] _directions = { {-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1} };
         private readonly Peg[,] _pegs;
         
-        public static Board Instance { get; private set; }
+        public static Board? Instance { get; private set; }
         public int Width => _pegs.GetLength(0);
         public int Height => _pegs.GetLength(1);
         public Board(Peg[,] pegs)
@@ -41,9 +41,9 @@ namespace States
             {
                 return _pegs[x, y];
             }
-            catch (IndexOutOfRangeException)
+            catch
             {
-                return null;
+                return null!;
             }
         }
 
