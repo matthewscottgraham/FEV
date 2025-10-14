@@ -6,15 +6,17 @@
 
 .info-container-parent {
     margin: 8px;
-    margin-top: 48px;
+    margin-top: 64px;
     flex-direction: row;
     flex-grow: 0;
+    flex-shrink: 1;
 }
 
 .active-player-info {
     border-width: 1px;
     border-radius: 8px;
-    border-color: black;
+    border-color: #FFFFFF;
+    background-color: #EEEEEE;
 }
 
 .info-container {
@@ -22,6 +24,8 @@
     width: 20%;
     flex-direction: column;
     flex-grow: 0;
+    flex-shrink: 1;
+    height: 100px;
 }
 
 .spacer {
@@ -40,7 +44,18 @@
     width: 32px;
     height: 32px;
     margin: 8px;
+    background-color: rgba(0,0,0,0);
+    -unity-font-style: bold;
+    color: white;
+    border-radius: 12px;
+    border-width: 0;
 }
+
+.button-menu:hover{
+    background-color: white;
+    color: black;
+}
+
 .command-container{
     flex-direction: row;
 }

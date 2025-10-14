@@ -27,6 +27,7 @@ namespace Pegs
         
         private void CreateStyles()
         {
+            if (PegStyles.Count > 0) return;
             PegStyles.Add(PegState.Normal, new PegStyle(new Color(0.8f,0.8f, 0.8f), IconUtility.GetPegSprite(), 0.6f));
             PegStyles.Add(PegState.Highlighted, new PegStyle(Color.cyan, IconUtility.GetSelectedPegSprite()));
             PegStyles.Add(PegState.Effect, new PegStyle(Color.white, IconUtility.GetEffectPegSprite()));
