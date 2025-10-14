@@ -15,6 +15,9 @@ public class MainMenuController : MonoBehaviour
         _rootElement = uiDocument.rootVisualElement.AddNew<VisualElement>();
         _rootElement.AddToClassList("main-menu-container");
 
+        var title = _rootElement.AddNew<Label>("title");
+        title.text = "Tetsi";
+        
         var heading = _rootElement.AddNew<Label>("heading");
         heading.text = "Rules";
         
@@ -25,12 +28,17 @@ public class MainMenuController : MonoBehaviour
         var spacer = _rootElement.AddNew<VisualElement>();
         spacer.style.height = 24;
         
-        var playButton = _rootElement.AddNew<Button>();
-        playButton.text = "Play";
+        var buttonContainer = _rootElement.AddNew<VisualElement>("menu-button-container");
+        
+        var playButton = buttonContainer.AddNew<Button>();
+        playButton.text = "PLAY";
         playButton.clicked += () => { SceneLoader.LoadScene("scn_game"); };
         
-        var exitButton = _rootElement.AddNew<Button>();
-        exitButton.text = "Exit";
-        exitButton.clicked += () => { SceneLoader.ExitGame(); };
+        var settingsButton = buttonContainer.AddNew<Button>();
+        settingsButton.text = "CONFIG";
+        
+        var exitButton = buttonContainer.AddNew<Button>();
+        exitButton.text = "EXIT";
+        exitButton.clicked += SceneLoader.ExitGame;
     }
 }

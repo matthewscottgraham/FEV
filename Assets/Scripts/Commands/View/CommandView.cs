@@ -120,6 +120,7 @@ namespace Commands.View
         {
             if (command.GetType() == typeof(Tile)) return CreateTileButton(command as Tile, container);
             var button = new Button { text = command.Label };
+            button.AddToClassList("command-button");
             container?.Add(button);
             button.clicked += command.Execute;
             return button;
@@ -137,7 +138,7 @@ namespace Commands.View
 
         private void HandleMenuButtonClicked()
         {
-            SceneLoader.LoadScene("scn_game");
+            SceneLoader.LoadScene("scn_menu");
         }
     }
 }

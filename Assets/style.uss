@@ -15,8 +15,10 @@
 .active-player-info {
     border-width: 1px;
     border-radius: 8px;
-    border-color: #FFFFFF;
-    background-color: #EEEEEE;
+    border-top-color: rgba(255,255,255,0.2);
+    /*border-bottom-color: rgba(0,0,0,0.2);*/
+    /*border-bottom-width: 2px;*/
+    background-color: rgba(255,255,255,0.1);
 }
 
 .info-container {
@@ -35,6 +37,8 @@
 .label-turn {
     font-size: 22px;
     -unity-font-style: bold;
+    -unity-text-outline-color: rgba(0,0,0,0.35);
+    -unity-text-outline-width: 1px;
 }
 
 .button-menu {
@@ -49,16 +53,18 @@
     color: white;
     border-radius: 12px;
     border-width: 0;
+    -unity-text-align: middle-center;
 }
 
-.button-menu:hover{
+.button-menu:hover {
     background-color: white;
     color: black;
 }
 
-.command-container{
+.command-container {
     flex-direction: row;
 }
+
 .staging-container {
     flex-grow: 1;
     flex-direction: row;
@@ -66,12 +72,31 @@
     align-self: center;
     justify-content: center;
 }
+.menu-button-container {
+    width: 250px;
+}
+
+Button {
+    height: 32px;
+    margin: 8px;
+    background-color: rgba(0,0,0,0);
+    -unity-font-style: bold;
+    color: white;
+    border-radius: 12px;
+    border-width: 0;
+    -unity-text-align: middle-left;
+}
+
+Button:hover {
+    background-color: white;
+    color: black;
+}
 
 TileElement {
     width: 48px;
     height: 48px;
     padding: 0;
-    margin: 6px;
+    margin: 0;
     background-color: transparent;
     border-color: black;
     border-radius: 12px;
@@ -112,7 +137,6 @@ TileElement .unity-button__image {
 .selected {
     background-color: #464646;
     border-color: white;
-    bottom: 12px;
     transition-property: all;
     transition-duration: 1s;
     transition-timing-function: ease-in-cubic;
@@ -129,6 +153,11 @@ TileElement .unity-button__image {
 Label {
     white-space: normal;
     font-size: 18px;
+}
+
+.title{
+    font-size: 32px;
+    -unity-font-style: bold;
 }
 
 .heading {
