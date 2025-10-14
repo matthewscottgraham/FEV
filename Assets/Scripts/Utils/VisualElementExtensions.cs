@@ -3,6 +3,13 @@ using System;
 
 public static class VisualElementExtensions
 {
+    public static VisualElement AddSpacer(this VisualElement visualElement)
+    {
+        var spacer = visualElement.AddNew<VisualElement>("spacer");
+        spacer.pickingMode = PickingMode.Ignore;
+        return spacer;
+    }
+    
     public static T AddNew<T>(this VisualElement visualElement) where T : VisualElement
     {
         var newElement = (T)Activator.CreateInstance(typeof(T));

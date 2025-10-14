@@ -13,9 +13,11 @@ namespace Commands.View
         private MatchConfiguration _matchConfiguration;
         
         private UIDocument _uiDocument;
+
+        private VisualElement[] _playerInfoContainers;
+        private Label[] _playerNameLabels;
+        private Label[] _playerScoreLabels;
         
-        private Label _playerLabel;
-        private Label _scoreLabel;
         private Label _effectLabel;
         private VisualElement _commandContainer;
         private VisualElement _tileContainer;
@@ -26,8 +28,18 @@ namespace Commands.View
         {
             _matchConfiguration = matchConfiguration;
             _uiDocument = gameObject.GetComponent<UIDocument>();
-            _playerLabel = _uiDocument.rootVisualElement.Q<Label>("playerLabel");
-            _scoreLabel = _uiDocument.rootVisualElement.Q<Label>("playerScore");
+            
+            _playerInfoContainers = new VisualElement[_matchConfiguration.PlayerCount];
+            _playerNameLabels = new Label[_matchConfiguration.PlayerCount];
+            _playerScoreLabels = new Label[_matchConfiguration.PlayerCount];
+            
+            var playerInfoContainer = _uiDocument.rootVisualElement.Q<VisualElement>("PlayerInfo");
+            for (var i = 0; i < _matchConfiguration.PlayerCount; i++)
+            {
+                CreatePlayerInfoDisplay(playerInfoContainer, i);
+                if (i % 2 == 0) playerInfoContainer.AddSpacer();
+            }
+            
             _effectLabel = _uiDocument.rootVisualElement.Q<Label>("effectLabel");
             _commandContainer = _uiDocument.rootVisualElement.Q("commandContainer");
             _tileContainer = _uiDocument.rootVisualElement.Q("cardContainer");
@@ -35,13 +47,35 @@ namespace Commands.View
             _menuButton.clicked += HandleMenuButtonClicked;
         }
 
-        public void Redraw(Player player)
+        public void Redraw(int currentPlayerIndex, Player[] allPlayers)
         {
             ClearCommandButtons();
+
+            for (var i = 0; i < allPlayers.Length; i++)
+            {
+                DisplayPlayerName(allPlayers[i]);
+                DisplayPlayerScore(allPlayers[i]);
+                
+                if (i == currentPlayerIndex) _playerInfoContainers[i].AddToClassList("active-player-info");
+                else _playerInfoContainers[i].RemoveFromClassList("active-player-info");
+            }
+
+            DisplayPlayerTiles(allPlayers[currentPlayerIndex]);
+        }
+
+        private void CreatePlayerInfoDisplay(VisualElement parentContainer, int playerIndex)
+        {
+            var container = parentContainer.AddNew<VisualElement>();
+            container.AddToClassList("info-container");
+            _playerInfoContainers[playerIndex] = container;
+
+            var playerNameLabel = container.AddNew<Label>("label-turn");
+            playerNameLabel.text = "Player Name";
+            _playerNameLabels[playerIndex] = playerNameLabel;
             
-            DisplayPlayerName(player);
-            DisplayPlayerScore(player);
-            DisplayPlayerTiles(player);
+            var playerScoreLabel = container.AddNew<Label>("label-turn");
+            playerScoreLabel.text = "Score";
+            _playerScoreLabels[playerIndex] = playerScoreLabel;
         }
 
         private void DisplayPlayerTiles(Player player)
@@ -66,14 +100,14 @@ namespace Commands.View
         private void DisplayPlayerName(Player player)
         {
             //var suffix = !player.IsHuman ? "Bot" : "Human";
-            _playerLabel.text = $"{player}";// ({suffix})";
-            _playerLabel.style.color = player.PegStyle.Color;
+            _playerNameLabels[player.Index].text = $"{player}";// ({suffix})";
+            _playerNameLabels[player.Index].style.color = player.PegStyle.Color;
         }
         
         private void DisplayPlayerScore(Player player)
         {
-            _scoreLabel.text = "$ " + player.Score;
-            _scoreLabel.style.color = player.PegStyle.Color;
+            _playerScoreLabels[player.Index].text = "$ " + player.Score;
+            _playerScoreLabels[player.Index].style.color = player.PegStyle.Color;
         }
 
         private void ClearCommandButtons()

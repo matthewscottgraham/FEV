@@ -4,10 +4,24 @@
     justify-content: center;
 }
 
-.info-container {
-    padding: 12px;
-    padding-top: 48px;
+.info-container-parent {
+    margin: 8px;
+    margin-top: 48px;
     flex-direction: row;
+    flex-grow: 0;
+}
+
+.active-player-info {
+    border-width: 1px;
+    border-radius: 8px;
+    border-color: black;
+}
+
+.info-container {
+    padding: 8px;
+    width: 20%;
+    flex-direction: column;
+    flex-grow: 0;
 }
 
 .spacer {
@@ -22,7 +36,10 @@
 .button-menu {
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
+    width: 32px;
+    height: 32px;
+    margin: 8px;
 }
 .command-container{
     flex-direction: row;
@@ -51,7 +68,7 @@ TileElement .unity-button__image {
 }
 
 .tile-badge-container {
-    top: -24;
+    top: -24px;
     height: 16px;
 }
 

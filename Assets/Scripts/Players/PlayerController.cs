@@ -44,7 +44,9 @@ namespace Players
             StateMachine.OnStateChanged += HandleStateChanged;
             _inputController.Zoomed += HandleZoom;
         }
-
+        
+        public Player[] AllPlayers => _players;
+        
         public Player GetCurrentPlayer()
         {
             return _players[_currentPlayerIndex];

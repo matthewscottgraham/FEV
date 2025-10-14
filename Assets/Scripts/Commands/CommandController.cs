@@ -20,7 +20,7 @@ namespace Commands
             _playerController = playerController;
 
             _view.Initialize(_matchConfiguration, this);
-            _view.Redraw(_playerController.GetCurrentPlayer());
+            _view.Redraw(_playerController.GetCurrentPlayer().Index, _playerController.AllPlayers);
             
             StateMachine.OnStateChanged += UpdateView;
             StateMachine.OnStateChanged += HandleStateChange;
@@ -55,18 +55,18 @@ namespace Commands
                 StateMachine.PlayState();
             }
 
-            _view.Redraw(_playerController.GetCurrentPlayer());
+            _view.Redraw(_playerController.GetCurrentPlayer().Index, _playerController.AllPlayers);
         }
 
         private void UpdateView()
         {
-            _view.Redraw(_playerController.GetCurrentPlayer());
+            _view.Redraw(_playerController.GetCurrentPlayer().Index, _playerController.AllPlayers);
         }
 
         private void HandleTileSelected(Tile tile)
         {
             _playerController.GetCurrentPlayer().SelectTile(tile);
-            _view.Redraw(_playerController.GetCurrentPlayer());
+            _view.Redraw(_playerController.GetCurrentPlayer().Index, _playerController.AllPlayers);
         }
     }
 }
