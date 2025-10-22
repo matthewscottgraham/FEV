@@ -57,22 +57,6 @@ namespace States
             return pegs.ToArray();
         }
         
-        public Dictionary<Player, int> CalculateScores()
-        {
-            var scores = new Dictionary<Player, int>();
-            
-            foreach (var peg in _pegs)
-            {
-                if (!peg.Owner) continue;
-                if (!scores.TryAdd(peg.Owner, peg.Score))
-                {
-                    scores[peg.Owner] += peg.Score;
-                }
-            }
-
-            return scores;
-        }
-        
         public void CaptureFlankedPegs()
         {
             var flankedPegs = new Dictionary<Player, HashSet<Peg>>();

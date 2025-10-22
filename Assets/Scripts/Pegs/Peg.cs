@@ -12,15 +12,9 @@ namespace Pegs
     {
         private SpriteRenderer _spriteRenderer;
         private Tween _tween;
-        private int _score = 1;
         private float _randomDelay = 0.1f;
         private bool _isDeactivated = false;
-
-        public int Score
-        {
-            get => _score;
-            set => SetScore(value);
-        }
+        
         public PegState PegState { get; private set; }
         public Player Owner { get; private set; }
         public IEffect Effect { get; private set; }
@@ -78,16 +72,6 @@ namespace Pegs
             _isDeactivated = true;
             SetState();
             SetMaterial();
-        }
-
-        private void SetScore(int score)
-        {
-            _score = score;
-            if (_score > 1)
-            {
-                var pegShadow = gameObject.AddComponent<PegShadow>();
-                pegShadow.Initialize(_spriteRenderer);
-            }
         }
 
         private void SetState(bool isHighlighted = false, bool isValidHighlight = false)

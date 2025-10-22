@@ -9,11 +9,10 @@ namespace Effects
             var random = Random.Range(0, 100);
             return random switch
             {
-                > 90 => new ScoreMultiplier(2),
-                > 80 => new RadialGrow(GetEffectResult(), 1),
-                > 75 => new HorizontalFill(GetEffectResult()),
-                > 70 => new VerticalFill(GetEffectResult()),
-                > 65 => new DrawTileEffect(),
+                > 90 => new RadialGrow(GetEffectResult(), 1),
+                > 85 => new HorizontalFill(GetEffectResult()),
+                > 80 => new VerticalFill(GetEffectResult()),
+                > 75 => new DrawTileEffect(),
                 _ => null
             };
         }

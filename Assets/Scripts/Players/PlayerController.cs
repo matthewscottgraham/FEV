@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using FEV;
 using States;
@@ -10,8 +9,6 @@ namespace Players
 {
     public class PlayerController : MonoBehaviour, IDisposable
     {
-        public Action OnScoreUpdated { get; set; }
-        
         private InputController _inputController;
         private MatchConfiguration _matchConfiguration;
         private Player[] _players;
@@ -29,8 +26,6 @@ namespace Players
         
         public void Initialize(MatchConfiguration matchConfiguration, InputController inputController)
         {
-            Player.OnCommandsModified += UpdateScores;
-            
             _matchConfiguration = matchConfiguration;
             _inputController = inputController;
             _players = new Player[_matchConfiguration.PlayerCount];
@@ -59,20 +54,8 @@ namespace Players
             return _players[index];
         }
 
-        public void UpdateScores()
-        {
-            var scores = Board.Instance.CalculateScores();
-            foreach (var player in _players)
-            {
-                player.SetScore(scores.GetValueOrDefault(player, 0));
-            }
-            
-            OnScoreUpdated?.Invoke();
-        }
-
         public void Dispose()
         {
-            Player.OnCommandsModified -= UpdateScores;
             StateMachine.OnStateChanged -= HandleStateChanged;
             _players = null;
             _inputController.Zoomed -= HandleZoom;
