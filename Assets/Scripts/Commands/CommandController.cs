@@ -25,7 +25,7 @@ namespace Commands
             StateMachine.OnStateChanged += UpdateView;
             StateMachine.OnStateChanged += HandleStateChange;
             Tile.OnTileSelected += HandleTileSelected;
-            Player.OnCommandsModified += UpdateView;
+            Player.OnDataModified += UpdateView;
             
             HandleStateChange();
         }
@@ -35,7 +35,7 @@ namespace Commands
             StateMachine.OnStateChanged -= UpdateView;
             StateMachine.OnStateChanged -= HandleStateChange;
             Tile.OnTileSelected -= HandleTileSelected;
-            Player.OnCommandsModified -= UpdateView;
+            Player.OnDataModified -= UpdateView;
             
             _view = null;
             _playerController = null;

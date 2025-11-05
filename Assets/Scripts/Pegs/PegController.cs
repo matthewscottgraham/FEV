@@ -75,7 +75,7 @@ namespace Pegs
             foreach (var peg in pegs)
             {
                 peg.ConsumeEffect(currentPlayer, pegs);
-                peg.Claim(currentPlayer);
+                var score = peg.Claim(currentPlayer);
             }
 
             currentPlayer.RemoveCommand(tile);
@@ -107,6 +107,7 @@ namespace Pegs
                     if (peg.Owner != null) continue;
                     if (peg.PegState == PegState.Deactivated) continue;
                     peg.Claim(player);
+                    // TODO: add score to scores
                     claimed++;
                 }
             }

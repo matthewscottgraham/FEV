@@ -10,7 +10,7 @@ namespace Players
 {
     public class Player : ScriptableObject
     {
-        public static Action OnCommandsModified;
+        public static Action OnDataModified;
         public int Index { get; private set; }
         public PegStyle PegStyle { get; private set; }
         public bool IsHuman { get; private set; }
@@ -23,6 +23,12 @@ namespace Players
             Index = index;
             PegStyle = new PegStyle(color, icon, 0.8f, 0.5f, Ease.OutBack);
             IsHuman = isHuman;
+        }
+
+        public void AddScore(int score)
+        {
+            Score += score;
+            OnDataModified?.Invoke();
         }
 
         public void EndTurn()
@@ -41,7 +47,7 @@ namespace Players
             if (command.GetType() == typeof(Tile))
                 SelectedTile = command as Tile;
             SortCommands();
-            OnCommandsModified?.Invoke();
+            OnDataModified?.Invoke();
         }
 
         public void RemoveCommand(ICommand command)
@@ -50,7 +56,7 @@ namespace Players
                 AvailableCommands.Remove(command);
             if (SelectedTile == command)
                 SelectedTile = null;
-            OnCommandsModified?.Invoke();
+            OnDataModified?.Invoke();
         }
 
         public void SelectTile(Tile tile)

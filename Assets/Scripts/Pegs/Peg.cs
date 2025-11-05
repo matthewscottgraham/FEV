@@ -53,9 +53,14 @@ namespace Pegs
         public bool Claim(Player player)
         {
             if (PegState == PegState.Deactivated) return false;
+            
+            var score = CalculateClaimScore(); // do this prior to assigning to new owner
+            player.AddScore(score);
+            
             Owner = player;
             SetState();
             SetMaterial();
+            
             return true;
         }
 
@@ -74,6 +79,13 @@ namespace Pegs
             SetMaterial();
         }
 
+        private int CalculateClaimScore()
+        {
+            var score = 1;
+            if (Owner != null) score++;
+            if (Effect != null) score++;
+            return score;
+        }
         private void SetState(bool isHighlighted = false, bool isValidHighlight = false)
         {
             switch (isHighlighted)

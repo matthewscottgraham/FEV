@@ -7,8 +7,8 @@
         <engine:VisualElement name="stagingArea" picking-mode="Ignore" class="staging-container" />
         <engine:Button text="|||" name="menuButton" class="button-menu" style="rotate: 90deg;" />
     </engine:VisualElement>
-    <engine:VisualElement name="Description" style="flex-grow: 0;">
-        <engine:Label text="Label" name="effectLabel" class="effect-label" />
+    <engine:VisualElement name="Description" picking-mode="Ignore" style="flex-grow: 0;">
+        <engine:Label text="Label" name="effectLabel" picking-mode="Ignore" class="effect-label" />
     </engine:VisualElement>
     <engine:VisualElement name="commandContainer" picking-mode="Ignore" class="command-container">
         <engine:VisualElement name="cardContainer" picking-mode="Ignore" class="staging-container" />
